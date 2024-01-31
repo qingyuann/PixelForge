@@ -8,9 +8,15 @@ using Silk.NET.Windowing;
 
 namespace PixelForge
 {
-    class Loop
+    class MainLoop
     {
         private static IWindow _window;
+        private static InputSystem _inputSystem;
+        
+        public void Stop()
+        {
+            _window.Close();
+        }
 
         static void Main(string[] args)
         {
@@ -30,15 +36,58 @@ namespace PixelForge
 
         private static void OnLoad()
         {
-            IInputContext input = _window.CreateInput();
-            for (int i = 0; i < input.Keyboards.Count; i++)
-                input.Keyboards[i].KeyDown += KeyDown;
+            void bDown(IKeyboard keyboard, Key key, int i)
+            {
+                if( key  == Key.B ) {
+                    Console.WriteLine("b is down");
+                }
+            }
+            void bUp(IKeyboard keyboard, Key key, int i)
+            {
+                if( key  == Key.B ) {
+                    Console.WriteLine("b is up");
+                }
+            }
+            
+            _inputSystem = new InputSystem(ref _window);
+            InputSystem.AddKeyDownEvent( bDown );
+            InputSystem.AddKeyUpEvent( bUp );
         }
-
+        
         private static void OnUpdate(double deltaTime)
         {
+            //在update的最开始执行
+            EarlyUpdate(deltaTime);
+            //在update的中间执行
+            Update(deltaTime);
+            //在update的最后执行
+            LateUpdate(deltaTime);
         }
-
+        
+        private static void EarlyUpdate(double deltaTime)
+        {
+            _inputSystem.CheckKeys();
+        }
+        
+        private static void Update(double deltaTime)
+        {
+            if( InputSystem.GetKey( Key.A ) ) {
+                Console.WriteLine( "A is pressed!" );
+            }
+            if( InputSystem.GetKeyDown( Key.A ) ) {
+                Console.WriteLine( "A is pressed down!" );
+            }
+            if( InputSystem.GetKeyUp( Key.A ) ) {
+                Console.WriteLine( "A is pressed up!" );
+            }
+        }
+ 
+        
+        private static void LateUpdate(double deltaTime)
+        {
+            _inputSystem.Clear();
+        }
+        
         private static void OnRender(double deltaTime)
         {
         }
