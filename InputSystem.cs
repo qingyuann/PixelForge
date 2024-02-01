@@ -1,6 +1,7 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.SDL;
 using Silk.NET.Windowing;
+using System.Numerics;
 
 namespace PixelForge;
 
@@ -106,6 +107,16 @@ public class InputSystem {
 	}
 
 	/// <summary>
+	/// 删除按键按下的方法
+	/// </summary>
+	public static void RemoveKeyDownEvent( Action<IKeyboard, Key, int> action ) {
+		foreach( IKeyboard t in inputContext.Keyboards ) {
+			t.KeyDown -= action;
+		}
+	}
+
+
+	/// <summary>
 	/// 添加按键抬起的方法
 	/// </summary>
 	public static void AddKeyUpEvent( Action<IKeyboard, Key, int> action ) {
@@ -115,20 +126,119 @@ public class InputSystem {
 	}
 
 	/// <summary>
-	/// 删除按键按下的方法
-	/// </summary>
-	public static void RemoveKeyDownEvent( Action<IKeyboard, Key, int> action ) {
-		foreach( IKeyboard t in inputContext.Keyboards ) {
-			t.KeyDown -= action;
-		}
-	}
-
-	/// <summary>
 	///	删除按键抬起的方法
 	/// </summary>
 	public static void RemoveKeyUpEvent( Action<IKeyboard, Key, int> action ) {
 		foreach( IKeyboard t in inputContext.Keyboards ) {
 			t.KeyUp -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标移动的方法
+	/// </summary>
+	public static void AddMouseMoveEvent( Action<IMouse, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseMove += action;
+		}
+	}
+
+	/// <summary>
+	/// 删除鼠标移动的方法
+	/// </summary>
+	public static void RemoveMouseMoveEvent( Action<IMouse, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseMove -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标滚轮滚动的方法
+	///  </summary>
+	public static void AddMouseScrollEvent( Action<IMouse, ScrollWheel> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.Scroll += action;
+		}
+	}
+
+	/// <summary>
+	/// 删除鼠标滚轮滚动的方法
+	/// </summary>
+	public static void RemoveMouseScrollEvent( Action<IMouse, ScrollWheel> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.Scroll -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标按键按下的方法
+	/// </summary>
+	public static void AddMouseDownEvent( Action<IMouse, MouseButton> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseDown += action;
+		}
+	}
+
+	/// <summary>
+	/// 删除鼠标按键按下的方法
+	/// </summary>
+	public static void RemoveMouseDownEvent( Action<IMouse, MouseButton> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseDown -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标按键抬起的方法
+	/// </summary>
+	public static void AddMouseUpEvent( Action<IMouse, MouseButton> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseUp += action;
+		}
+	}
+
+	/// <summary>
+	/// 删除鼠标按键抬起的方法
+	/// </summary>
+	public static void RemoveMouseUpEvent( Action<IMouse, MouseButton> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.MouseUp -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标单击的方法
+	/// </summary>
+	public static void AddMouseClickEvent( Action<IMouse, MouseButton, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.Click += action;
+		}
+	}
+
+	/// <summary>
+	///  删除鼠标单击的方法
+	///  </summary>
+	public static void RemoveMouseClickEvent( Action<IMouse, MouseButton, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.Click -= action;
+		}
+	}
+
+	/// <summary>
+	/// 添加鼠标双击的方法
+	///	 </summary>
+	public static void AddMouseDoubleClickEvent( Action<IMouse, MouseButton, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.DoubleClick += action;
+		}
+	}
+	
+	/// <summary>
+	/// 删除鼠标双击的方法
+	/// </summary>
+	public static void RemoveMouseDoubleClickEvent( Action<IMouse, MouseButton, Vector2> action ) {
+		foreach( IMouse t in inputContext.Mice ) {
+			t.DoubleClick -= action;
 		}
 	}
 
