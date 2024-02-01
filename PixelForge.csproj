@@ -5,6 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +14,11 @@
       <PackageReference Include="Silk.NET.OpenGL" Version="2.20.0" />
       <PackageReference Include="Silk.NET.Vulkan" Version="2.20.0" />
       <PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Geometry\" />
     </ItemGroup>
     
 </Project>
