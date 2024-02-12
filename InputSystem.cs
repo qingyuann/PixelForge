@@ -17,7 +17,7 @@ public class InputSystem {
 	//管理所有action
 	List<KeyValuePair<KeyValuePair<Key, Action>, Action<Key>>> _keyDownActions = new List<KeyValuePair<KeyValuePair<Key, Action>, Action<Key>>>();
 
-	public InputSystem( ref IWindow _window ) {
+	public InputSystem( IWindow _window ) {
 		//新建一个keyboard
 		inputContext = _window.CreateInput();
 		//注册按键，实现按下和抬起的检测
