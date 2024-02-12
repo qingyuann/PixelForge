@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelForge", "PixelForge.csproj", "{3D928FF2-8131-4881-82FE-F13299736373}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyProject.CodeGenerator", "jenny\MyProject.CodeGenerator.csproj", "{2F180755-E4DA-4DDD-A056-85A7423B7ED6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{3D928FF2-8131-4881-82FE-F13299736373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D928FF2-8131-4881-82FE-F13299736373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D928FF2-8131-4881-82FE-F13299736373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F180755-E4DA-4DDD-A056-85A7423B7ED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F180755-E4DA-4DDD-A056-85A7423B7ED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F180755-E4DA-4DDD-A056-85A7423B7ED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F180755-E4DA-4DDD-A056-85A7423B7ED6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,2 @@
+1. 先创建release： dotnet run -c Release --project jenny/MyProject.CodeGenerator.csproj server
+2.  写完component和entity后生成jenny代码 ：  dotnet jenny/bin/Release/net6.0/MyProject.CodeGenerator.dll client gen

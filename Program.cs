@@ -21,6 +21,15 @@ namespace PixelForge {
 		}
 
 		static void Main( string[] args ) {
+			// var contexts = Contexts.sharedInstance;
+			// var e = contexts.game.CreateEntity();
+			// e.AddHealth(100);
+			//
+			// System.Console.WriteLine("e.health.value: " + e.health.Value);
+			//
+			//
+			
+			
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
 				Title = GameSetting.Name
