@@ -8,6 +8,8 @@ public class RenderQuadInstances : Renderer
 {
     string _shaderVertPath;
     string _shaderFragPath;
+    
+    Texture _texture;
 
     float[] _positions;
 
@@ -39,6 +41,7 @@ public class RenderQuadInstances : Renderer
         //set uv
         Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
         BaseShader = new Shader(base.Gl, _shaderVertPath, _shaderFragPath);
+        _texture = new Texture(Gl, AssetManager.GetAssetPath("silk.png"));
     }
 
     public RenderQuadInstances(GL Gl, List<float> pos, float width, float height, int layer, string vertPath,
@@ -68,15 +71,21 @@ public class RenderQuadInstances : Renderer
         BaseShader = new Shader(base.Gl, _shaderVertPath, _shaderFragPath);
     }
 
+    public void UpdatePos(List<float> pos)
+    {
+        _instanceCount = pos.Count / 2;
+        pos.CopyTo(0, _positions, 0, Math.Min(_arraySize, pos.Count));
+        SetUniform("posOffset", _positions);
+    }
+    
+    
     public override void Draw()
     {
  
         BaseShader.Use();
         
-        SetTexture(0, "_QuadInstanceMainTex",new Texture( Gl, AssetManager.GetAssetPath("silk.png")));
+        SetTexture(0, "_QuadInstanceMainTex",_texture);
         SetUniform("viewMatrix", VirtualCamera.GetViewMatrix());
-        SetUniform("posOffset", _positions);
-        
         
         Vao.Bind();
 

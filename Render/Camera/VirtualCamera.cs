@@ -16,7 +16,7 @@ public struct PosAnchor {
 	}
 }
 public static class VirtualCamera {
-	static Camera _camera = new Camera( new Vector2( 0, 0 ), 0.5f );
+	public static Camera _camera = new Camera( new Vector2( 0, 0 ), 0.5f );
 	static List<PosAnchor> _anchors = new();
 	static int activeAnchor = -1;
 
@@ -118,7 +118,6 @@ public static class VirtualCamera {
 			}
 		}
 	}
-
 
 
 	/// <summary>

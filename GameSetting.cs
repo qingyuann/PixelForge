@@ -7,7 +7,7 @@ public static class GameSetting {
 	//public const string ProjectPath = @"./";
 	public const string ProjectPath = @"../../../";
 	public const int MaxInstancePerDrawCall = 500;
-	public const int MaxRenderLayer = 2;
+	public const int MaxRenderLayer = 3;
 
 	/// <summary>
 	/// 每帧获取deltaTime,毫秒

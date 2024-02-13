@@ -24,15 +24,7 @@ namespace PixelForge {
 		}
 
 		static void Main( string[] args ) {
-			// var contexts = Contexts.sharedInstance;
-			// var e = contexts.game.CreateEntity();
-			// e.AddHealth(100);
-			//
-			// System.Console.WriteLine("e.health.value: " + e.health.Value);
-			//
-			//
-			
-			
+	
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
 				Title = GameSetting.Name
@@ -62,8 +54,8 @@ namespace PixelForge {
 
 			//设置a的值
 			a = new Vector2( 0, 0 );
-			VirtualCamera.SetAnchor( "1", ref a );
-			VirtualCamera.SetActiveAnchor( "1" );
+			// VirtualCamera.SetAnchor( "1", ref a );
+			// VirtualCamera.SetActiveAnchor( "1" );
 
 			// await VirtualCamera.MoveToPos( new Vector2( 1, 1 ), 2000 );
 		}
@@ -85,16 +77,16 @@ namespace PixelForge {
 
 		static void Update( double deltaTime ) {
 			if( InputSystem.GetKey( Key.W ) ) {
-				a.Y += 0.1f;
+				VirtualCamera._camera.Position.Y += 0.1f;
 			}
 			if( InputSystem.GetKey( Key.S ) ) {
-				a.Y -= 0.1f;
+				VirtualCamera._camera.Position.Y  -= 0.1f;
 			}
 			if( InputSystem.GetKey( Key.A ) ) {
-				a.X -= 0.1f;
+				VirtualCamera._camera.Position.X  -= 0.1f;
 			}
 			if( InputSystem.GetKey( Key.D ) ) {
-				a.X += 0.1f;
+				VirtualCamera._camera.Position.X  += 0.1f;
 			}
 			
 			_systems.Execute();
