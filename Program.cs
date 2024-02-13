@@ -7,7 +7,7 @@ using Render;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
-
+using Entitas;
 
 namespace PixelForge {
 	class MainLoop {
@@ -15,6 +15,9 @@ namespace PixelForge {
 		static InputSystem _inputSystem;
 		static RenderPipeline _renderPipeline;
 		static Vector2 a;
+		
+		static Systems _systems = new Systems();
+		static Contexts _contexts = new Contexts();
 
 		public void Stop() {
 			_window.Close();
@@ -48,7 +51,13 @@ namespace PixelForge {
 		static async void OnLoad() {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
-			_renderPipeline = new RenderPipeline( _window );
+			
+			
+			//Add GameSystem Here
+			_systems.Add(new AddGameSystem(_contexts));
+			_systems.Initialize();
+			
+			_renderPipeline = new RenderPipeline( _window, _contexts);
 
 
 			//设置a的值
@@ -87,6 +96,8 @@ namespace PixelForge {
 			if( InputSystem.GetKey( Key.D ) ) {
 				a.X += 0.1f;
 			}
+			
+			_systems.Execute();
 		}
 
 

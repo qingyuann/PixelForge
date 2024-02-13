@@ -29,4 +29,7 @@
   <ItemGroup>
     <None Remove="jenny\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ECSGenerated\" />
+  </ItemGroup>
 </Project>

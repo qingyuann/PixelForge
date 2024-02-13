@@ -12,13 +12,14 @@ public class RenderPipeline
     List<RenderTexture> _layerRt = new List<RenderTexture>();
     RendererManager _rendererManager;
     
-    
+    private readonly Contexts _contexts;
     RenderQuadInstances _quads;
     
-    public RenderPipeline(IWindow window)
+    public RenderPipeline(IWindow window, Contexts contexts)
     {
         _gl = GL.GetApi(window);
-        _rendererManager = new RendererManager(_gl);
+        _contexts = contexts;
+        _rendererManager = new RendererManager(_gl, _contexts);
         SetupLayerRt();
     }
 

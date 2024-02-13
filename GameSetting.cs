@@ -4,6 +4,7 @@ public static class GameSetting {
 	public const int WindowWidth = 1024;
 	public const int WindowHeight = 768;
 	public const string Name = "PixelForge";
+	//public const string ProjectPath = @"./";
 	public const string ProjectPath = @"../../../";
 	public const int MaxInstancePerDrawCall = 500;
 	public const int MaxRenderLayer = 2;

@@ -22,6 +22,7 @@ public static class AssetManager {
 
 	public static string GetAssetPath( string fileName ) {
 		_dictionary.TryGetValue( fileName, out string? path );
+		//string filePath = path is null ? "" : path + "/" + fileName;
 		string filePath = path is null ? "" : path + "\\" + fileName;
 		return filePath; // 如果path为空，则返回空字符串
 	}
