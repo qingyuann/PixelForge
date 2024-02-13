@@ -2,8 +2,11 @@
 out vec4 FragColor;
 
 uniform vec3 uColor;
+uniform sampler2D _QuadInstanceMainTex;
 in vec2 fUv;
 void main()
 {
-    FragColor = vec4(uColor, 1.0);
+    vec4 mainTex = texture(_QuadInstanceMainTex, fUv);    
+    vec4 color = vec4(uColor, 1.0);
+    FragColor = mainTex+color;
 }

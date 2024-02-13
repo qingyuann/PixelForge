@@ -20,8 +20,6 @@ public class RenderPipeline
         _gl = GL.GetApi(window);
         _rendererManager = new RendererManager(_gl);
         SetupLayerRt();
-        
-
     }
 
     public void OnRender()
@@ -38,6 +36,8 @@ public class RenderPipeline
             _rendererManager.Render(index);
         }
 
+        _renderScreen.SetTexture(0, "uTexture0", _layerRt[0].RT);
+        _renderScreen.SetTexture(1, "uTexture1", _layerRt[1].RT);
         //渲染到屏幕
         _gl.BindFramebuffer(GLEnum.Framebuffer, 0);
         _gl.Clear((uint)GLEnum.ColorBufferBit);

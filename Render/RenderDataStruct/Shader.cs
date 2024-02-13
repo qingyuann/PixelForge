@@ -23,6 +23,7 @@ namespace Render
             _gl.GetProgram(_handle, GLEnum.LinkStatus, out var status);
             if (status == 0)
             {
+                Console.WriteLine("着色器程序链接失败: " + _gl.GetProgramInfoLog(_handle)+"\n"+vertexPath+"\n"+fragmentPath);
                 throw new Exception($"Program failed to link with error: {_gl.GetProgramInfoLog(_handle)}");
             }
             _gl.DetachShader(_handle, vertex);

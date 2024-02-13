@@ -22,11 +22,9 @@ public class RenderTexture {
 			_gl.FramebufferTexture2D( GLEnum.Framebuffer, GLEnum.ColorAttachment0 + colorAttachment, GLEnum.Texture2D, RT.Handle, 0 );
 
 			// 检查帧缓冲完整性
-			if( _gl.CheckFramebufferStatus( GLEnum.Framebuffer ) == GLEnum.FramebufferComplete ) {
-				Console.WriteLine( "帧缓冲完整" );
-			} else {
-				Console.WriteLine( "帧缓冲不完整" );
-			}
+			if(_gl.CheckFramebufferStatus( GLEnum.Framebuffer ) != GLEnum.FramebufferComplete ) {
+				throw new Exception( "Framebuffer is not complete" );
+			} 
 		}
 	}
 

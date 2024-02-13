@@ -23,6 +23,7 @@ public class RenderQuadInstances : Renderer
 
         //初始化数组，大小和shader中的一样
         _positions = new float[_arraySize];
+
         //实例的数量
         _instanceCount = pos.Count / 2;
         pos.CopyTo(0, _positions, 0, Math.Min(_arraySize, pos.Count));
@@ -30,7 +31,6 @@ public class RenderQuadInstances : Renderer
         //basic quad
         PatternMesh.CreateQuad(new Vector3(0, 0, 0), width, height, out Vertices, out Indices, anchor);
         Ebo = new BufferObject<uint>(base.Gl, Indices, BufferTargetARB.ElementArrayBuffer);
-        Console.WriteLine(Indices.Length);
         Vbo = new BufferObject<float>(base.Gl, Vertices, BufferTargetARB.ArrayBuffer);
         Vao = new VertexArrayObject<float, uint>(Gl, Vbo, Ebo);
 
@@ -70,11 +70,14 @@ public class RenderQuadInstances : Renderer
 
     public override void Draw()
     {
+ 
         BaseShader.Use();
-
+        
+        SetTexture(0, "_QuadInstanceMainTex",new Texture( Gl, AssetManager.GetAssetPath("silk.png")));
         SetUniform("viewMatrix", VirtualCamera.GetViewMatrix());
         SetUniform("posOffset", _positions);
-
+        
+        
         Vao.Bind();
 
         Gl.DrawArraysInstanced(PrimitiveType.Triangles, 0, 6, (uint)_instanceCount);

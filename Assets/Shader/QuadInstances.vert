@@ -2,8 +2,7 @@
 layout (location = 0) in vec3 vPos;
 layout (location = 1) in vec2 vUv;
 
-#define MAX_INSTANCE 2000
-
+#define MAX_INSTANCE 500
 
 out vec2 fUv;
 uniform float posOffset[MAX_INSTANCE*2];

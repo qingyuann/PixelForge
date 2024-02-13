@@ -30,11 +30,10 @@ public static class VirtualCamera {
 		Vector2 startPos = _camera.Position;
 		while( startTime < time ) {
 			var deltaTime = GameSetting.DeltaTime;
-			float t = (float)startTime / time;
+			float t = (float)startTime / time;				
 			_camera.Position = Vector2.Lerp( startPos, pos, t );
 			startTime += deltaTime;
-			Console.WriteLine( startTime );
-			await Task.Delay( deltaTime );
+					await Task.Delay( deltaTime );
 		}
 	}
 
