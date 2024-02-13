@@ -43,8 +43,8 @@ public sealed class EnemySystem : IInitializeSystem, IExecuteSystem
             if(entity.hasPixelForgeBasicComponentscsPosition)
             {
                 var position = entity.pixelForgeBasicComponentscsPosition;
-                position.X += 1.0f;
-                position.Y += 1.0f;
+                position.X += 0.01f;
+                position.Y += 0.01f;
                 entity.ReplacePixelForgeBasicComponentscsPosition(position.X, position.Y);
                 //Console.WriteLine("position.X" + position.X);
             }

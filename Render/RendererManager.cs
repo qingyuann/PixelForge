@@ -28,12 +28,12 @@ public class RendererManager {
 		}
 		_renderers.Add( new RenderQuadInstances( _gl, poses, 0.05f, 0.05f, 0 ) );
 		_renderers[0].SetUniform( "uColor", new Vector3( 0, 0.5f, 0.5f ) );
-
-		// _renderers.Add(new RenderQuad(_gl, new Vector3(0.5f, 0f, 0f), 0.2f, 0.2f, 0));
-		// _renderers[1].SetUniform("uColor", new Vector3(1, 0, 0));
-		//
-		// _renderers.Add(new RenderQuad(_gl, new Vector3(-0.51f, 0f,0f), 0.052f, 0.2f, 1));
-		// _renderers[2].SetUniform("uColor", new Vector3(0, 0, 1));
+		
+		_renderers.Add(new RenderQuad(_gl, new Vector3(0.5f, 0f, 0f), 0.2f, 0.2f, 1));
+		_renderers[1].SetUniform("uColor", new Vector3(1, 0, 0));
+		
+		_renderers.Add(new RenderQuad(_gl, new Vector3(-0.51f, 0f,0f), 0.1f, 0.1f, 2));
+		_renderers[2].SetUniform("uColor", new Vector3(0, 0, 1));
 	}
 
 	public void Render( int layer ) {
@@ -42,7 +42,7 @@ public class RendererManager {
 		var poses = new List<float>();
 		foreach( var entity in entities ) {
 			if( entity.hasPixelForgeBasicComponentscsPosition ) {
-				Console.WriteLine( entity.pixelForgeBasicComponentscsPosition.X );
+				// Console.WriteLine( entity.pixelForgeBasicComponentscsPosition.X );
 				poses.Add( entity.pixelForgeBasicComponentscsPosition.X );
 				poses.Add( entity.pixelForgeBasicComponentscsPosition.Y );
 			}
