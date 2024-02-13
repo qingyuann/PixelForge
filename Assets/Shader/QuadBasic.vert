@@ -6,8 +6,7 @@ out vec2 fUv;
 uniform mat4 viewMatrix;
 
 void main()
-{
-    //Multiplying our uniform with the vertex position, the multiplication order here does matter.
+{   
     gl_Position = viewMatrix*vec4(vPos.x, vPos.y, vPos.z, 1.0);
     fUv = vUv;
 }

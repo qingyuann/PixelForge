@@ -7,8 +7,8 @@ namespace Render
         where TVertexType : unmanaged
         where TIndexType : unmanaged
     {
-        private uint _handle;
-        private GL _gl;
+        private readonly uint _handle;
+        private readonly GL _gl;
 
         public VertexArrayObject(GL gl, BufferObject<TVertexType> vbo, BufferObject<TIndexType> ebo)
         {

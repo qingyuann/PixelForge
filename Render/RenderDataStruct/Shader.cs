@@ -73,6 +73,26 @@ namespace Render
             _gl.UniformMatrix4(location, 1, false, (float*) &value);
         }
 
+        public unsafe void SetUniform( string name, Vector2 value ) {
+            int location = _gl.GetUniformLocation(_handle, name);
+            if (location == -1)
+            {
+                Console.WriteLine($"{name} uniform not found on shader.");
+            }
+            _gl.Uniform2(location, value.X, value.Y);
+        }
+        
+        public unsafe void SetUniform( string name, float[] value ) {
+            int location = _gl.GetUniformLocation(_handle, name);
+            if (location == -1)
+            {
+                Console.WriteLine($"{name} uniform not found on shader.");
+            }
+            var num = value.Length;
+           
+            _gl.Uniform1( location, (uint)num, value );
+        }
+
         public void SetUniform(string name, float value)
         {
             int location = _gl.GetUniformLocation(_handle, name);

@@ -5,22 +5,23 @@ public static class GameSetting {
 	public const int WindowHeight = 768;
 	public const string Name = "PixelForge";
 	public const string ProjectPath = @"../../../";
-
-	public const int ChunkSize = 16;
+	public const int MaxInstancePerDrawCall = 2000;
+	public const int MaxRenderLayer = 2;
 
 	/// <summary>
 	/// 每帧获取deltaTime,毫秒
 	/// </summary>
 	public static int DeltaTime {
-		get;private set;
+		get;
+		private set;
 	}
-	
+
 	public static void Load() {
 		//加载资源
 		DeltaTime = 10;
 	}
-	
-	public static void Update (double deltaTime) {
-		DeltaTime = (int)(deltaTime*1000);
+
+	public static void Update( double deltaTime ) {
+		DeltaTime = (int)( deltaTime * 1000 );
 	}
 }
