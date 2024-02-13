@@ -12,7 +12,7 @@ public class RenderTexture {
 	public RenderTexture( GL gl, uint width, uint height, int colorAttachment = 0 ) {
 		_colorAttachment = colorAttachment;
 		_gl = gl;
-		_gl.GenFramebuffers( 1, out _fbo );
+		_fbo=_gl.GenFramebuffer( );
 		_gl.BindFramebuffer( GLEnum.Framebuffer, _fbo );
 
 		// 创建纹理对象:四个通道，所以四倍

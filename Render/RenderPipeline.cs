@@ -26,7 +26,7 @@ public class RenderPipeline
 
 	void SetupLayerRt() {
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( new RenderTexture( _gl, GameSetting.WindowWidth, GameSetting.WindowHeight, i ) );
+			_layerRt.Add( new RenderTexture( _gl, GameSetting.WindowWidth, GameSetting.WindowHeight) );
 		}
 
 		_renderScreen = new RenderFullscreen( _gl );
