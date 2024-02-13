@@ -16,8 +16,11 @@ namespace PixelForge {
 		static InputSystem _inputSystem;
 		static RenderPipeline _renderPipeline;
 		static Vector2 a;
+		
+		static Systems _systems = new Systems();
+		static Contexts _contexts = new Contexts();
 
-		//static Systems _systems;
+	
 
 		public void Stop() {
 			_window.Close();
@@ -40,7 +43,7 @@ namespace PixelForge {
 
 			_window = Window.Create( options );
 			_window.Load += OnLoad;
-			_window.Update += OnUpdate;
+			_window.Update += OnUpdate; 
 			_window.Render += OnRender;
 			_window.Closing += OnClose;
 			_window.Run();
@@ -51,11 +54,11 @@ namespace PixelForge {
 		static async void OnLoad() {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
-			_renderPipeline = new RenderPipeline( _window );
-
-			//var context = Contexts.sharedInstance;
-			//_systems = new Systems().Add(new AddGameSystem(context));
-			//_systems.Initialize();
+			//_renderPipeline = new RenderPipeline( _window );
+			
+			
+			_systems.Add(new AddGameSystem(_contexts));
+			_systems.Initialize();
 
 
 			//设置a的值
@@ -95,7 +98,7 @@ namespace PixelForge {
 				a.X += 0.1f;
 			}
 			
-			//_systems.Execute();
+			_systems.Execute();
 		}
 
 
@@ -104,11 +107,11 @@ namespace PixelForge {
 		}
 
 		static void OnRender( double deltaTime ) {
-			_renderPipeline.OnRender();
+			//_renderPipeline.OnRender();
 		}
 
 		static void OnClose() {
-			_renderPipeline.OnClose();
+			//_renderPipeline.OnClose();
 		}
 	}
 }

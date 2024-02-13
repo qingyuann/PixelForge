@@ -6,7 +6,7 @@ namespace PixelForge.Spawner;
 /// <summary>
 /// inherit from IExecuteSystem, execute every frame
 /// </summary>
-public sealed class EnemySystem : IExecuteSystem
+public sealed class EnemySystem : IInitializeSystem, IExecuteSystem
 {
     private readonly Contexts _contexts;
     private readonly int _enemyCount;
@@ -19,10 +19,12 @@ public sealed class EnemySystem : IExecuteSystem
     
     public void Initialize()
     {
+        
         for (var i = 0; i < _enemyCount; i++)
         {
             var entity = _contexts.game.CreateEntity();
             entity.AddPixelForgeBasicComponentsPosition(0.0f,0.0f);
+            //Console.WriteLine("Enemy Created!");
         }
         
     }
@@ -30,12 +32,13 @@ public sealed class EnemySystem : IExecuteSystem
     public void Execute()
     {
         AutoMove();
-        
     }
     
     private void AutoMove()
     {
         var entities = _contexts.game.GetEntities();
+       
+        Console.WriteLine(entities.Length);
         foreach (var entity in entities)
         {
             if(entity.hasPixelForgeBasicComponentsPosition)
