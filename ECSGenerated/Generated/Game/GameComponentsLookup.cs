@@ -8,15 +8,18 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int Health = 0;
+    public const int PixelForgeBasicComponentsPosition = 0;
+    public const int PixelForgeBasicComponentsRotation = 1;
 
-    public const int TotalComponents = 1;
+    public const int TotalComponents = 2;
 
     public static readonly string[] componentNames = {
-        "Health"
+        "PixelForgeBasicComponentsPosition",
+        "PixelForgeBasicComponentsRotation"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(HealthComponent)
+        typeof(PixelForge.BasicComponents.PositionComponent),
+        typeof(PixelForge.BasicComponents.RotationComponent)
     };
 }

@@ -28,5 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="jenny\**" />
+    <None Remove="Spawner" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ECSGenerated\" />
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 // See https://aka.ms/new-console-template for more information
 
 using System.Numerics;
+using Entitas;
 using Render;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -15,6 +16,8 @@ namespace PixelForge {
 		static InputSystem _inputSystem;
 		static RenderPipeline _renderPipeline;
 		static Vector2 a;
+
+		//static Systems _systems;
 
 		public void Stop() {
 			_window.Close();
@@ -49,6 +52,10 @@ namespace PixelForge {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
 			_renderPipeline = new RenderPipeline( _window );
+
+			//var context = Contexts.sharedInstance;
+			//_systems = new Systems().Add(new AddGameSystem(context));
+			//_systems.Initialize();
 
 
 			//设置a的值
@@ -87,6 +94,8 @@ namespace PixelForge {
 			if( InputSystem.GetKey( Key.D ) ) {
 				a.X += 0.1f;
 			}
+			
+			//_systems.Execute();
 		}
 
 
