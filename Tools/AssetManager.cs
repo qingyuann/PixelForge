@@ -22,8 +22,23 @@ public static class AssetManager {
 
 	public static string GetAssetPath( string fileName ) {
 		_dictionary.TryGetValue( fileName, out string? path );
-		//string filePath = path is null ? "" : path + "/" + fileName;
-		string filePath = path is null ? "" : path + "\\" + fileName;
+		PlatformID platform = Environment.OSVersion.Platform;
+		string filePath;
+		if (platform == PlatformID.Win32NT || platform == PlatformID.Win32S || platform == PlatformID.Win32Windows || platform == PlatformID.WinCE)
+		{
+			//windows
+			filePath = path is null ? "" : path + "\\" + fileName;
+		}
+		else if (platform == PlatformID.MacOSX)
+		{
+			//mac
+			filePath = path is null ? "" : path + "/" + fileName;
+		}
+		else
+		{
+			filePath = path is null ? "" : path + "\\" + fileName;
+			Console.WriteLine("未知操作系统");
+		}
 		return filePath; // 如果path为空，则返回空字符串
 	}
 }
