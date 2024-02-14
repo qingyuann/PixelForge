@@ -7,36 +7,37 @@ namespace Render;
 
 public class RenderPipeline
 {
-    public static GL Gl;
+    readonly GL _gl;
     RenderFullscreen _renderScreen;
     readonly int _layerCount = GameSetting.MaxRenderLayer;
     List<RenderTexture> _layerRt = new List<RenderTexture>();
  
-    private readonly Contexts _contexts;
+
     RenderQuadInstances _quads;
     
     public RenderPipeline(IWindow window)
     {
-        Gl = GL.GetApi(window);
+        _gl = GL.GetApi(window);
+        GlobalVariable.Gl = _gl;
         SetupLayerRt(); }
 
 	void SetupLayerRt() {
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( new RenderTexture( Gl, GameSetting.WindowWidth, GameSetting.WindowHeight) );
+			_layerRt.Add( new RenderTexture( _gl, GameSetting.WindowWidth, GameSetting.WindowHeight) );
 		}
 
 		_renderScreen = new RenderFullscreen(  );
 	}
 
 	public void OnRender() {
-		Gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
-		Gl.Clear( (uint)GLEnum.ColorBufferBit );
-		Gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
+		_gl.Clear( (uint)GLEnum.ColorBufferBit );
+		_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
 		for( var index = 0; index < _layerCount; index++ ) {
 			_layerRt[index].RenderToRt();
-			Gl.Clear( (uint)GLEnum.ColorBufferBit );
-			Gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+			_gl.Clear( (uint)GLEnum.ColorBufferBit );
+			_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 			RenderSystem.Render( index );
 		}
 		
@@ -46,8 +47,8 @@ public class RenderPipeline
 		}
 		
 		//渲染到屏幕
-		Gl.BindFramebuffer(GLEnum.Framebuffer, 0);
-		Gl.Clear((uint)GLEnum.ColorBufferBit);
+		_gl.BindFramebuffer(GLEnum.Framebuffer, 0);
+		_gl.Clear((uint)GLEnum.ColorBufferBit);
 		_renderScreen.Draw();
 	}
 

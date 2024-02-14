@@ -22,7 +22,7 @@ namespace PixelForge {
 		}
 
 		static void Main( string[] args ) {
-	
+			GlobalVariable.Contexts = _contexts;
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
 				Title = GameSetting.Name
@@ -41,14 +41,9 @@ namespace PixelForge {
 		static async void OnLoad() {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
-			
 			_renderPipeline = new RenderPipeline( _window);
-
-
 			_systems.Add(new AddGameSystem(_contexts));
 			_systems.Initialize();
-			
-			GlobalVariable.Init( RenderPipeline.Gl, _contexts);
 		}
 
 		static void OnUpdate( double deltaTime ) {

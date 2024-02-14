@@ -7,7 +7,7 @@ public static class GlobalVariable {
 	public static GL Gl;
 	public static Contexts Contexts;
 
-	public static void Init(GL gl, Contexts contexts) {
+	public static void Init(ref GL gl, ref Contexts contexts) {
 		Gl = gl;
 		Contexts = contexts;
 	}
