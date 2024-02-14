@@ -8,18 +8,39 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int PixelForgeBasicComponentscsPosition = 0;
-    public const int PixelForgeBasicComponentscsRotation = 1;
+    public const int ComponentBasicMove = 0;
+    public const int ComponentCamera = 1;
+    public const int ComponentName = 2;
+    public const int ComponentPosition = 3;
+    public const int ComponentRenderSinglePara = 4;
+    public const int ComponentRotation = 5;
+    public const int ComponentSingleRenderer = 6;
+    public const int ComponentSize = 7;
+    public const int ComponentSpriteInstanceRenderer = 8;
 
-    public const int TotalComponents = 2;
+    public const int TotalComponents = 9;
 
     public static readonly string[] componentNames = {
-        "PixelForgeBasicComponentscsPosition",
-        "PixelForgeBasicComponentscsRotation"
+        "ComponentBasicMove",
+        "ComponentCamera",
+        "ComponentName",
+        "ComponentPosition",
+        "ComponentRenderSinglePara",
+        "ComponentRotation",
+        "ComponentSingleRenderer",
+        "ComponentSize",
+        "ComponentSpriteInstanceRenderer"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(PixelForge.BasicComponents.cs.Position),
-        typeof(PixelForge.BasicComponents.cs.Rotation)
+        typeof(Component.BasicMoveComponent),
+        typeof(Component.CameraComponent),
+        typeof(Component.NameComponent),
+        typeof(Component.PositionComponent),
+        typeof(Component.RenderSingleParaComponent),
+        typeof(Component.RotationComponent),
+        typeof(Component.SingleRendererComponent),
+        typeof(Component.SizeComponent),
+        typeof(Component.SpriteInstanceRendererComponent)
     };
 }

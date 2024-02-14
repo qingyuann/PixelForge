@@ -8,5 +8,5 @@ void main()
 {
     vec4 mainTex = texture(_QuadInstanceMainTex, fUv);    
     vec4 color = vec4(uColor, 1.0);
-    FragColor = mainTex+color;
+    FragColor = mainTex+color*2;
 }

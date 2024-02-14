@@ -22,9 +22,9 @@ public class Renderer
     /// <summary>
     /// 使用默认着色器
     /// </summary>
-    protected Renderer(GL Gl, int layer)
+    protected Renderer( int layer)
     {
-        this.Gl = Gl;
+        this.Gl = RenderPipeline.Gl;
         Layer = layer;
     }
 

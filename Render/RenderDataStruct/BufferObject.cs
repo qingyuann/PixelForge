@@ -22,6 +22,15 @@ namespace Render
                 _gl.BufferData(bufferType, (nuint) (data.Length * sizeof(TDataType)), d, BufferUsageARB.StaticDraw);
             }
         }
+        
+        public unsafe void UpdateBuffer(Span<TDataType> data)
+        {
+            Bind();
+            fixed (void* d = data)
+            {
+                _gl.BufferSubData(_bufferType, 0, (nuint)(data.Length * sizeof(TDataType)), d);
+            }
+        }
 
         public void Bind()
         {

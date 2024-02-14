@@ -18,14 +18,12 @@ public sealed class EnemySystem : IInitializeSystem, IExecuteSystem
     
     public void Initialize()
     {
-        
         for (var i = 0; i < _enemyCount; i++)
         {
             var entity = _contexts.game.CreateEntity();
-            entity.AddPixelForgeBasicComponentscsPosition(0.0f + i*0.1f,0.0f);
+            entity.AddComponentPosition(0.0f + i*0.1f,0.0f,0.0f);
             //Console.WriteLine("Enemy Created!");
         }
-        
     }
     
     public void Execute()
@@ -35,19 +33,19 @@ public sealed class EnemySystem : IInitializeSystem, IExecuteSystem
     
     private void AutoMove()
     {
-        var entities = _contexts.game.GetEntities();
-       
-        //Console.WriteLine(entities.Length);
-        foreach (var entity in entities)
-        {
-            if(entity.hasPixelForgeBasicComponentscsPosition)
-            {
-                var position = entity.pixelForgeBasicComponentscsPosition;
-                position.X += 0.01f;
-                position.Y += 0.01f;
-                entity.ReplacePixelForgeBasicComponentscsPosition(position.X, position.Y);
-                //Console.WriteLine("position.X" + position.X);
-            }
-        }
+        // var entities = _contexts.game.GetEntities();
+        //
+        // //Console.WriteLine(entities.Length);
+        // foreach (var entity in entities)
+        // {
+        //     if(entity.hasComponentPosition)
+        //     {
+        //         var position = entity.componentPosition;
+        //         position.X += 0.01f;
+        //         position.Y += 0.01f;
+        //         entity.ReplaceComponentPosition(position.X, position.Y, position.Z);
+        //         //Console.WriteLine("position.X" + position.X);
+        //     }
+        // }
     }
 }

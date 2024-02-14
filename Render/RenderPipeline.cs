@@ -7,7 +7,7 @@ namespace Render;
 
 public class RenderPipeline
 {
-    static GL _gl;
+    public static GL Gl;
     RenderFullscreen _renderScreen;
     readonly int _layerCount = GameSetting.MaxRenderLayer;
     List<RenderTexture> _layerRt = new List<RenderTexture>();
@@ -16,32 +16,31 @@ public class RenderPipeline
     private readonly Contexts _contexts;
     RenderQuadInstances _quads;
     
-    public RenderPipeline(IWindow window, Contexts contexts)
+    public RenderPipeline(IWindow window)
     {
-        _gl = GL.GetApi(window);
-        _gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
-        _contexts = contexts;
-        _rendererManager = new RendererManager(_gl, _contexts);
+        Gl = GL.GetApi(window);
+        _rendererManager = new RendererManager(Gl);
         SetupLayerRt(); }
 
 	void SetupLayerRt() {
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( new RenderTexture( _gl, GameSetting.WindowWidth, GameSetting.WindowHeight) );
+			_layerRt.Add( new RenderTexture( Gl, GameSetting.WindowWidth, GameSetting.WindowHeight) );
 		}
 
-		_renderScreen = new RenderFullscreen( _gl );
+		_renderScreen = new RenderFullscreen(  );
 	}
 
 	public void OnRender() {
-		_gl.Clear( (uint)GLEnum.ColorBufferBit );
-		_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-
+		Gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
+		Gl.Clear( (uint)GLEnum.ColorBufferBit );
+		Gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
 		for( var index = 0; index < _layerCount; index++ ) {
 			_layerRt[index].RenderToRt();
-			_gl.Clear( (uint)GLEnum.ColorBufferBit );
-			_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+			Gl.Clear( (uint)GLEnum.ColorBufferBit );
+			Gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 			_rendererManager.Render( index );
+			RenderSystem.Render( index );
 		}
 		
 		for( int i = 0; i < _layerCount; i++ ) {
@@ -50,8 +49,8 @@ public class RenderPipeline
 		}
 		
 		//渲染到屏幕
-		_gl.BindFramebuffer(GLEnum.Framebuffer, 0);
-		_gl.Clear((uint)GLEnum.ColorBufferBit);
+		Gl.BindFramebuffer(GLEnum.Framebuffer, 0);
+		Gl.Clear((uint)GLEnum.ColorBufferBit);
 		_renderScreen.Draw();
 	}
 

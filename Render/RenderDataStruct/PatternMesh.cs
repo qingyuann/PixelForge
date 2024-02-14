@@ -20,7 +20,10 @@ public static class PatternMesh {
 	/// <param name="vertices"></param>
 	/// <param name="indices"></param>
 	/// <param name="anchor">Center->pos为中间，Bottom->下方，Top->上方</param>
-	public static void CreateQuad( Vector3 pos, float width, float height, out float[] vertices, out uint[] indices, Anchor anchor=Anchor.Center ) {
+	public static void CreateQuad( Vector3 pos, Vector2 size, float rotation,out float[] vertices, out uint[] indices, Anchor anchor=Anchor.Center ) {
+		var width = size.X*2;
+		var height = size.Y*2;
+	
 		if( anchor==Anchor.Center) {
 			vertices = new float[] {
 				//X    Y      Z     U   V
@@ -52,9 +55,26 @@ public static class PatternMesh {
 				pos.X-width/2, pos.Y, pos.Z, 0.0f, 1.0f,
 			};
 		}
+		
+		float angleInRadians = (float)(rotation * Math.PI / 180);
+		Matrix3x2 rotationMatrix = Matrix3x2.CreateRotation(angleInRadians);
+		for( int i = 0; i < 6; i++ ) {
+			Vector2 point = new Vector2(vertices[i * 5], vertices[i * 5 + 1]);
+			point = Vector2.Transform(point, rotationMatrix);
+			vertices[i * 5] = point.X;
+			vertices[i * 5 + 1] = point.Y;
+		};
+			
 		indices = new uint[] {
 			0,1,2,3,4,5
 		};
+	}	
+	
+	public static void CreateQuadDefault( out float[] vertices, out uint[] indices) {
+		CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out vertices, out  indices );
 	}
 	
 }
+	
+		
+	

@@ -6,10 +6,10 @@ namespace Render;
 
 public class RenderFullscreen : Renderer {
 
-	public RenderFullscreen( GL Gl, int layer = -1 ) : base( Gl, layer ) {
+	public RenderFullscreen( int layer = -1 ) : base(  layer ) {
 		GenerateBgShader( GameSetting.MaxRenderLayer, out string shaderVert, out string shaderFrag );
 
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), 2, 2, out Vertices, out Indices );
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1,1 ), 0, out Vertices, out Indices );
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
 		Vbo = new BufferObject<float>( base.Gl, Vertices, BufferTargetARB.ArrayBuffer );
 		Vao = new VertexArrayObject<float, uint>( Gl, Vbo, Ebo );

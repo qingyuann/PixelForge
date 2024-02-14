@@ -14,10 +14,8 @@ namespace PixelForge {
 		static IWindow _window;
 		static InputSystem _inputSystem;
 		static RenderPipeline _renderPipeline;
-		static Vector2 a;
-		
 		static Systems _systems = new Systems();
-		static Contexts _contexts = new Contexts();
+		public static Contexts _contexts = new Contexts();
 
 		public void Stop() {
 			_window.Close();
@@ -44,20 +42,11 @@ namespace PixelForge {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
 			
-			
-			//Add GameSystem Here
+			_renderPipeline = new RenderPipeline( _window);
+
+
 			_systems.Add(new AddGameSystem(_contexts));
 			_systems.Initialize();
-			
-			_renderPipeline = new RenderPipeline( _window, _contexts);
-
-
-			//设置a的值
-			a = new Vector2( 0, 0 );
-			// VirtualCamera.SetAnchor( "1", ref a );
-			// VirtualCamera.SetActiveAnchor( "1" );
-
-			// await VirtualCamera.MoveToPos( new Vector2( 1, 1 ), 2000 );
 		}
 
 		static void OnUpdate( double deltaTime ) {
@@ -76,22 +65,8 @@ namespace PixelForge {
 		}
 
 		static void Update( double deltaTime ) {
-			if( InputSystem.GetKey( Key.W ) ) {
-				VirtualCamera._camera.Position.Y += 0.1f;
-			}
-			if( InputSystem.GetKey( Key.S ) ) {
-				VirtualCamera._camera.Position.Y  -= 0.1f;
-			}
-			if( InputSystem.GetKey( Key.A ) ) {
-				VirtualCamera._camera.Position.X  -= 0.1f;
-			}
-			if( InputSystem.GetKey( Key.D ) ) {
-				VirtualCamera._camera.Position.X  += 0.1f;
-			}
-			
 			_systems.Execute();
 		}
-
 
 		static void LateUpdate( double deltaTime ) {
 			_inputSystem.Clear();
