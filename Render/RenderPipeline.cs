@@ -11,15 +11,13 @@ public class RenderPipeline
     RenderFullscreen _renderScreen;
     readonly int _layerCount = GameSetting.MaxRenderLayer;
     List<RenderTexture> _layerRt = new List<RenderTexture>();
-    RendererManager _rendererManager;
-    
+ 
     private readonly Contexts _contexts;
     RenderQuadInstances _quads;
     
     public RenderPipeline(IWindow window)
     {
         Gl = GL.GetApi(window);
-        _rendererManager = new RendererManager(Gl);
         SetupLayerRt(); }
 
 	void SetupLayerRt() {
@@ -39,7 +37,6 @@ public class RenderPipeline
 			_layerRt[index].RenderToRt();
 			Gl.Clear( (uint)GLEnum.ColorBufferBit );
 			Gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-			_rendererManager.Render( index );
 			RenderSystem.Render( index );
 		}
 		

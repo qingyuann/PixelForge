@@ -15,8 +15,8 @@ namespace PixelForge {
 		static InputSystem _inputSystem;
 		static RenderPipeline _renderPipeline;
 		static Systems _systems = new Systems();
-		public static Contexts _contexts = new Contexts();
-
+		static Contexts _contexts = new Contexts();
+	
 		public void Stop() {
 			_window.Close();
 		}
@@ -47,6 +47,8 @@ namespace PixelForge {
 
 			_systems.Add(new AddGameSystem(_contexts));
 			_systems.Initialize();
+			
+			GlobalVariable.Init( RenderPipeline.Gl, _contexts);
 		}
 
 		static void OnUpdate( double deltaTime ) {

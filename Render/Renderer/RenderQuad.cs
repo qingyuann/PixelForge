@@ -10,7 +10,7 @@ public class RenderQuad : Renderer {
 	GL _gl;
 
 	public RenderQuad(Vector3 pos, Vector2 scale,float rotation, int layer,Anchor anchor = Anchor.Center ) : base( layer ) {
-		_gl = RenderPipeline.Gl;
+		_gl = GlobalVariable.Gl;
 		_shaderVertPath = AssetManager.GetAssetPath( "QuadBasic.vert" );
 		_shaderFragPath = AssetManager.GetAssetPath( "QuadBasic.frag" );
 

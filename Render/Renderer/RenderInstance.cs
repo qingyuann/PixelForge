@@ -32,14 +32,14 @@ public class RenderQuadInstances : Renderer {
 		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0f, out Vertices, out Indices, anchor );
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
 		Vbo = new BufferObject<float>( base.Gl, Vertices, BufferTargetARB.ArrayBuffer );
-		Vao = new VertexArrayObject<float, uint>( RenderPipeline.Gl, Vbo, Ebo );
+		Vao = new VertexArrayObject<float, uint>( GlobalVariable.Gl, Vbo, Ebo );
 
 		//set pos
 		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
 		BaseShader = new Shader( base.Gl, _shaderVertPath, _shaderFragPath );
-		_texture = new Texture(  RenderPipeline.Gl, AssetManager.GetAssetPath( "silk.png" ) );
+		_texture = new Texture(  GlobalVariable.Gl, AssetManager.GetAssetPath( "silk.png" ) );
 		UpdateInstance( pos, scale, rotations );
 	}
 

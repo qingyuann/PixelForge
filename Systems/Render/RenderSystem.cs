@@ -14,7 +14,7 @@ public class RenderSystem : IInitializeSystem {
 
 	public RenderSystem( Contexts contexts ) {
 		_contexts = contexts;
-		_gl = RenderPipeline.Gl;
+		_gl = GlobalVariable.Gl;
 	}
 
 	public void Initialize() {

@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using PixelForge;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace Render;
@@ -24,7 +25,7 @@ public class Renderer
     /// </summary>
     protected Renderer( int layer)
     {
-        this.Gl = RenderPipeline.Gl;
+        this.Gl = GlobalVariable.Gl;
         Layer = layer;
     }
 
