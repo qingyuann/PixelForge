@@ -16,9 +16,6 @@ public class Renderer
 
     protected float[] Vertices;
     protected uint[] Indices;
-    protected BufferObject<float> Vbo;
-    protected BufferObject<uint> Ebo;
-    protected VertexArrayObject<float, uint> Vao;
 
     /// <summary>
     /// 使用默认着色器
@@ -29,16 +26,9 @@ public class Renderer
         Layer = layer;
     }
 
-    public virtual void Draw()
-    {
-    }
-
     public virtual void Dispose()
     {
         BaseShader.Dispose();
-        Vbo.Dispose();
-        Ebo.Dispose();
-        Vao.Dispose();
     }
 
     /// <summary>

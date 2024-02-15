@@ -4,7 +4,14 @@ using System.Numerics;
 
 namespace Render;
 
-public class RenderQuadInstances : Renderer {
+public class RenderQuadInstances : Renderer, IRenderInstanceObject {
+	public float[] Vertices { get; set; }
+	public uint[] Indices { get; set; }
+	public BufferObject<float> Vbo { get; set; }
+	public BufferObject<uint> Ebo { get; set; }
+	public VertexArrayObject<float, uint> Vao { get; set; }
+
+
 	string _shaderVertPath;
 	string _shaderFragPath;
 
@@ -22,14 +29,26 @@ public class RenderQuadInstances : Renderer {
 		Anchor anchor = Anchor.Center ) : base( layer ) {
 		_shaderVertPath = AssetManager.GetAssetPath( "QuadInstances.vert" );
 		_shaderFragPath = AssetManager.GetAssetPath( "QuadInstances.frag" );
+ 		SetUp( pos, scale, rotations, anchor );
+	}
+	
+	public RenderQuadInstances( List<Vector3> pos, List<Vector2> scale, List<float> rotations, int layer,string vertFileName, string fragFilePath, Anchor anchor = Anchor.Center ) : base( layer ) {
+		_shaderVertPath = AssetManager.GetAssetPath( vertFileName );
+		_shaderFragPath = AssetManager.GetAssetPath( fragFilePath );
+		SetUp( pos, scale, rotations, anchor );
 
+	}
+	
+	void SetUp(List<Vector3> pos, List<Vector2> scale, List<float> rotations, Anchor anchor = Anchor.Center) {
 		//初始化数组，大小和shader中的一样
 		_positions = new float[_maxInstance * 3];
 		_sizes = new float[_maxInstance * 2];
 		_rotations = new float[_maxInstance];
 
 		//basic quad
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0f, out Vertices, out Indices, anchor );
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0f, out float[] vert, out uint[] indices, anchor );
+		Vertices = vert;
+		Indices = indices;
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
 		Vbo = new BufferObject<float>( base.Gl, Vertices, BufferTargetARB.ArrayBuffer );
 		Vao = new VertexArrayObject<float, uint>( GlobalVariable.Gl, Vbo, Ebo );
@@ -39,40 +58,11 @@ public class RenderQuadInstances : Renderer {
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
 		BaseShader = new Shader( base.Gl, _shaderVertPath, _shaderFragPath );
-		_texture = new Texture(  GlobalVariable.Gl, AssetManager.GetAssetPath( "silk.png" ) );
+		_texture = new Texture( GlobalVariable.Gl, AssetManager.GetAssetPath( "silk.png" ) );
 		UpdateInstance( pos, scale, rotations );
 	}
-
-	// public RenderQuadInstances(GL Gl,float depth, List<Vector2> pos, float width, float height, int layer, string vertPath,
-	//     string fragPath, Anchor anchor = Anchor.Center) : base(Gl, layer)
-	// {
-	//     _shaderVertPath = AssetManager.GetAssetPath(vertPath);
-	//     _shaderFragPath = AssetManager.GetAssetPath(fragPath);
-	//     _positions = new float[_arraySize];
-	//
-	//     //初始化数组，大小和shader中的一样
-	//     _positions = new float[_arraySize];
-	//     //实例的数量
-	//     //实例的数量
-	//     _instanceCount = pos.Count ;
-	//     var posFloats = pos.SelectMany(v => new float[] { v.X, v.Y }).ToList(); 
-	//     posFloats.CopyTo(0, _positions, 0, Math.Min(_arraySize, pos.Count));
-	//
-	//     //basic quad
-	//     PatternMesh.CreateQuad(new Vector3(0, 0, depth), width, height, out Vertices, out Indices, anchor);
-	//
-	//     Ebo = new BufferObject<uint>(base.Gl, Indices, BufferTargetARB.ElementArrayBuffer);
-	//     Vbo = new BufferObject<float>(base.Gl, Vertices, BufferTargetARB.ArrayBuffer);
-	//     Vao = new VertexArrayObject<float, uint>(Gl, Vbo, Ebo);
-	//
-	//     //set pos
-	//     Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-	//     //set uv
-	//     Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-	//     BaseShader = new Shader(base.Gl, _shaderVertPath, _shaderFragPath);
-	// }
-
-	public void UpdateInstance( List<Vector3> pos, List<Vector2> scale, List<float> rotations ) {
+	
+	public void UpdateInstance( List<Vector3> pos, List<Vector2> scale, List<float> rotations , Anchor anchor = Anchor.Center ) {
 		if( pos.Count != scale.Count || pos.Count != rotations.Count ) {
 			throw new System.Exception( "pos, scale, rotations count not match" );
 		}
@@ -130,7 +120,7 @@ public class RenderQuadInstances : Renderer {
 		SetUniform( "rotationOffset", _rotations );
 	}
 
-	public override void Draw() {
+	public void Draw() {
 
 		BaseShader.Use();
 
@@ -140,5 +130,13 @@ public class RenderQuadInstances : Renderer {
 		Vao.Bind();
 
 		Gl.DrawArraysInstanced( PrimitiveType.Triangles, 0, 6, (uint)_instanceCount );
+	}
+
+	public override void Dispose() {
+		base.Dispose();
+		Vao.Dispose();
+		Vbo.Dispose();
+		Ebo.Dispose();
+		_texture.Dispose();
 	}
 }

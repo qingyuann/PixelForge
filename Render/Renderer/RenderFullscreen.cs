@@ -4,12 +4,19 @@ using System.Numerics;
 
 namespace Render;
 
-public class RenderFullscreen : Renderer {
+public class RenderFullscreen : Renderer, IRenderSingleObject {
+	public float[] Vertices { get; set;}
+	public uint[] Indices { get; set; }
+	public BufferObject<float> Vbo { get; set; }
+	public BufferObject<uint> Ebo { get; set; }
+	public VertexArrayObject<float, uint> Vao { get; set; }
 
-	public RenderFullscreen( int layer = -1 ) : base(  layer ) {
+	public RenderFullscreen( int layer = -1 ) : base( layer ) {
 		GenerateBgShader( GameSetting.MaxRenderLayer, out string shaderVert, out string shaderFrag );
 
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1,1 ), 0, out Vertices, out Indices );
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices);
+		Vertices = vert;
+		Indices = indices;
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
 		Vbo = new BufferObject<float>( base.Gl, Vertices, BufferTargetARB.ArrayBuffer );
 		Vao = new VertexArrayObject<float, uint>( Gl, Vbo, Ebo );
@@ -18,20 +25,29 @@ public class RenderFullscreen : Renderer {
 		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
-		BaseShader = new Shader( base.Gl, shaderVert, shaderFrag,true );
-		
+		BaseShader = new Shader( base.Gl, shaderVert, shaderFrag, true );
+
 		// string shaderVertTest = AssetManager.GetAssetPath( "BG.vert" );
 		// string shaderFragTest = AssetManager.GetAssetPath( "BG.frag" );
 		// BaseShader = new Shader( base.Gl, shaderVertTest, shaderFragTest);
 	}
 
-	override public void Draw() {
+	public void Update( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
+	
+	public void Draw() {
 		unsafe {
 			Vao.Bind();
 			BaseShader.Use();
 			Gl.DrawElements( PrimitiveType.Triangles,
 				(uint)Indices.Length, DrawElementsType.UnsignedInt, null );
 		}
+	}
+
+	public override void Dispose() {
+		base.Dispose();
+		Vbo.Dispose();
+		Ebo.Dispose();
+		Vao.Dispose();
 	}
 
 	//generate bg shader
