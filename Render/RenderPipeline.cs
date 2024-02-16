@@ -37,7 +37,7 @@ public class RenderPipeline {
 
 		for( int i = 0; i < _layerCount; i++ ) {
 			string texName = $"uTexture{i}";
-			_renderScreen.SetTexture( i, texName, _layerRt[i].RT );
+			_renderScreen.SetTexture( i, texName, _layerRt[i] );
 		}
 
 		//渲染到屏幕

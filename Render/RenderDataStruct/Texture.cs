@@ -5,13 +5,13 @@ using System;
 
 namespace Render {
 	public class Texture : IDisposable {
-		private uint _handle;
+		protected uint _handle;
 		public uint Handle {
 			get {
 				return _handle;
 			}
 		}
-		private GL _gl;
+		protected GL _gl;
 
 		public unsafe Texture( GL gl, string path ) {
 			_gl = gl;
@@ -77,7 +77,7 @@ namespace Render {
 			_gl.BindTexture( TextureTarget.Texture2D, 0 );
 		}
 		
-		public void Dispose() {
+		public virtual void Dispose() {
 			_gl.DeleteTexture( _handle );
 		}
 	}
