@@ -19,7 +19,6 @@ public class RenderSystem : IInitializeSystem {
 
 	public void Initialize() {
 		SetupRendererGroup();
-
 	}
 	
 	public static void Render( int layer ) {

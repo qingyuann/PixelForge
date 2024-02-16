@@ -34,6 +34,18 @@ namespace Render {
 			SetParameters();
 		}
 
+		public void UpdateImage( Span<byte> data, uint width, uint height ) {
+			unsafe {
+				Bind(TextureUnit.Texture31);
+
+				fixed (void* d = &data[0]) {
+					_gl.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, d);
+					SetParameters();
+				}
+			}
+
+		}
+		
 		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ) {
 			_gl = gl;
 

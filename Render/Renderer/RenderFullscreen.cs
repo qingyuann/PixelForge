@@ -11,7 +11,7 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 	public BufferObject<uint> Ebo { get; set; }
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
-	public RenderFullscreen( int layer = -1 ) : base( layer ) {
+	public RenderFullscreen(  ) : base( -1 ) {
 		GenerateBgShader( GameSetting.MaxRenderLayer, out string shaderVert, out string shaderFrag );
 
 		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices);

@@ -17,8 +17,9 @@ public static class GameComponentsLookup {
     public const int ComponentSingleRenderer = 6;
     public const int ComponentSize = 7;
     public const int ComponentSpriteInstanceRenderer = 8;
+    public const int PPPostProcess = 9;
 
-    public const int TotalComponents = 9;
+    public const int TotalComponents = 10;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
@@ -29,7 +30,8 @@ public static class GameComponentsLookup {
         "ComponentRotation",
         "ComponentSingleRenderer",
         "ComponentSize",
-        "ComponentSpriteInstanceRenderer"
+        "ComponentSpriteInstanceRenderer",
+        "PPPostProcess"
     };
 
     public static readonly System.Type[] componentTypes = {
@@ -41,6 +43,7 @@ public static class GameComponentsLookup {
         typeof(Component.RotationComponent),
         typeof(Component.SingleRendererComponent),
         typeof(Component.SizeComponent),
-        typeof(Component.SpriteInstanceRendererComponent)
+        typeof(Component.SpriteInstanceRendererComponent),
+        typeof(PP.PostProcess)
     };
 }
