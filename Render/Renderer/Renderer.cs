@@ -20,7 +20,7 @@ public class Renderer
     /// </summary>
     protected Renderer( int layer, string shaderVertName, string shaderFragName, bool isShaderContent = false)
     {
-        Gl = GlobalVariable.Gl;
+        Gl = GlobalVariable.GL;
         Layer = layer;
 
         if( isShaderContent==false ) {

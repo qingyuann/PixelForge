@@ -4,11 +4,11 @@ using Silk.NET.OpenGL;
 namespace PixelForge; 
 
 public static class GlobalVariable {
-	public static GL Gl;
+	public static GL GL;
 	public static Contexts Contexts;
 
 	public static void Init(ref GL gl, ref Contexts contexts) {
-		Gl = gl;
+		GL = gl;
 		Contexts = contexts;
 	}
 }

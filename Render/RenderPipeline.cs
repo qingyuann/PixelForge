@@ -20,7 +20,7 @@ public class RenderPipeline {
 	public RenderPipeline( IWindow window ) {
 		_window = window;
 		_gl = GL.GetApi( window );
-		GlobalVariable.Gl = _gl;
+		GlobalVariable.GL = _gl;
 
 		//创建渲染层
 		for( int i = 0; i < _layerCount; i++ ) {
@@ -36,11 +36,11 @@ public class RenderPipeline {
 		}
 		
 		//test
-		testQuad = new RenderQuad( Vector3.Zero, Vector2.One * 0.2f, 0, 0 );
+		// testQuad = new RenderQuad( Vector3.Zero, Vector2.One * 0.2f, 0, 0 );
 		// testQuad.SetTexture( "MainTex","silk2.png" );
-		var path = AssetManager.GetAssetPath( "silk2.png" );
-		tex = new Texture( _gl, path );
-		testQuad.SetTexture( "MainTex", tex );
+		// var path = AssetManager.GetAssetPath( "silk2.png" );
+		// tex = new Texture( _gl, path );
+		// testQuad.SetTexture( "MainTex", tex );
 		
 		
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
@@ -51,7 +51,6 @@ public class RenderPipeline {
 		_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 		for( var index = 0; index < _layerCount; index++ ) {
 			_layerRt[index].RenderToRt();
-			testQuad.Draw();
 			_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 			RenderSystem.Render( index );
 		}

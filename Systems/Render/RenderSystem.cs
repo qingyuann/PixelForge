@@ -17,13 +17,14 @@ public class RenderSystem : IInitializeSystem {
 
 	public RenderSystem( Contexts contexts ) {
 		_contexts = contexts;
-		_gl = GlobalVariable.Gl;
+		_gl = GlobalVariable.GL;
 	}
 
 	public void Initialize() {
+		Debug.Log( "RenderSystem" );
 		SetupRendererGroup();
 	}
-
+	
 	public static void Render( int layer ) {
 		UpdateRenderGroup();
 		foreach( var e in _renderGroup ) {
@@ -116,7 +117,7 @@ public class RenderSystem : IInitializeSystem {
 			var size = new Vector2( e.componentSize.X, e.componentSize.Y );
 			var rotation = e.componentRotation.Rot;
 			if( e.hasMatSingleRenderer ) {
-				e.matSingleRenderer.Renderer.Update( pos, size, rotation );
+				e.matSingleRenderer.Renderer.UpdateTransform( pos, size, rotation );
 			}
 		}
 	}
@@ -133,4 +134,5 @@ public class RenderSystem : IInitializeSystem {
 		//获得批量渲染的种类
 		var entities = _renderInstanceGroup.GetEntities();
 	}
+	
 }

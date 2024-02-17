@@ -6,6 +6,7 @@ using System;
 namespace Render {
 	public class Texture : IDisposable {
 		protected readonly uint _handle;
+        
 		public uint Handle {
 			get {
 				return _handle;
@@ -18,8 +19,9 @@ namespace Render {
 
 			_handle = _gl.GenTexture();
 			Bind(TextureUnit.Texture31);
-
+			Image<Rgba32> imgs = Image.Load<Rgba32>( path );
 			//传入path,载入图片，逐行写入
+			//使用using可以自动释放资源
 			using( var img = Image.Load<Rgba32>( path ) ) {
 				gl.TexImage2D( TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)img.Width, (uint)img.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null );
 
@@ -31,14 +33,13 @@ namespace Render {
 					}
 				} );
 			}
-
 			SetParameters();
 		}
 		
 		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ) {
 			_gl = gl;
-
 			_handle = _gl.GenTexture();
+			
 			Bind(TextureUnit.Texture31);
 
 			fixed (void* d = &data[0]) {
@@ -47,7 +48,13 @@ namespace Render {
 			}
 		}
 		
-		public void UpdateImage( Span<byte> data, uint width, uint height ) {
+		/// <summary>
+		/// 将数据写入glTexture
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		public void UpdateImageContent( Span<byte> data, uint width, uint height ) {
 			unsafe {
 				Bind(TextureUnit.Texture31);
 

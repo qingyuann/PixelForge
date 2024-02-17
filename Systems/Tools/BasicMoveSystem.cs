@@ -14,6 +14,7 @@ public class BasicMoveSystem : IInitializeSystem, IExecuteSystem {
 	}
 
 	public void Initialize() {
+		Debug.Log( "2 BasicMoveSystem" );
 		_controllerGroup = _context.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentBasicMove, GameMatcher.ComponentPosition ) );
 	}
 

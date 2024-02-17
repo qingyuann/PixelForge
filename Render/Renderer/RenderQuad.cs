@@ -13,7 +13,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
 	public RenderQuad( Vector3 pos, Vector2 scale, float rotation, int layer, Anchor anchor = Anchor.Center, string vertShaderName = "QuadBasic.vert", string fragShaderName = "QuadBasic.frag" ) : base( layer, vertShaderName, fragShaderName ) {
-		GL gl = GlobalVariable.Gl;
+		GL gl = GlobalVariable.GL;
 		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor );
 		Vertices = vert;
 		Indices = indices;
@@ -29,7 +29,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		}
 	}
 
-	public void Update( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) {
+	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) {
 		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor );
 		Vertices = vert;
 		Indices = indices;

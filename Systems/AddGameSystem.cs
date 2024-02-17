@@ -3,6 +3,11 @@ namespace PixelForge;
 using Entitas;
 using PixelForge.Spawner;
 public sealed class AddGameSystem : Systems {
+	/// <summary>
+	/// 运行式会先顺序执行一遍构造函数，再顺序执行一遍Initialize函数
+	/// 所以创建system时候想清楚把内容放在哪里
+	/// </summary>
+	/// <param name="contexts"></param>
 	public AddGameSystem( Contexts contexts ) {
 		//先添加场景物体
 		Add( new HierarchySystem( contexts ) );

@@ -34,7 +34,7 @@ public class RenderQuadInstances : Renderer, IRenderInstanceObject {
 		Indices = indices;
 		Ebo = new BufferObject<uint>( Gl, Indices, BufferTargetARB.ElementArrayBuffer );
 		Vbo = new BufferObject<float>( Gl, Vertices, BufferTargetARB.ArrayBuffer );
-		Vao = new VertexArrayObject<float, uint>( GlobalVariable.Gl, Vbo, Ebo );
+		Vao = new VertexArrayObject<float, uint>( GlobalVariable.GL, Vbo, Ebo );
 
 		//set pos
 		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );

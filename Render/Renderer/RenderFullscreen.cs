@@ -29,7 +29,7 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 		// BaseShader = new Shader( base.Gl, shaderVertTest, shaderFragTest);
 	}
 
-	public void Update( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
+	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
 
 	public void Draw() {
 		unsafe {
