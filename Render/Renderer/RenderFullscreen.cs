@@ -5,16 +5,14 @@ using System.Numerics;
 namespace Render;
 
 public class RenderFullscreen : Renderer, IRenderSingleObject {
-	public float[] Vertices { get; set;}
+	public float[] Vertices { get; set; }
 	public uint[] Indices { get; set; }
 	public BufferObject<float> Vbo { get; set; }
 	public BufferObject<uint> Ebo { get; set; }
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
-	public RenderFullscreen(  ) : base( -1 ) {
-		GenerateBgShader( GameSetting.MaxRenderLayer, out string shaderVert, out string shaderFrag );
-
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices);
+	public RenderFullscreen() : base( -1, GenerateBgVertShader(), GenerateBgFragShader( GameSetting.MaxRenderLayer ), true ) {
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices );
 		Vertices = vert;
 		Indices = indices;
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
@@ -25,7 +23,6 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
-		BaseShader = new Shader( base.Gl, shaderVert, shaderFrag, true );
 
 		// string shaderVertTest = AssetManager.GetAssetPath( "BG.vert" );
 		// string shaderFragTest = AssetManager.GetAssetPath( "BG.frag" );
@@ -33,13 +30,26 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 	}
 
 	public void Update( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
-	
+
 	public void Draw() {
 		unsafe {
 			Vao.Bind();
 			BaseShader.Use();
+
+			int textureNum = 0;
+			foreach( var tex in Textures ) {
+				BaseShader.SetUniform( textureNum, tex.Key, tex.Value );
+				textureNum++;
+			}
+
 			Gl.DrawElements( PrimitiveType.Triangles,
 				(uint)Indices.Length, DrawElementsType.UnsignedInt, null );
+
+			//unbind
+			for( int i = 0; i < textureNum; i++ ) {
+				Gl.ActiveTexture( TextureUnit.Texture0 + i );
+				Gl.BindTexture( TextureTarget.Texture2D, 0 );
+			}
 		}
 	}
 
@@ -51,8 +61,8 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 	}
 
 	//generate bg shader
-	void GenerateBgShader( int layerNumber, out string bgVertShader, out string bgFragShader ) {
-		bgFragShader = @"
+	static string GenerateBgFragShader( int layerNumber ) {
+		var bgFragShader = @"
 #version 330 core
 in vec2 fUv;
 out vec4 FragColor;
@@ -87,8 +97,10 @@ void main()
 FragColor = vec4(0,0,0,0);
 }";
 		}
-
-		bgVertShader = @"
+		return bgFragShader;
+	}
+	static string GenerateBgVertShader() {
+		var bgVertShader = @"
 #version 330 core
 layout (location = 0) in vec3 vPos;
 layout (location = 1) in vec2 vUv;
@@ -101,5 +113,6 @@ void main()
     fUv = vUv;
 }
 ";
+		return bgVertShader;
 	}
 }

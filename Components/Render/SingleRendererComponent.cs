@@ -1,7 +1,7 @@
 ﻿using Entitas;
 using Render;
 
-namespace Component; 
+namespace Mat; 
 
 [Game]
 public class SingleRendererComponent  : IComponent{

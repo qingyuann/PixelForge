@@ -5,13 +5,13 @@ using System;
 
 namespace Render {
 	public class Texture : IDisposable {
-		protected uint _handle;
+		protected readonly uint _handle;
 		public uint Handle {
 			get {
 				return _handle;
 			}
 		}
-		protected GL _gl;
+		protected readonly GL _gl;
 
 		public unsafe Texture( GL gl, string path ) {
 			_gl = gl;
@@ -19,6 +19,7 @@ namespace Render {
 			_handle = _gl.GenTexture();
 			Bind(TextureUnit.Texture31);
 
+			//传入path,载入图片，逐行写入
 			using( var img = Image.Load<Rgba32>( path ) ) {
 				gl.TexImage2D( TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)img.Width, (uint)img.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null );
 
@@ -33,18 +34,6 @@ namespace Render {
 
 			SetParameters();
 		}
-
-		public void UpdateImage( Span<byte> data, uint width, uint height ) {
-			unsafe {
-				Bind(TextureUnit.Texture31);
-
-				fixed (void* d = &data[0]) {
-					_gl.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, d);
-					SetParameters();
-				}
-			}
-
-		}
 		
 		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ) {
 			_gl = gl;
@@ -57,8 +46,19 @@ namespace Render {
 				SetParameters();
 			}
 		}
+		
+		public void UpdateImage( Span<byte> data, uint width, uint height ) {
+			unsafe {
+				Bind(TextureUnit.Texture31);
 
-		private void SetParameters() {
+				fixed (void* d = &data[0]) {
+					_gl.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, d);
+					SetParameters();
+				}
+			}
+		}
+
+		void SetParameters() {
 			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge );
 			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge );
 			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear );
@@ -73,6 +73,9 @@ namespace Render {
 			_gl.BindTexture( TextureTarget.Texture2D, _handle );
 		}
 
+		/// <summary>
+		/// 应该在绘制之前绑定纹理，绘制之后解绑纹理
+		/// </summary>
 		public void ReleaseBind() {
 			_gl.BindTexture( TextureTarget.Texture2D, 0 );
 		}

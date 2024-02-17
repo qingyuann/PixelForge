@@ -10,40 +10,49 @@ public static class GameComponentsLookup {
 
     public const int ComponentBasicMove = 0;
     public const int ComponentCamera = 1;
-    public const int ComponentName = 2;
-    public const int ComponentPosition = 3;
-    public const int ComponentRenderSinglePara = 4;
+    public const int ComponentCellularAutomaton = 2;
+    public const int ComponentName = 3;
+    public const int ComponentPosition = 4;
     public const int ComponentRotation = 5;
-    public const int ComponentSingleRenderer = 6;
-    public const int ComponentSize = 7;
-    public const int ComponentSpriteInstanceRenderer = 8;
-    public const int PPPostProcess = 9;
+    public const int ComponentSize = 6;
+    public const int ComponentTexture = 7;
+    public const int MatPara = 8;
+    public const int MatRenderSingleTrigger = 9;
+    public const int MatSingleRenderer = 10;
+    public const int MatSpriteInstanceRenderer = 11;
+    public const int PPPostProcess = 12;
 
-    public const int TotalComponents = 10;
+    public const int TotalComponents = 13;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
         "ComponentCamera",
+        "ComponentCellularAutomaton",
         "ComponentName",
         "ComponentPosition",
-        "ComponentRenderSinglePara",
         "ComponentRotation",
-        "ComponentSingleRenderer",
         "ComponentSize",
-        "ComponentSpriteInstanceRenderer",
+        "ComponentTexture",
+        "MatPara",
+        "MatRenderSingleTrigger",
+        "MatSingleRenderer",
+        "MatSpriteInstanceRenderer",
         "PPPostProcess"
     };
 
     public static readonly System.Type[] componentTypes = {
         typeof(Component.BasicMoveComponent),
         typeof(Component.CameraComponent),
+        typeof(Component.CellularAutomatonComponent),
         typeof(Component.NameComponent),
         typeof(Component.PositionComponent),
-        typeof(Component.RenderSingleParaComponent),
         typeof(Component.RotationComponent),
-        typeof(Component.SingleRendererComponent),
         typeof(Component.SizeComponent),
-        typeof(Component.SpriteInstanceRendererComponent),
+        typeof(Component.TextureComponent),
+        typeof(Mat.ParaComponent),
+        typeof(Mat.RenderSingleTriggerComponent),
+        typeof(Mat.SingleRendererComponent),
+        typeof(Mat.SpriteInstanceRendererComponent),
         typeof(PP.PostProcess)
     };
 }

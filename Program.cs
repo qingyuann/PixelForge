@@ -7,6 +7,7 @@ using Render;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
+using Silk.NET.GLFW;
 using Entitas;
 
 namespace PixelForge {
@@ -16,7 +17,7 @@ namespace PixelForge {
 		static RenderPipeline _renderPipeline;
 		static Systems _systems = new Systems();
 		static Contexts _contexts = new Contexts();
-	
+
 		public void Stop() {
 			_window.Close();
 		}
@@ -25,10 +26,15 @@ namespace PixelForge {
 			GlobalVariable.Contexts = _contexts;
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
-				Title = GameSetting.Name
+				Title = GameSetting.Name,
+				FramesPerSecond = 120,
+				UpdatesPerSecond = 120,
+				VSync = true,
+				WindowBorder = WindowBorder.Fixed,
+				ShouldSwapAutomatically = true
 			};
-
 			_window = Window.Create( options );
+	
 			_window.Load += OnLoad;
 			_window.Update += OnUpdate;
 			_window.Render += OnRender;
@@ -41,8 +47,8 @@ namespace PixelForge {
 		static async void OnLoad() {
 			GameSetting.Load();
 			_inputSystem = new InputSystem( _window );
-			_renderPipeline = new RenderPipeline( _window);
-			_systems.Add(new AddGameSystem(_contexts));
+			_renderPipeline = new RenderPipeline( _window );
+			_systems.Add( new AddGameSystem( _contexts ) );
 			_systems.Initialize();
 		}
 

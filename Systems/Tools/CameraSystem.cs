@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace PixelForge;
 
-public sealed class CameraSystem : IInitializeSystem {
+public sealed class CameraSystem : IInitializeSystem, IExecuteSystem{
 	public static Matrix4x4 MainCamViewMatrix;
 
 	readonly Contexts _contexts;
@@ -17,9 +17,6 @@ public sealed class CameraSystem : IInitializeSystem {
 	public void Initialize() {
 		_cameraGroup =_contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCamera, GameMatcher.ComponentPosition ) );
 		SetCameraViewMatrix();
-		_cameraGroup.OnEntityAdded += ( group, entity, index, component ) => {
-			SetCameraViewMatrix();
-		};
 	}
 
 	//对筛选出来的entity进行操作
@@ -36,5 +33,9 @@ public sealed class CameraSystem : IInitializeSystem {
 				return;
 			}
 		}
+	}
+	
+	public void Execute() {
+		SetCameraViewMatrix();
 	}
 }

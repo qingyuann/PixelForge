@@ -1,12 +1,10 @@
-using System;
-using System.IO;
 using System.Numerics;
 using Silk.NET.OpenGL;
 
 namespace Render {
 	public class Shader : IDisposable {
-		private uint _handle;
-		private GL _gl;
+		readonly private uint _handle;
+		readonly private GL _gl;
 
 		public Shader( GL gl, string vertexPath, string fragmentPath, bool isShaderString = false ) {
 			_gl = gl;
@@ -29,28 +27,22 @@ namespace Render {
 			_gl.DeleteShader( fragment );
 		}
 
-
-
-
-
-
 		/// <summary>
-		/// 先use，再setuniform
+		/// 先use，再set uniform
 		/// </summary>
 		public void Use() {
 			_gl.UseProgram( _handle );
 		}
 
 		public void SetUniform( int textureNum, string texName, Texture texture ) {
-			var textureUnit = (TextureUnit)( (int)TextureUnit.Texture0 + textureNum );
+			TextureUnit textureUnit = (TextureUnit)( (int)TextureUnit.Texture0 + textureNum );
 			texture.Bind( textureUnit );
 			int textureLocation = _gl.GetUniformLocation( _handle, texName );
 			if( textureLocation == -1 ) {
 				Console.WriteLine( $"{texName} uniform not found on shader." );
 			}
 			_gl.Uniform1( textureLocation, textureNum );
-			// texture.ReleaseBind();
-		}
+	 }
 
 		public void SetUniform( string name, int value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
@@ -69,7 +61,7 @@ namespace Render {
 			_gl.UniformMatrix4( location, 1, false, (float*)&value );
 		}
 
-		public unsafe void SetUniform( string name, Vector2 value ) {
+		public void SetUniform( string name, Vector2 value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
 				Console.WriteLine( $"{name} uniform not found on shader." );
@@ -77,7 +69,7 @@ namespace Render {
 			_gl.Uniform2( location, value.X, value.Y );
 		}
 
-		public unsafe void SetUniform( string name, float[] value ) {
+		public void SetUniform( string name, float[] value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
 				Console.WriteLine( $"{name} uniform not found on shader." );
@@ -117,12 +109,7 @@ namespace Render {
 		}
 
 		private uint LoadShader( ShaderType type, string path, bool isShaderString = false ) {
-			string src;
-			if( !isShaderString ) {
-				src = File.ReadAllText( path );
-			} else {
-				src = path;
-			}
+			string src = !isShaderString ? File.ReadAllText( path ) : path;
 			uint handle = _gl.CreateShader( type );
 			_gl.ShaderSource( handle, src );
 			_gl.CompileShader( handle );

@@ -6,6 +6,7 @@ namespace PixelForge;
 public class BasicMoveSystem : IInitializeSystem, IExecuteSystem {
 
 	Contexts _context;
+	int _accelerator = 1;
 	IGroup<GameEntity> _controllerGroup;
 
 	public BasicMoveSystem( Contexts contexts ) {
@@ -23,24 +24,18 @@ public class BasicMoveSystem : IInitializeSystem, IExecuteSystem {
 				var pos = e.componentPosition;
 				var update = false;
 				if( InputSystem.GetKey( Key.W ) ) {
-					pos.Y += move.Speed * GameSetting.DeltaTime;
-					update = true;
+					pos.Y += move.Speed * GameSetting.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.S ) ) {
-					pos.Y -= move.Speed * GameSetting.DeltaTime;
-					update = true;
+					pos.Y -= move.Speed * GameSetting.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.A ) ) {
-					pos.X -= move.Speed * GameSetting.DeltaTime;
-					update = true;
+					pos.X -= move.Speed * GameSetting.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.D ) ) {
-					pos.X += move.Speed * GameSetting.DeltaTime;
-					update = true;
+					pos.X += move.Speed * GameSetting.DeltaTime*_accelerator;
 				}
-				if( update) {
-					e.ReplaceComponentPosition( pos.X, pos.Y, pos.Z );
-				}
+				_accelerator = InputSystem.GetKey( Key.ShiftLeft ) ? 2 : 1;
 			}
 		}
 	}

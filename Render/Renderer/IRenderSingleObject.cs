@@ -3,7 +3,7 @@
 namespace Render;
 
 public interface IRenderSingleObject {
-	protected float[] Vertices { get; set; }
+	float[] Vertices { get; set; }
 	protected uint[] Indices{ get; set; }
 	protected BufferObject<float> Vbo{ get; set; }
 	protected BufferObject<uint> Ebo{ get; set; }

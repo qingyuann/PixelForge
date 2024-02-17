@@ -2,7 +2,7 @@
 using Render;
 using System.Numerics;
 
-namespace Component;
+namespace Mat;
 
 [Game]
 public class SpriteInstanceRendererComponent : IComponent {

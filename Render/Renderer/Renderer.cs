@@ -8,22 +8,26 @@ namespace Render;
 /// 处理了shader的使用和销毁
 /// </summary>
 public class Renderer
-{
-    protected GL Gl;
+{	
+    protected readonly GL Gl;
     protected Shader BaseShader;
+    public Dictionary<string, Texture> Textures=new Dictionary<string, Texture>();
 
     public int Layer { get; private set; }
-
-    protected float[] Vertices;
-    protected uint[] Indices;
 
     /// <summary>
     /// 使用默认着色器
     /// </summary>
-    protected Renderer( int layer)
+    protected Renderer( int layer, string shaderVertName, string shaderFragName, bool isShaderContent = false)
     {
-        this.Gl = GlobalVariable.Gl;
+        Gl = GlobalVariable.Gl;
         Layer = layer;
+
+        if( isShaderContent==false ) {
+            shaderVertName = AssetManager.GetAssetPath( shaderVertName );
+            shaderFragName = AssetManager.GetAssetPath( shaderFragName);
+        }
+        BaseShader = new Shader( Gl, shaderVertName, shaderFragName ,isShaderContent);
     }
 
     public virtual void Dispose()
@@ -53,6 +57,8 @@ public class Renderer
         else if (value is float[])
         {
             BaseShader.SetUniform(name, (float[])value);
+        } else {
+            Debug.Log("Renderer.ApplyUniform: 未知的类型");
         }
     }
 
@@ -62,16 +68,26 @@ public class Renderer
         ApplyUniform(name, value);
     }
 
-    public void SetTexture(int textureNum, string texName, Texture texture)
+    public void SetTexture( string texName, Texture texture)
     {
-        BaseShader.Use();
-        BaseShader.SetUniform(textureNum, texName, texture);
+        if( Textures.ContainsKey(texName) )
+        {
+            Textures[texName].Dispose();
+            Textures.Remove(texName);
+        }
+        Textures.Add(texName, texture);
+    }
+    
+    public void SetTexture(string texName, string texturePath)
+    {
+        if (Textures.ContainsKey(texName))
+        {
+            Textures[texName].Dispose();
+            Textures.Remove(texName);
+        }
+        var path = AssetManager.GetAssetPath(texturePath);
+        var tex = new Texture(Gl, path);
+        Textures.Add(texName, tex);
     }
 
-    public void SetTexture(int textureNum, string texName, string texturePath)
-    {
-        var tex = new Texture(Gl, texturePath);
-        BaseShader.Use();
-        BaseShader.SetUniform(textureNum, texName, tex);
-    }
 }

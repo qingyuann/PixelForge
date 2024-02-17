@@ -6,9 +6,9 @@ namespace Render
     public class BufferObject<TDataType> : IDisposable
         where TDataType : unmanaged
     {
-        private uint _handle;
-        private BufferTargetARB _bufferType;
-        private GL _gl;
+        readonly private uint _handle;
+        readonly private BufferTargetARB _bufferType;
+        readonly private GL _gl;
 
         public unsafe BufferObject(GL gl, Span<TDataType> data, BufferTargetARB bufferType)
         {

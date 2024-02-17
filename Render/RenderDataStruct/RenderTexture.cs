@@ -3,9 +3,8 @@
 namespace Render;
 
 public class RenderTexture:Texture {
-	uint _fbo;
-
-	int _colorAttachment;
+	readonly uint _fbo;
+	readonly int _colorAttachment;
 
 	public RenderTexture( GL gl, uint width, uint height, int colorAttachment = 0 ) : base( gl, new byte[width * height * 4], width, height) {
 		_colorAttachment = colorAttachment;
