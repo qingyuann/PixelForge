@@ -33,4 +33,12 @@ public static class Debug {
 		var fileName = frame.GetFileName();
 		Console.WriteLine($" ({f})  (Debug info: {fileName}, line {lineNumber})");
 	}
+	
+	public static void LogError( string message ) {
+		StackFrame frame = new StackFrame(1, true);
+		var lineNumber = frame.GetFileLineNumber();
+		var fileName = frame.GetFileName();
+
+		throw new Exception($"{message} (Debug info: {fileName}, line {lineNumber})");
+	}	
 }

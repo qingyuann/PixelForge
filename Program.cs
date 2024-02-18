@@ -30,9 +30,11 @@ namespace PixelForge {
 				FramesPerSecond = 120,
 				UpdatesPerSecond = 120,
 				VSync = true,
-				WindowBorder = WindowBorder.Fixed,
+				WindowBorder = WindowBorder.Resizable,
 				ShouldSwapAutomatically = true
 			};
+			
+			
 			_window = Window.Create( options );
 	
 			_window.Load += OnLoad;

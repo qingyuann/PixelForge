@@ -5,7 +5,8 @@ using System.Numerics;
 
 namespace Mat; 
 [Game]
-public class RenderSingleTriggerComponent  : IComponent{
+public class RenderSingleComponent  : IComponent{
 	public bool IsVisible=true;
 	public int Layer;
+	public RenderQuad? Renderer;
 }

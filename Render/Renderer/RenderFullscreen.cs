@@ -29,6 +29,20 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 		// BaseShader = new Shader( base.Gl, shaderVertTest, shaderFragTest);
 	}
 
+	public RenderFullscreen(string shaderVertName,string shaderFragName) : base( -1, shaderVertName, shaderFragName ) {
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices );
+		Vertices = vert;
+		Indices = indices;
+		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
+		Vbo = new BufferObject<float>( base.Gl, Vertices, BufferTargetARB.ArrayBuffer );
+		Vao = new VertexArrayObject<float, uint>( Gl, Vbo, Ebo );
+
+		//set pos
+		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );
+		//set uv
+		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
+	}
+	
 	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
 
 	public void Draw() {

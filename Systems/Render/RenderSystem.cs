@@ -12,26 +12,22 @@ public class RenderSystem : IInitializeSystem {
 	static Contexts _contexts;
 	static IGroup<GameEntity> _renderGroup;
 	static IGroup<GameEntity> _renderInstanceGroup;
-	GL _gl;
-	List<Renderer> _renderers = new List<Renderer>();
 
 	public RenderSystem( Contexts contexts ) {
 		_contexts = contexts;
-		_gl = GlobalVariable.GL;
 	}
 
 	public void Initialize() {
-		Debug.Log( "RenderSystem" );
 		SetupRendererGroup();
 	}
 	
 	public static void Render( int layer ) {
-		UpdateRenderGroup();
+		UpdateRenderGroupTransform();
 		foreach( var e in _renderGroup ) {
-			var eLayer = e.matRenderSingleTrigger.Layer;
+			var eLayer = e.matRenderSingle.Layer;
 			if( eLayer == layer ) {
-				if( e.hasMatSingleRenderer ) {
-					e.matSingleRenderer.Renderer.Draw();
+				if( e.hasMatRenderSingle ) {
+					e.matRenderSingle.Renderer?.Draw();
 				}
 			}
 		}
@@ -41,7 +37,7 @@ public class RenderSystem : IInitializeSystem {
 		//渲染单个的sprite
 		_renderGroup = _contexts.game.GetGroup(
 			GameMatcher.AllOf(
-				GameMatcher.MatRenderSingleTrigger,
+				GameMatcher.MatRenderSingle,
 				GameMatcher.ComponentPosition,
 				GameMatcher.ComponentSize,
 				GameMatcher.ComponentRotation ).NoneOf(
@@ -51,7 +47,7 @@ public class RenderSystem : IInitializeSystem {
 			SetUpSingleRenderer( e );
 		}
 
-		_renderGroup.OnEntityAdded += ( group, entity, index, component ) => {
+		_renderGroup.OnEntityAdded += ( _, entity, _, _ ) => {
 			SetUpSingleRenderer( entity );
 		};
 	}
@@ -60,21 +56,21 @@ public class RenderSystem : IInitializeSystem {
 		var pos = new Vector3( e.componentPosition.X, e.componentPosition.Y, e.componentPosition.Z );
 		var size = new Vector2( e.componentSize.X, e.componentSize.Y );
 		var rotation = e.componentRotation.Rot;
-		var spriteAttribute = e.matRenderSingleTrigger;
+		var spriteAttribute = e.matRenderSingle;
 
-		e.AddMatSingleRenderer( new RenderQuad( pos, size, rotation, spriteAttribute.Layer ) );
+		e.matRenderSingle.Renderer ??= new RenderQuad( pos, size, rotation, spriteAttribute.Layer );
 		if( e.hasMatPara ) {
 			SetRendererPara( e );
 		} else {
 			//响应para的添加
-			e.OnComponentAdded += ( entity, index, component ) => {
-				if( component is ParaComponent para ) {
+			e.OnComponentAdded += ( _, _, component ) => {
+				if( component is ParaComponent ) {
 					SetRendererPara( e );
 				}
 			};
 		}
 		//响应para变化
-		e.OnComponentReplaced += ( entity, index, previousComponent, newComponent ) => {
+		e.OnComponentReplaced += ( _, _, _, newComponent ) => {
 			if( newComponent is ParaComponent ) {
 				SetRendererPara( e );
 			}
@@ -87,19 +83,19 @@ public class RenderSystem : IInitializeSystem {
 	/// <param name="e"></param>
 	static void SetRendererPara( GameEntity e ) {
 		//set para
-		if( e is{ hasMatPara: true, hasMatSingleRenderer: true } ) {
-			var renderer = e.matSingleRenderer.Renderer;
+		if( e is{ hasMatPara: true, hasMatRenderSingle: true } ) {
+			RenderQuad? renderer = e.matRenderSingle.Renderer;
 			if( e.matPara.ParaDict != null ) {
 				foreach( var para in e.matPara.ParaDict ) {
-					renderer.SetUniform( para.Key, para.Value );
+					renderer?.SetUniform( para.Key, para.Value );
 				}
 			}
 			if( e.matPara.TextureDict != null ) {
 				foreach( var texture in e.matPara.TextureDict ) {
 					if( texture.Value is string value ) {
-						renderer.SetTexture( texture.Key, value );
+						renderer?.SetTexture( texture.Key, value );
 					} else if( texture.Value is Texture textureValue ) {
-						renderer.SetTexture( texture.Key, textureValue );
+						renderer?.SetTexture( texture.Key, textureValue );
 					}
 				}
 			}
@@ -109,15 +105,15 @@ public class RenderSystem : IInitializeSystem {
 	/// <summary>
 	/// 更新单例渲染组的属性
 	/// </summary>
-	static void UpdateRenderGroup() {
+	static void UpdateRenderGroupTransform() {
 		//渲染单个的sprite
 		//更新渲染参数
 		foreach( GameEntity e in _renderGroup.GetEntities() ) {
 			var pos = new Vector3( e.componentPosition.X, e.componentPosition.Y, e.componentPosition.Z );
 			var size = new Vector2( e.componentSize.X, e.componentSize.Y );
 			var rotation = e.componentRotation.Rot;
-			if( e.hasMatSingleRenderer ) {
-				e.matSingleRenderer.Renderer.UpdateTransform( pos, size, rotation );
+			if( e.hasMatRenderSingle ) {
+				e.matRenderSingle.Renderer?.UpdateTransform( pos, size, rotation );
 			}
 		}
 	}

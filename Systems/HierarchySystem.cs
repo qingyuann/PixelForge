@@ -1,5 +1,6 @@
 ﻿using Entitas;
 using Render;
+using Render.PostEffect;
 using System.Numerics;
 
 namespace PixelForge;
@@ -9,6 +10,10 @@ public class HierarchySystem : IInitializeSystem {
 
 	public HierarchySystem( Contexts contexts ) {
 		_contexts = contexts;
+		var a = contexts.allContexts;
+		foreach( IContext c in a ) {
+			Debug.Log( c.contextInfo.name );
+		}
 	}
 
 	public void Initialize() {
@@ -21,9 +26,12 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 0, 0, 0 );
 		camera.AddComponentCamera( 0, true, 0.5f );
 		camera.AddComponentBasicMove( true, 0.0005f );
-		//
-		// var globalLight = _contexts.game.CreateEntity();
-		//
+
+		var globalLight = _contexts.game.CreateEntity();
+		globalLight.AddGlobalPostProcessGroup( true, new int[]{ 0, 1 }, 0.5f,
+			new PostProcessComputer[]{ new BloomComputer() } );
+
+
 		// var quad1 = _contexts.game.CreateEntity();
 		// quad1.AddComponentName( "quad1" );
 		// quad1.AddComponentPosition( 0, 0, 0 );
@@ -45,7 +53,8 @@ public class HierarchySystem : IInitializeSystem {
 		quad3.AddComponentPosition( 0, 1, 0 );
 		quad3.AddComponentSize( 0.5f, 0.5f );
 		quad3.AddComponentRotation( 0 );
-		quad3.AddMatRenderSingleTrigger( true, 0 );
+		quad3.AddMatRenderSingle( true, 0, null );
 		quad3.isComponentCellularAutomaton = true;
 	}
+
 }

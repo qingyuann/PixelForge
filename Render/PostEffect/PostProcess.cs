@@ -1,6 +1,6 @@
 ﻿namespace Render.PostEffect;
 
-public abstract class PostEffect {
-	public abstract void Render(RenderTexture rt);
-	 
+public abstract class PostProcessComputer {
+	public abstract void Render( RenderTexture rt );
+	public abstract void SetParams( Dictionary<string, object> param );
 }

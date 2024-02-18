@@ -34,7 +34,9 @@ public class Renderer
     {
         BaseShader.Dispose();
     }
-
+    
+    public virtual void Draw(){}
+    
     /// <summary>
     /// 先use，再apply
     /// </summary>

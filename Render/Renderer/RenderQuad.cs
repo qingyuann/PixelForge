@@ -25,7 +25,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
 		if( fragShaderName == "QuadBasic.frag" ) {
-			SetTexture( "MainTex","silk.png" );
+			SetTexture( "MainTex", "silk.png" );
 		}
 	}
 
@@ -36,7 +36,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		Vbo.UpdateBuffer( Vertices );
 	}
 
-	public void Draw() {
+	public override void Draw() {
 		unsafe {
 			Vao.Bind();
 			BaseShader.Use();
@@ -57,5 +57,12 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 				Gl.BindTexture( TextureTarget.Texture2D, 0 );
 			}
 		}
+	}
+
+	public override void Dispose() {
+		base.Dispose();
+		Vbo.Dispose();
+		Ebo.Dispose();
+		Vao.Dispose();
 	}
 }

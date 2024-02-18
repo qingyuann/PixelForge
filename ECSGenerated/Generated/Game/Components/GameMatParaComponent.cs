@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Mat.ParaComponent matPara { get { return (Mat.ParaComponent)GetComponent(GameComponentsLookup.MatPara); } }
     public bool hasMatPara { get { return HasComponent(GameComponentsLookup.MatPara); } }
 
-    public void AddMatPara(System.Collections.Generic.Dictionary<string, object> newParaDict, System.Collections.Generic.Dictionary<string, object> newTextureDict) {
+    public void AddMatPara(System.Collections.Generic.Dictionary<string, object>? newParaDict, System.Collections.Generic.Dictionary<string, object>? newTextureDict) {
         var index = GameComponentsLookup.MatPara;
         var component = (Mat.ParaComponent)CreateComponent(index, typeof(Mat.ParaComponent));
         component.ParaDict = newParaDict;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceMatPara(System.Collections.Generic.Dictionary<string, object> newParaDict, System.Collections.Generic.Dictionary<string, object> newTextureDict) {
+    public void ReplaceMatPara(System.Collections.Generic.Dictionary<string, object>? newParaDict, System.Collections.Generic.Dictionary<string, object>? newTextureDict) {
         var index = GameComponentsLookup.MatPara;
         var component = (Mat.ParaComponent)CreateComponent(index, typeof(Mat.ParaComponent));
         component.ParaDict = newParaDict;

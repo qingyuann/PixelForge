@@ -9,6 +9,4 @@ public interface IRenderInstanceObject {
 	protected BufferObject<uint> Ebo{ get; set; }
 	protected VertexArrayObject<float, uint> Vao{ get; set; }
 	public void UpdateInstance(List<Vector3> pos, List<Vector2> scale, List<float> rotations, Anchor anchor = Anchor.Center);
-	public void Draw();
-	public void Dispose();
 }

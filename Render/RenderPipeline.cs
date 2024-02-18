@@ -22,14 +22,15 @@ public class RenderPipeline {
 		_gl = GL.GetApi( window );
 		GlobalVariable.GL = _gl;
 
-		//创建渲染层
+		//create render layer
 		for( int i = 0; i < _layerCount; i++ ) {
 			_layerRt.Add( new RenderTexture( _gl, GameSetting.WindowWidth, GameSetting.WindowHeight ) );
 		}
 		_renderScreen = new RenderFullscreen();
 		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
 		
-		//设置renderScreen的shader
+		
+		//set renderScreen shader
 		for( int i = 0; i < _layerCount; i++ ) {
 			string texName = $"uTexture{i}";
 			_renderScreen.SetTexture( texName, _layerRt[i] );
@@ -47,20 +48,25 @@ public class RenderPipeline {
 	}
 
 	public void OnRender() {
-		// testQuad.SetTexture( 0, "MainTex", tex );
 		_gl.ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+		//render to layer
 		for( var index = 0; index < _layerCount; index++ ) {
 			_layerRt[index].RenderToRt();
 			_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 			RenderSystem.Render( index );
 		}
 		
-		//渲染到屏幕
+		//post process
+		for( var index = 0; index < _layerCount; index++ ) {
+			_layerRt[index].RenderToRt();
+			PostProcessSystem.RenderPostProcess( index, _layerRt[index] );
+		}
+
+
+		
+		//blit to screen
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 		_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
-
-		// testQuad.Draw();
-
 		_renderScreen.Draw();
 	}
 

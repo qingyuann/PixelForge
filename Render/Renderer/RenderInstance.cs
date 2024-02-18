@@ -106,7 +106,7 @@ public class RenderQuadInstances : Renderer, IRenderInstanceObject {
 		SetUniform( "rotationOffset", _rotations );
 	}
 
-	public void Draw() {
+	public override void Draw() {
 		BaseShader.Use();
 		var textureNum = 0;
 		foreach( var tex in Textures ) {

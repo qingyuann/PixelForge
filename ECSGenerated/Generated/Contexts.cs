@@ -57,6 +57,7 @@ public partial class Contexts : Entitas.IContexts {
 public partial class Contexts {
 
     public const string ComponentName = "ComponentName";
+    public const string ComponentParent = "ComponentParent";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
@@ -64,6 +65,11 @@ public partial class Contexts {
             ComponentName,
             game.GetGroup(GameMatcher.ComponentName),
             (e, c) => ((Component.NameComponent)c).Name));
+
+        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, string>(
+            ComponentParent,
+            game.GetGroup(GameMatcher.ComponentParent),
+            (e, c) => ((Component.ParentComponent)c).ParentName));
     }
 }
 
@@ -71,5 +77,9 @@ public static class ContextsExtensions {
 
     public static GameEntity GetEntityWithComponentName(this GameContext context, string Name) {
         return ((Entitas.PrimaryEntityIndex<GameEntity, string>)context.GetEntityIndex(Contexts.ComponentName)).GetEntity(Name);
+    }
+
+    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithComponentParent(this GameContext context, string ParentName) {
+        return ((Entitas.EntityIndex<GameEntity, string>)context.GetEntityIndex(Contexts.ComponentParent)).GetEntities(ParentName);
     }
 }
