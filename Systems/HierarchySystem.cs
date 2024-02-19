@@ -23,9 +23,12 @@ public class HierarchySystem : IInitializeSystem {
 	void InitEntity() {
 		var camera = _contexts.game.CreateEntity();
 		camera.AddComponentName( "mainCamera" );
+		camera.AddComponentSize( 0.1f, 0.1f );
+		camera.AddComponentRotation( 0 );
 		camera.AddComponentPosition( 0, 0, 0 );
 		camera.AddComponentCamera( 0, true, 0.5f );
 		camera.AddComponentBasicMove( true, 0.0005f );
+		camera.AddMatRenderSingle( true, 0, null );
 
 		var globalLight = _contexts.game.CreateEntity();
 		globalLight.AddGlobalPostProcessGroup( true, new int[]{ 0, 1 }, 0.5f,
@@ -54,7 +57,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad3.AddComponentSize( 0.5f, 0.5f );
 		quad3.AddComponentRotation( 0 );
 		quad3.AddMatRenderSingle( true, 0, null );
-		quad3.isComponentCellularAutomaton = true;
+		// quad3.isComponentCellularAutomaton = true;
 	}
 
 }

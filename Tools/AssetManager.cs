@@ -29,7 +29,7 @@ public static class AssetManager {
 			//windows
 			filePath = path is null ? "" : path + "\\" + fileName;
 		}
-		else if (platform == PlatformID.MacOSX)
+		else if (platform == PlatformID.MacOSX || platform == PlatformID.Unix)
 		{
 			//mac
 			filePath = path is null ? "" : path + "/" + fileName;

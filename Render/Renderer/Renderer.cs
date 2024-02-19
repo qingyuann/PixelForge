@@ -80,14 +80,14 @@ public class Renderer
         Textures.Add(texName, texture);
     }
     
-    public void SetTexture(string texName, string texturePath)
+    public void SetTexture(string texName, string textureName)
     {
         if (Textures.ContainsKey(texName))
         {
             Textures[texName].Dispose();
             Textures.Remove(texName);
         }
-        var path = AssetManager.GetAssetPath(texturePath);
+        var path = AssetManager.GetAssetPath(textureName);
         var tex = new Texture(Gl, path);
         Textures.Add(texName, tex);
     }

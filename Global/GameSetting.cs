@@ -1,11 +1,25 @@
 ﻿namespace PixelForge;
 
 public static class GameSetting {
-	public const int WindowWidth = 2048;
-	public const int WindowHeight = 2048;
+	public const int WindowWidth = 500;
+	public const int WindowHeight = 500;
 	public const string Name = "PixelForge";
 	//public const string ProjectPath = @"./";
-	public const string ProjectPath = @"../../../";
+	public static string ProjectPath
+	{
+		get
+		{
+			PlatformID platform = Environment.OSVersion.Platform;
+			if (platform == PlatformID.Win32NT || platform == PlatformID.Win32S || platform == PlatformID.Win32Windows || platform == PlatformID.WinCE)
+			{
+				return @"../../../";
+			}
+			else
+			{
+				return @"./";
+			}
+		}
+	}
 	public const int MaxInstancePerDrawCall = 50;
 	public const int MaxRenderLayer = 3;
 
