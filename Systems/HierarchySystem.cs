@@ -31,10 +31,9 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddMatRenderSingle( true, 0, null );
 
 		var globalLight = _contexts.game.CreateEntity();
-		globalLight.AddGlobalPostProcessGroup( true, new int[]{ 0, 1 }, 0.5f,
-			new PostProcessComputer[]{ new BloomComputer() } );
-
-
+		globalLight.AddppBloomComponnet( true, new int[] { 0 }, 0.5f, new BloomComputer() );
+		globalLight.AddppGaussianBlur( true, new int[] { 0 }, 0.5f, new GaussianBlurComputer() );
+		
 		// var quad1 = _contexts.game.CreateEntity();
 		// quad1.AddComponentName( "quad1" );
 		// quad1.AddComponentPosition( 0, 0, 0 );

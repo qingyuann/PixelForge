@@ -2,12 +2,12 @@
 using Entitas.CodeGeneration.Attributes;
 using Render.PostEffect;
 
-namespace Global;
+namespace pp;
 
 [Game]
-public class PostProcessGroupComponent : IComponent{
+public class BloomComponnet : IComponent{
 	public bool Enabled;
 	public int[] Layers;
 	public float Intensity;
-	public PostProcessComputer[] Computer;
+	public BloomComputer Computer;
 }

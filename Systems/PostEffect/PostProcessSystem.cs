@@ -1,65 +1,72 @@
 ﻿using Entitas;
+using pp;
 using Render;
 using Render.PostEffect;
+
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace PixelForge;
 
-public sealed class PostProcessSystem : IInitializeSystem, IExecuteSystem {
-	//set a singleton
-	static PostProcessSystem _postProcessSystem;
-	public static PostProcessSystem Instance {
-		get {
-			if( _postProcessSystem is null ) {
-				_postProcessSystem = new PostProcessSystem();
-			}
-			return _postProcessSystem;
-		}
-	}
+public sealed class PostProcessSystem : IInitializeSystem, IExecuteSystem
+{
+    //set a singleton
+    static PostProcessSystem _postProcessSystem;
+
+    public static PostProcessSystem Instance
+    {
+        get
+        {
+            if (_postProcessSystem is null)
+            {
+                _postProcessSystem = new PostProcessSystem();
+            }
+
+            return _postProcessSystem;
+        }
+    }
 
 
+    // pair of post process component and its computer
+    private static Dictionary<Type, Type> _ppTypes = new Dictionary<Type, Type>()
+    {
+        { typeof(BloomComponnet), typeof(BloomComputer) },
+        { typeof(GaussianBlurComponent), typeof(GaussianBlurComputer) },
+    };
 
-	Contexts _contexts;
-	static IGroup<GameEntity> _ppEntityGroup;
-	Dictionary<IComponent, PostProcessComputer> _computers = new Dictionary<IComponent, PostProcessComputer>();
+    //store all post process components
+    private Dictionary<IComponent, PostProcessComputer> _allPP = new Dictionary<IComponent, PostProcessComputer>();
 
 
-	public void Initialize() {
-		_contexts = Contexts.sharedInstance;
-		_ppEntityGroup = _contexts.game.GetGroup( GameMatcher.GlobalPostProcessGroup );
-		foreach( var e in _ppEntityGroup.GetEntities() ) {
-			SetUpPostEffects( e );
-		}
-		_ppEntityGroup.OnEntityAdded += ( _, entity, _, _ ) => {
-			SetUpPostEffects( entity );
-		};
-	}
+    Contexts _contexts;
+    GameEntity _ppEntity;
+    Dictionary<IComponent, PostProcessComputer> _computers = new Dictionary<IComponent, PostProcessComputer>();
 
-	void SetUpPostEffects( GameEntity entity ) {
-		var ppEntity = entity.globalPostProcessGroup;
-		if( ppEntity.Enabled ) {
-			foreach( var c in ppEntity.Computer ) {
+    public void Initialize()
+    {
+        _contexts = Contexts.sharedInstance;
+        _ppEntity = _contexts.game.ppLightSettingEntity;
+        foreach (var c in _ppEntity.GetComponents())
+        {
+            foreach (var pp in _ppTypes)
+            {
+                if (pp.Key == c.GetType())
+                {
+                    Debug.Log("pp" + pp.Key);
+                }
+            }
+        }
+    }
 
-			}
-		}
-	}
+    void SetUpPostEffects(GameEntity entity)
+    {
+    }
 
-	public void Execute() {
+    public void Execute()
+    {
+    }
 
-	}
-
-	public static void RenderPostProcess( int layer, RenderTexture rt ) {
-		if( _ppEntityGroup == null ) {
-			return;
-		}
-		foreach( var e in _ppEntityGroup ) {
-			var pp = e.globalPostProcessGroup;
-			if( pp.Enabled && pp.Layers.Contains( layer ) ) {
-				foreach( var c in pp.Computer ) {
-					c.Render( rt );
-				}
-			}
-		}
-	}
+    public static void RenderPostProcess(int layer, RenderTexture rt)
+    {
+    }
 }

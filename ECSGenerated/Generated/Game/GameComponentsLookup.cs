@@ -17,12 +17,14 @@ public static class GameComponentsLookup {
     public const int ComponentRotation = 6;
     public const int ComponentSize = 7;
     public const int ComponentTexture = 8;
-    public const int GlobalPostProcessGroup = 9;
-    public const int MatPara = 10;
-    public const int MatRenderSingle = 11;
-    public const int MatSpriteInstanceRenderer = 12;
+    public const int MatPara = 9;
+    public const int MatRenderSingle = 10;
+    public const int MatSpriteInstanceRenderer = 11;
+    public const int ppBloomComponnet = 12;
+    public const int ppGaussianBlur = 13;
+    public const int ppLightSetting = 14;
 
-    public const int TotalComponents = 13;
+    public const int TotalComponents = 15;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
@@ -34,10 +36,12 @@ public static class GameComponentsLookup {
         "ComponentRotation",
         "ComponentSize",
         "ComponentTexture",
-        "GlobalPostProcessGroup",
         "MatPara",
         "MatRenderSingle",
-        "MatSpriteInstanceRenderer"
+        "MatSpriteInstanceRenderer",
+        "ppBloomComponnet",
+        "ppGaussianBlur",
+        "ppLightSetting"
     };
 
     public static readonly System.Type[] componentTypes = {
@@ -50,9 +54,11 @@ public static class GameComponentsLookup {
         typeof(Component.RotationComponent),
         typeof(Component.SizeComponent),
         typeof(Component.TextureComponent),
-        typeof(Global.PostProcessGroupComponent),
         typeof(Mat.ParaComponent),
         typeof(Mat.RenderSingleComponent),
-        typeof(Mat.SpriteInstanceRendererComponent)
+        typeof(Mat.SpriteInstanceRendererComponent),
+        typeof(pp.BloomComponnet),
+        typeof(pp.GaussianBlurComponent),
+        typeof(pp.LightSettingComponent)
     };
 }
