@@ -19,7 +19,7 @@ public static class RenderTexturePool {
 		return new RenderTexture( GlobalVariable.GL, width, height, 0 );
 	}
 
-	public static void Release( RenderTexture rt ) {
+	public static void Return( RenderTexture rt ) {
 		if (_pool.Count < 5)
 		{
 			_pool.Push(rt);

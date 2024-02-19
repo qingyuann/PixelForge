@@ -20,6 +20,7 @@ public class RenderPipeline {
 
 		//create render layer
 		for( int i = 0; i < _layerCount; i++ ) {
+			// _layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight  ) );
 			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight  ) );
 		}
 		_renderScreen = new RenderFullscreen();
@@ -57,11 +58,7 @@ public class RenderPipeline {
 		//blit to screen
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 		_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)ClearBufferMask.DepthBufferBit );
-		 // _renderScreen.Draw();
-
-
-		_quad.Draw();
-		_quad1.Draw();
+		_renderScreen.Draw();
 	}
 
 	public void OnClose() {

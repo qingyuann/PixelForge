@@ -41,7 +41,7 @@ public class BloomComputer : PostProcessComputer {
 	}
 
 	public override void Dispose() {
-		RenderTexturePool.Release( tempRT1 );
+		RenderTexturePool.Return( tempRT1 );
 		_gaussianBlurComputer.Dispose();
 	}
 

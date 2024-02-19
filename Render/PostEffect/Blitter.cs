@@ -28,19 +28,19 @@ public static class Blitter {
 	}
 
 
-	// public static void Blit( RenderTexture rt1, RenderTexture rt2 ) {
-	// 	GlobalVariable.GL.BindFramebuffer( FramebufferTarget.ReadFramebuffer, rt1._fbo );
-	// 	GlobalVariable.GL.BindFramebuffer( FramebufferTarget.DrawFramebuffer, rt2._fbo );
-	// 	GlobalVariable.GL.BlitFramebuffer(
-	// 		0, 0, rt1.Width, rt1.Height, // 源区域左下角坐标和右上角坐标
-	// 		0, 0, rt2.Width, rt2.Height, // 目标区域左下角坐标和右上角坐标
-	// 		ClearBufferMask.ColorBufferBit, // 指定要复制的缓冲区
-	// 		BlitFramebufferFilter.Nearest // 指定采样滤波方式
-	// 	);
-	// 	// 解绑帧缓冲区
-	// 	GlobalVariable.GL.BindFramebuffer( FramebufferTarget.ReadFramebuffer, 0 );
-	// 	GlobalVariable.GL.BindFramebuffer( FramebufferTarget.DrawFramebuffer, 0 );
-	// }
+	public static void Blit( RenderTexture rt1, RenderTexture rt2 ) {
+		GlobalVariable.GL.BindFramebuffer( FramebufferTarget.ReadFramebuffer, rt1._fbo );
+		GlobalVariable.GL.BindFramebuffer( FramebufferTarget.DrawFramebuffer, rt2._fbo );
+		GlobalVariable.GL.BlitFramebuffer(
+			0, 0, rt1.Width, rt1.Height, // 源区域左下角坐标和右上角坐标
+			0, 0, rt2.Width, rt2.Height, // 目标区域左下角坐标和右上角坐标
+			ClearBufferMask.ColorBufferBit, // 指定要复制的缓冲区
+			BlitFramebufferFilter.Linear // 指定采样滤波方式
+		);
+		// 解绑帧缓冲区
+		GlobalVariable.GL.BindFramebuffer( FramebufferTarget.ReadFramebuffer, 0 );
+		GlobalVariable.GL.BindFramebuffer( FramebufferTarget.DrawFramebuffer, 0 );
+	}
 
 	static void RecordState() {
 		_gl.GetInteger( GLEnum.ArrayBufferBinding, out originalState[0] );
