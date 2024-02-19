@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using PixelForge;
+using System.Numerics;
 
 namespace Render;
 
@@ -18,9 +19,10 @@ public static class PatternMesh {
 	/// <param name="vertices"></param>
 	/// <param name="indices"></param>
 	/// <param name="anchor">Center->pos为中间，Bottom->下方，Top->上方</param>
-	public static void CreateQuad( Vector3 pos, Vector2 size, float rotation, out float[] vertices, out uint[] indices, Anchor anchor = Anchor.Center, bool invertV = false ) {
-		var width = size.X * 2;
-		var height = size.Y * 2;
+	/// <param name="fixedLength"></param>
+	public static void CreateQuad( Vector3 pos, Vector2 size, float rotation, out float[] vertices, out uint[] indices, Anchor anchor = Anchor.Center, bool relativeLength=false, bool invertV = false ) {
+		var width =!relativeLength? (size.X*1000/GameSetting.WindowWidth):size.X * 2;
+		var height = !relativeLength? (size.Y*1000/GameSetting.WindowHeight):size.Y * 2;
 		float[] tempVertices;
 		uint[] tempIndices;
 
@@ -68,7 +70,7 @@ public static class PatternMesh {
 			point = Vector2.Transform( point, rotationMatrix );
 			tempVertices[i * 5] = point.X + pos.X;
 			tempVertices[i * 5 + 1] = point.Y + pos.Y;
-			tempVertices[i * 5 + 2] = - pos.Z;
+			tempVertices[i * 5 + 2] = -pos.Z;
 		}
 		;
 

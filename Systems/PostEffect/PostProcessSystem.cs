@@ -14,7 +14,7 @@ public sealed class PostProcessSystem : IInitializeSystem {
 
 	// pair of post process component and its computer
 	static Dictionary<Type, Type> _ppTypes = new Dictionary<Type, Type>(){
-		{ typeof( BloomComponnet ), typeof( BloomComputer ) },
+		{ typeof( BloomComponent ), typeof( BloomComputer ) },
 		{ typeof( GaussianBlurComponent ), typeof( GaussianBlurComputer ) },
 	};
 

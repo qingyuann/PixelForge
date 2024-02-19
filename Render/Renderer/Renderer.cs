@@ -42,14 +42,12 @@ public class Renderer {
 	void ApplyUniform( string name, object value ) {
 		if( value is Vector3 ) {
 			BaseShader.SetUniform( name, (Vector3)value );
-		} else if( value is float ) {
-			BaseShader.SetUniform( name, (float)value );
 		} else if( value is Matrix4x4 ) {
 			BaseShader.SetUniform( name, (Matrix4x4)value );
 		} else if( value is float[] ) {
 			BaseShader.SetUniform( name, (float[])value );
-		} else if( value is int ) {
-			float v = Convert.ToSingle(value);
+		} else if( value is int || value is uint || value is float || value is double ) {
+			float v = Convert.ToSingle( value );
 			BaseShader.SetUniform( name, v );
 		} else {
 			Debug.LogError( "Renderer.ApplyUniform: 未知的类型" );
@@ -62,7 +60,7 @@ public class Renderer {
 	}
 
 	public void SetTexture( string texName, Texture texture, bool keepOld = true ) {
-		if( Textures.ContainsKey( texName )) {
+		if( Textures.ContainsKey( texName ) ) {
 			if( !keepOld ) {
 				Textures[texName].Dispose();
 			}

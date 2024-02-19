@@ -20,7 +20,7 @@ public static class GameComponentsLookup {
     public const int MatPara = 9;
     public const int MatRenderSingle = 10;
     public const int MatSpriteInstanceRenderer = 11;
-    public const int ppBloomComponnet = 12;
+    public const int ppBloom = 12;
     public const int ppGaussianBlur = 13;
     public const int ppLightSetting = 14;
 
@@ -39,7 +39,7 @@ public static class GameComponentsLookup {
         "MatPara",
         "MatRenderSingle",
         "MatSpriteInstanceRenderer",
-        "ppBloomComponnet",
+        "ppBloom",
         "ppGaussianBlur",
         "ppLightSetting"
     };
@@ -57,7 +57,7 @@ public static class GameComponentsLookup {
         typeof(Mat.ParaComponent),
         typeof(Mat.RenderSingleComponent),
         typeof(Mat.SpriteInstanceRendererComponent),
-        typeof(pp.BloomComponnet),
+        typeof(pp.BloomComponent),
         typeof(pp.GaussianBlurComponent),
         typeof(pp.LightSettingComponent)
     };

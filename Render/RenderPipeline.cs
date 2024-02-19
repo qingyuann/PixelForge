@@ -1,7 +1,5 @@
 ﻿using PixelForge;
-using Render.PostEffect;
 using Silk.NET.OpenGL;
-using Silk.NET.Windowing;
 using System.Numerics;
 
 namespace Render;
@@ -22,7 +20,7 @@ public class RenderPipeline {
 
 		//create render layer
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight ) );
+			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight  ) );
 		}
 		_renderScreen = new RenderFullscreen();
 		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
@@ -35,9 +33,9 @@ public class RenderPipeline {
 
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 
-		// _quad = new RenderQuad( Vector3.Zero+ new Vector3( 0f, 0f, 0.1f ), Vector2.One, 0, 0 );
-		// _quad1 = new RenderQuad( Vector3.Zero + new Vector3( 1f, 1f, 0.2f ), Vector2.One*0.5f, 0, 0 );
-		// _quad1.SetTexture( "MainTex","silk2.png" );
+		_quad = new RenderQuad( Vector3.Zero + new Vector3( 0f, 0f, 0.1f ), Vector2.One, 0, 0 );
+		_quad1 = new RenderQuad( Vector3.Zero + new Vector3( 1f, 1f, 0.2f ), Vector2.One * 0.5f, 0, 0 );
+		_quad1.SetTexture( "MainTex", "silk2.png" );
 	}
 
 	public void OnRender() {
@@ -59,7 +57,11 @@ public class RenderPipeline {
 		//blit to screen
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 		_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)ClearBufferMask.DepthBufferBit );
-		_renderScreen.Draw();
+		 // _renderScreen.Draw();
+
+
+		_quad.Draw();
+		_quad1.Draw();
 	}
 
 	public void OnClose() {

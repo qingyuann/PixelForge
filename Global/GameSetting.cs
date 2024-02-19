@@ -2,7 +2,7 @@
 
 public static class GameSetting {
 	public const int WindowWidth = 1000;
-	public const int WindowHeight = 1000;
+	public const int WindowHeight = 2000;
 	public const string Name = "PixelForge";
 	//public const string ProjectPath = @"./";
 	public static string ProjectPath
