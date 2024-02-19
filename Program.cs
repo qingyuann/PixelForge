@@ -9,6 +9,7 @@ using Silk.NET.Maths;
 using Silk.NET.Windowing;
 using Silk.NET.GLFW;
 using Entitas;
+using Silk.NET.OpenGL;
 
 namespace PixelForge {
 	class MainLoop {
@@ -33,10 +34,10 @@ namespace PixelForge {
 				WindowBorder = WindowBorder.Resizable,
 				ShouldSwapAutomatically = true
 			};
-			
-			
+
 			_window = Window.Create( options );
-	
+
+
 			_window.Load += OnLoad;
 			_window.Update += OnUpdate;
 			_window.Render += OnRender;
@@ -48,8 +49,10 @@ namespace PixelForge {
 
 		static async void OnLoad() {
 			GameSetting.Load();
+			GlobalVariable.GL = GL.GetApi( _window );
+
 			_inputSystem = new InputSystem( _window );
-			_renderPipeline = new RenderPipeline( _window );
+			_renderPipeline = new RenderPipeline( GlobalVariable.GL );
 			_systems.Add( new AddGameSystem( _contexts ) );
 			_systems.Initialize();
 		}

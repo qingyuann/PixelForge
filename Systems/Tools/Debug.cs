@@ -13,6 +13,14 @@ public static class Debug {
 		Console.WriteLine($"{message} (Debug info: {fileName}, line {lineNumber})");
 	}	
 	
+	public static void Log( bool message ) {
+		StackFrame frame = new StackFrame(1, true);
+		var lineNumber = frame.GetFileLineNumber();
+		var fileName = frame.GetFileName();
+        
+		Console.WriteLine($"{message} (Debug info: {fileName}, line {lineNumber})");
+	}	
+	
 	public static void Log(Vector3 vector) {
 		StackFrame frame = new StackFrame(1, true);
 		var lineNumber = frame.GetFileLineNumber();

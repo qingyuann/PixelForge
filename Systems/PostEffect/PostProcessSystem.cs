@@ -8,65 +8,59 @@ using Render.PostEffect;
 
 namespace PixelForge;
 
-public sealed class PostProcessSystem : IInitializeSystem, IExecuteSystem
-{
-    //set a singleton
-    static PostProcessSystem _postProcessSystem;
+public sealed class PostProcessSystem : IInitializeSystem {
+	//set a singleton
+	public static PostProcessSystem Instance;
 
-    public static PostProcessSystem Instance
-    {
-        get
-        {
-            if (_postProcessSystem is null)
-            {
-                _postProcessSystem = new PostProcessSystem();
-            }
+	// pair of post process component and its computer
+	static Dictionary<Type, Type> _ppTypes = new Dictionary<Type, Type>(){
+		{ typeof( BloomComponnet ), typeof( BloomComputer ) },
+		{ typeof( GaussianBlurComponent ), typeof( GaussianBlurComputer ) },
+	};
 
-            return _postProcessSystem;
-        }
-    }
+	Contexts _contexts;
+	GameEntity _ppEntity;
+	//store all post process components
+	Dictionary<IComponent, PostProcessComputer> _computers;
 
+	public PostProcessSystem( Contexts contexts ) {
+		_contexts = contexts;
+		_computers = new Dictionary<IComponent, PostProcessComputer>();
+		if( Instance is null ) {
+			Instance = this;
+		}else {
+			throw new Exception( "PostProcessSystem is a singleton" );
+		}
+	}
 
-    // pair of post process component and its computer
-    private static Dictionary<Type, Type> _ppTypes = new Dictionary<Type, Type>()
-    {
-        { typeof(BloomComponnet), typeof(BloomComputer) },
-        { typeof(GaussianBlurComponent), typeof(GaussianBlurComputer) },
-    };
+	public void Initialize() {
+		_ppEntity = _contexts.game.ppLightSettingEntity;
+		if( _ppEntity is null ) {
+			return;
+		}
+		foreach( var c in _ppEntity.GetComponents() ) {
+			foreach( var pp in _ppTypes ) {
+				if( pp.Key == c.GetType() ) {
+					var computer = (PostProcessComputer)Activator.CreateInstance( pp.Value )!;
+					computer!.SetParams( c );
+					_computers.Add( c, computer );
+					break;
+				}
+			}
+		}
+	}
 
-    //store all post process components
-    private Dictionary<IComponent, PostProcessComputer> _allPP = new Dictionary<IComponent, PostProcessComputer>();
-
-
-    Contexts _contexts;
-    GameEntity _ppEntity;
-    Dictionary<IComponent, PostProcessComputer> _computers = new Dictionary<IComponent, PostProcessComputer>();
-
-    public void Initialize()
-    {
-        _contexts = Contexts.sharedInstance;
-        _ppEntity = _contexts.game.ppLightSettingEntity;
-        foreach (var c in _ppEntity.GetComponents())
-        {
-            foreach (var pp in _ppTypes)
-            {
-                if (pp.Key == c.GetType())
-                {
-                    Debug.Log("pp" + pp.Key);
-                }
-            }
-        }
-    }
-
-    void SetUpPostEffects(GameEntity entity)
-    {
-    }
-
-    public void Execute()
-    {
-    }
-
-    public static void RenderPostProcess(int layer, RenderTexture rt)
-    {
-    }
+	public static void RenderPostProcess( int layer, RenderTexture rt ) {
+		if( Instance._ppEntity is null ) {
+			return;
+		}
+		//render all post process components
+		foreach( var c in Instance._computers ) {
+			if( c.Key is IPostProcessingComponent pp ) {
+				if( pp.Enabled && pp.Layers.Contains( layer ) ) {
+					c.Value.Render( rt );
+				}
+			}
+		}
+	}
 }

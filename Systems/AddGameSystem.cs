@@ -13,6 +13,8 @@ public sealed class AddGameSystem : Systems {
 		Add( new HierarchySystem( contexts ) );
 		//然后把渲染器设置好
 		Add( new RenderSystem( contexts ) );
+		Add( new PostProcessSystem( contexts ) );
+
 
 		//处理事件
 		Add( new BasicMoveSystem( contexts ) );

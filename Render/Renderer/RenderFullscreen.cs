@@ -12,7 +12,7 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
 	public RenderFullscreen() : base( -1, GenerateBgVertShader(), GenerateBgFragShader( GameSetting.MaxRenderLayer ), true ) {
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices );
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices ,invertV:true );
 		Vertices = vert;
 		Indices = indices;
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
@@ -29,8 +29,8 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 		// BaseShader = new Shader( base.Gl, shaderVertTest, shaderFragTest);
 	}
 
-	public RenderFullscreen(string shaderVertName,string shaderFragName) : base( -1, shaderVertName, shaderFragName ) {
-		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices );
+	public RenderFullscreen( string shaderVertName, string shaderFragName ) : base( -1, shaderVertName, shaderFragName ) {
+		PatternMesh.CreateQuad( new Vector3( 0, 0, 0 ), new Vector2( 1, 1 ), 0, out float[] vert, out uint[] indices,invertV:true );
 		Vertices = vert;
 		Indices = indices;
 		Ebo = new BufferObject<uint>( base.Gl, Indices, BufferTargetARB.ElementArrayBuffer );
@@ -42,13 +42,13 @@ public class RenderFullscreen : Renderer, IRenderSingleObject {
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
 	}
-	
+
 	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) { }
 
-	public void Draw() {
+	public override void Draw() {
 		unsafe {
-			Vao.Bind();
 			BaseShader.Use();
+			Vao.Bind();
 
 			int textureNum = 0;
 			foreach( var tex in Textures ) {

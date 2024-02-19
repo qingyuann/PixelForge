@@ -11,22 +11,24 @@ public partial class GameEntity {
     public pp.GaussianBlurComponent ppGaussianBlur { get { return (pp.GaussianBlurComponent)GetComponent(GameComponentsLookup.ppGaussianBlur); } }
     public bool hasppGaussianBlur { get { return HasComponent(GameComponentsLookup.ppGaussianBlur); } }
 
-    public void AddppGaussianBlur(bool newEnabled, int[] newLayers, float newIntensity, Render.PostEffect.GaussianBlurComputer newComputer) {
+    public void AddppGaussianBlur(bool newEnabled, int[] newLayers, float newOffset, int newIterations, Render.PostEffect.GaussianBlurComputer newComputer) {
         var index = GameComponentsLookup.ppGaussianBlur;
         var component = (pp.GaussianBlurComponent)CreateComponent(index, typeof(pp.GaussianBlurComponent));
         component.Enabled = newEnabled;
         component.Layers = newLayers;
-        component.Intensity = newIntensity;
+        component.Offset = newOffset;
+        component.Iterations = newIterations;
         component.Computer = newComputer;
         AddComponent(index, component);
     }
 
-    public void ReplaceppGaussianBlur(bool newEnabled, int[] newLayers, float newIntensity, Render.PostEffect.GaussianBlurComputer newComputer) {
+    public void ReplaceppGaussianBlur(bool newEnabled, int[] newLayers, float newOffset, int newIterations, Render.PostEffect.GaussianBlurComputer newComputer) {
         var index = GameComponentsLookup.ppGaussianBlur;
         var component = (pp.GaussianBlurComponent)CreateComponent(index, typeof(pp.GaussianBlurComponent));
         component.Enabled = newEnabled;
         component.Layers = newLayers;
-        component.Intensity = newIntensity;
+        component.Offset = newOffset;
+        component.Iterations = newIterations;
         component.Computer = newComputer;
         ReplaceComponent(index, component);
     }
