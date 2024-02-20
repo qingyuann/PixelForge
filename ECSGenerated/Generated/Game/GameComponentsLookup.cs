@@ -10,32 +10,28 @@ public static class GameComponentsLookup {
 
     public const int ComponentBasicMove = 0;
     public const int ComponentCamera = 1;
-    public const int ComponentCellAutoTexture = 2;
-    public const int ComponentCellularAutomation = 3;
-    public const int ComponentName = 4;
-    public const int ComponentParent = 5;
-    public const int ComponentPosition = 6;
-    public const int ComponentRotation = 7;
-    public const int ComponentSand = 8;
-    public const int ComponentSize = 9;
-    public const int ComponentTexture = 10;
-    public const int GlobalPostProcessGroup = 11;
-    public const int MatPara = 12;
-    public const int MatRenderSingle = 13;
-    public const int MatSpriteInstanceRenderer = 14;
+    public const int ComponentCellularAutomaton = 2;
+    public const int ComponentName = 3;
+    public const int ComponentParent = 4;
+    public const int ComponentPosition = 5;
+    public const int ComponentRotation = 6;
+    public const int ComponentSize = 7;
+    public const int ComponentTexture = 8;
+    public const int GlobalPostProcessGroup = 9;
+    public const int MatPara = 10;
+    public const int MatRenderSingle = 11;
+    public const int MatSpriteInstanceRenderer = 12;
 
-    public const int TotalComponents = 15;
+    public const int TotalComponents = 13;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
         "ComponentCamera",
-        "ComponentCellAutoTexture",
-        "ComponentCellularAutomation",
+        "ComponentCellularAutomaton",
         "ComponentName",
         "ComponentParent",
         "ComponentPosition",
         "ComponentRotation",
-        "ComponentSand",
         "ComponentSize",
         "ComponentTexture",
         "GlobalPostProcessGroup",
@@ -47,13 +43,11 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(Component.BasicMoveComponent),
         typeof(Component.CameraComponent),
-        typeof(Component.CellAutoTexture),
-        typeof(Component.CellularAutomationComponent),
+        typeof(Component.CellularAutomatonComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
         typeof(Component.PositionComponent),
         typeof(Component.RotationComponent),
-        typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
         typeof(Component.TextureComponent),
         typeof(Global.PostProcessGroupComponent),

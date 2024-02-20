@@ -5,19 +5,16 @@ namespace PixelForge.Spawner;
 
 public class CellularAutomatonSystem : IInitializeSystem, IExecuteSystem {
 
-	private	readonly Contexts _contexts;
 	IGroup<GameEntity> _cellularAutomatonGroup;
 	byte color = 255;
 	Byte[] data;
 
-	public CellularAutomatonSystem( Contexts contexts )
-	{
-		_contexts = contexts;
+	public CellularAutomatonSystem( Contexts contexts ) {
 	}
 
 	public void Initialize() {
 		//entity 创建时添加trigger-> render system识别trigger添加renderer->_cellularAutomatonGroup识别到renderer后添加成员->识别到成员添加后加入para->renderer识别到para后将纹理添加到shader
-		_cellularAutomatonGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellularAutomation, GameMatcher.MatRenderSingle ) );
+		_cellularAutomatonGroup = GlobalVariable.Contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellularAutomaton, GameMatcher.MatRenderSingle ) );
 
 		//分配一块256*256的纹理内存,基于内存数据创建纹理
 		data = new Byte[256 * 256 * 4];
