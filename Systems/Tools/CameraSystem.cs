@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace PixelForge;
 
-public sealed class CameraSystem : IInitializeSystem, IExecuteSystem{
+public sealed class CameraSystem : IInitializeSystem, IExecuteSystem {
 	public static Matrix4x4 MainCamViewMatrix;
 
 	readonly Contexts _contexts;
@@ -15,7 +15,7 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem{
 	}
 
 	public void Initialize() {
-		_cameraGroup =_contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCamera, GameMatcher.ComponentPosition ) );
+		_cameraGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCamera, GameMatcher.ComponentPosition ) );
 		SetCameraViewMatrix();
 	}
 
@@ -26,7 +26,7 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem{
 				var posComponent = gameEntity.componentPosition;
 				Vector2 pos = new Vector2( posComponent.X, posComponent.Y );
 				var scale = gameEntity.componentCamera.Scale;
-				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation( new Vector3( -pos.X, -pos.Y,  0 ) );
+				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation( new Vector3( -pos.X * GlobalVariable.XUnit, -pos.Y * GlobalVariable.YUnit, 0 ) );
 				Matrix4x4 scaleMatrix = Matrix4x4.CreateScale( scale );
 				MainCamViewMatrix = translationMatrix * scaleMatrix;
 				//只有一个主相机
@@ -34,7 +34,7 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem{
 			}
 		}
 	}
-	
+
 	public void Execute() {
 		SetCameraViewMatrix();
 	}

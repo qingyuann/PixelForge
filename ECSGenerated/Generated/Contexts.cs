@@ -58,6 +58,7 @@ public partial class Contexts {
 
     public const string ComponentName = "ComponentName";
     public const string ComponentParent = "ComponentParent";
+    public const string ppLightSetting = "ppLightSetting";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
@@ -70,6 +71,11 @@ public partial class Contexts {
             ComponentParent,
             game.GetGroup(GameMatcher.ComponentParent),
             (e, c) => ((Component.ParentComponent)c).ParentName));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, bool>(
+            ppLightSetting,
+            game.GetGroup(GameMatcher.ppLightSetting),
+            (e, c) => ((pp.LightSettingComponent)c).Enabled));
     }
 }
 
@@ -81,5 +87,9 @@ public static class ContextsExtensions {
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithComponentParent(this GameContext context, string ParentName) {
         return ((Entitas.EntityIndex<GameEntity, string>)context.GetEntityIndex(Contexts.ComponentParent)).GetEntities(ParentName);
+    }
+
+    public static GameEntity GetEntityWithppLightSetting(this GameContext context, bool Enabled) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, bool>)context.GetEntityIndex(Contexts.ppLightSetting)).GetEntity(Enabled);
     }
 }
