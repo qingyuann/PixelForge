@@ -20,7 +20,7 @@ public static class RenderTexturePool {
 	}
 
 	public static void Return( RenderTexture rt ) {
-		if (_pool.Count < 5)
+		if (_pool.Count < 10)
 		{
 			_pool.Push(rt);
 		}

@@ -14,12 +14,12 @@ void main()
 {
     vec2 tex_offset = vec2(1.0 / screenWidth, 1.0 / screenHeight);
 
-    vec3 result = vec3(0, 0, 0);
+    vec4 result = vec4(0, 0, 0,0);
 
     for (int i = 0; i < 5; i++)
     {
-        result += texture(_BlitTexture, fUv + vec2(0, (i - 2) * offset) * tex_offset).rgb * weight[i];
+        result += texture(_BlitTexture, fUv + vec2(0, (i - 2) * offset) * tex_offset) * weight[i];
     }
 
-    FragColor = vec4(result, 1.0);
+    FragColor = result;
 }
