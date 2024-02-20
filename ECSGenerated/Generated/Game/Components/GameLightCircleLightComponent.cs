@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Light.CircleLightComponent lightCircleLight { get { return (Light.CircleLightComponent)GetComponent(GameComponentsLookup.LightCircleLight); } }
     public bool hasLightCircleLight { get { return HasComponent(GameComponentsLookup.LightCircleLight); } }
 
-    public void AddLightCircleLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, System.Numerics.Vector3 newColor, float newAttenuation) {
+    public void AddLightCircleLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
         var index = GameComponentsLookup.LightCircleLight;
         var component = (Light.CircleLightComponent)CreateComponent(index, typeof(Light.CircleLightComponent));
         component.Enabled = newEnabled;
@@ -19,12 +19,14 @@ public partial class GameEntity {
         component.LightOrder = newLightOrder;
         component.Radius = newRadius;
         component.Intensity = newIntensity;
+        component.Volume = newVolume;
         component.Color = newColor;
-        component.Attenuation = newAttenuation;
+        component.RadialFallOff = newRadialFallOff;
+        component.Angle = newAngle;
         AddComponent(index, component);
     }
 
-    public void ReplaceLightCircleLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, System.Numerics.Vector3 newColor, float newAttenuation) {
+    public void ReplaceLightCircleLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
         var index = GameComponentsLookup.LightCircleLight;
         var component = (Light.CircleLightComponent)CreateComponent(index, typeof(Light.CircleLightComponent));
         component.Enabled = newEnabled;
@@ -32,8 +34,10 @@ public partial class GameEntity {
         component.LightOrder = newLightOrder;
         component.Radius = newRadius;
         component.Intensity = newIntensity;
+        component.Volume = newVolume;
         component.Color = newColor;
-        component.Attenuation = newAttenuation;
+        component.RadialFallOff = newRadialFallOff;
+        component.Angle = newAngle;
         ReplaceComponent(index, component);
     }
 
