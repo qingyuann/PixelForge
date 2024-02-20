@@ -28,8 +28,8 @@ public class HierarchySystem : IInitializeSystem {
 
 		var globalLight = _contexts.game.CreateEntity();
 		globalLight.AddppLightSetting( true );
-		// globalLight.AddppBloom( true, new[]{ 1 }, 2f, 2, 0.8f, 5f, new BloomComputer() );
-		globalLight.AddppGaussianBlur( true, new[]{ 0 }, 5f, 1, new GaussianBlurComputer() );
+		globalLight.AddppBloom( true, new[]{ 0 }, 2f, 5, 0.8f, 5f, new BloomComputer() );
+		// globalLight.AddppGaussianBlur( true, new[]{ 0 }, 5f, 5, new GaussianBlurComputer() );
 
 		var quad1 = _contexts.game.CreateEntity();
 		quad1.AddComponentName( "quad1" );
