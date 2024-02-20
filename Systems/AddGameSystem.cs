@@ -17,7 +17,8 @@ public sealed class AddGameSystem : Systems {
 		//处理事件
 		Add( new BasicMoveSystem( contexts ) );
 		Add( new EnemySystem( contexts, 10 ) );
-		Add( new CellularAutomatonSystem( contexts ) );
+		//Add( new CellularAutomatonSystem( contexts ) );
+		Add(new CellAutomationSystem(contexts));
 
 		//最后处理相机
 		Add( new CameraSystem( contexts ) );
