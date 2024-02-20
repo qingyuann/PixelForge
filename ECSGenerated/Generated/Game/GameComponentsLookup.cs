@@ -18,15 +18,17 @@ public static class GameComponentsLookup {
     public const int ComponentRotation = 7;
     public const int ComponentSand = 8;
     public const int ComponentSize = 9;
-    public const int ComponentTexture = 10;
-    public const int MatPara = 11;
-    public const int MatRenderSingle = 12;
-    public const int MatSpriteInstanceRenderer = 13;
-    public const int ppBloom = 14;
-    public const int ppGaussianBlur = 15;
-    public const int ppLightSetting = 16;
+    public const int ComponentStone = 10;
+    public const int ComponentTexture = 11;
+    public const int ComponentWater = 12;
+    public const int MatPara = 13;
+    public const int MatRenderSingle = 14;
+    public const int MatSpriteInstanceRenderer = 15;
+    public const int ppBloom = 16;
+    public const int ppGaussianBlur = 17;
+    public const int ppLightSetting = 18;
 
-    public const int TotalComponents = 17;
+    public const int TotalComponents = 19;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
@@ -39,7 +41,9 @@ public static class GameComponentsLookup {
         "ComponentRotation",
         "ComponentSand",
         "ComponentSize",
+        "ComponentStone",
         "ComponentTexture",
+        "ComponentWater",
         "MatPara",
         "MatRenderSingle",
         "MatSpriteInstanceRenderer",
@@ -59,7 +63,9 @@ public static class GameComponentsLookup {
         typeof(Component.RotationComponent),
         typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
+        typeof(Component.StoneComponent),
         typeof(Component.TextureComponent),
+        typeof(Component.WaterComponent),
         typeof(Mat.ParaComponent),
         typeof(Mat.RenderSingleComponent),
         typeof(Mat.SpriteInstanceRendererComponent),

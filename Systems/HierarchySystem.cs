@@ -60,7 +60,7 @@ public class HierarchySystem : IInitializeSystem {
 		var quad3 = _contexts.game.CreateEntity();
 		quad3.AddComponentName( "quad3" );
 		quad3.AddComponentPosition( 0, 0, 0 );
-		quad3.AddComponentSize( 4f, 4f );
+		quad3.AddComponentSize( 2f, 2f );
 		quad3.AddComponentRotation( 0 );
 		quad3.AddMatRenderSingle( true, 0, null );
 		quad3.isComponentCellAutoTexture = true;

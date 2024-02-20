@@ -2,6 +2,7 @@ namespace PixelForge;
 
 using Entitas;
 using PixelForge.Spawner;
+using PixelForge.Spawner.CellAuto;
 public sealed class AddGameSystem : Systems {
 	/// <summary>
 	/// 运行式会先顺序执行一遍构造函数，再顺序执行一遍Initialize函数
