@@ -25,19 +25,20 @@ public class GaussianBlurComputer : PostProcessComputer {
 	}
 
 	public override void Render( RenderTexture rt ) {
-		tempRT1 = RenderTexturePool.Get( _halfWidth, _halfWidth );
-		tempRT2 = RenderTexturePool.Get( _halfWidth, _halfWidth );
-		_gausianBlurHorizontal.SetUniform( "screenWidth", _halfWidth );
-		_gausianBlurHorizontal.SetUniform( "screenHeight", _halfHeight );
-		_gaussianBlurVertical.SetUniform( "screenWidth", _halfWidth );
-		_gaussianBlurVertical.SetUniform( "screenHeight", _halfHeight );
+		tempRT1 = RenderTexturePool.Get( _width, _height );
+		tempRT2 = RenderTexturePool.Get( _width, _height );
+		_gausianBlurHorizontal.SetUniform( "screenWidth", _width );
+		_gausianBlurHorizontal.SetUniform( "screenHeight", _height );
+		_gaussianBlurVertical.SetUniform( "screenWidth", _width );
+		_gaussianBlurVertical.SetUniform( "screenHeight", _height );
 		_gausianBlurHorizontal.SetUniform( "offset", _offset );
 		_gaussianBlurVertical.SetUniform( "offset", _offset );
 		Blitter.Blit( rt, tempRT2);
 		Blitter.Blit( tempRT2, tempRT1, _gausianBlurHorizontal );
 		Blitter.Blit( tempRT1, tempRT2, _gaussianBlurVertical );
 		Blitter.Blit( tempRT1, rt);
-		
+		RenderTexturePool.Return( tempRT1 );
+		RenderTexturePool.Return( tempRT2 );
 		return;
 		
 		
@@ -88,8 +89,7 @@ public class GaussianBlurComputer : PostProcessComputer {
 		// //original size
 		// Blitter.Blit( tempRT1, rt );
 		//
-		// RenderTexturePool.Return( tempRT1 );
-		// RenderTexturePool.Return( tempRT2 );
+
 	}
 
 	public override void SetParams( IComponent param ) {
