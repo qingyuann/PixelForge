@@ -10,8 +10,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 {
     private	readonly Contexts _contexts;
     IGroup<GameEntity> _cellRenderGroup;
-    private uint _width;
-    private uint _height;
+    private int _width;
+    private int _height;
     private GameEntity[] _cellEntities;
     private byte[] _cellColors;
     
@@ -19,19 +19,17 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     public CellAutomationSystem( Contexts contexts )
     {
         _contexts = contexts;
+        _width = 500;
+        _height = 500;
+        _cellColors = new byte[_width * _height * 4];
+        _cellEntities = new GameEntity[_width * _height];
+        _cellRenderGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellAutoTexture, GameMatcher.MatRenderSingle ) );
     }
 
     public void Initialize()
     {
-        _width = 500;
-        _height = 500;
-        
-        _cellRenderGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellAutoTexture, GameMatcher.MatRenderSingle ) );
         
         
-        
-        _cellColors = new byte[_width * _height * 4];
-        _cellEntities = new GameEntity[_width * _height];
         InitCellEntities();
         InitCellColors();
         
@@ -48,11 +46,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     }
     
     void SetTexture( GameEntity e ) {
-        //这里新建纹理，添加到entity的matPara中，render system识别到para后将纹理添加到shader
-        //shader中会储存纹理的引用，所以这里不需要储存纹理的引用
-        Texture tempTexture = new Texture( GlobalVariable.GL, _cellColors, _width, _height );
+        Texture tempTexture = new Texture( GlobalVariable.GL, _cellColors, (uint)_width, (uint)_height );
         if( !e.hasMatPara ) {
-            //不添加属性参数，添加纹理参数
             e.AddMatPara( null, new Dictionary<string, object>(){
                 {
                     "MainTex", tempTexture
@@ -66,10 +61,14 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         if (InputSystem.GetKeyDown(Key.Space))
         {
             TestGenerateSand();
+            TestGenerateSand();
+            TestGenerateSand();
+            TestGenerateSand();
+            TestGenerateSand();
         }
-
-        for (int i = 0; i < _width; i++)
-            for(int j = (int)_height-1; j >= 0; j--)
+        
+        for(int j = (int)_height-1; j >= 0; j--)
+            for (int i = 0; i < _width; i++)
             {
                 var e = _cellEntities[ComputeIndex(i, j)];
                 if (e.isComponentSand)
@@ -84,7 +83,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             if( e.matRenderSingle.Renderer is not null )
             {
                 //Debug.Log("update texture");
-                e.matRenderSingle.Renderer.Textures["MainTex"].UpdateImageContent( _cellColors, _width, _height );
+                e.matRenderSingle.Renderer.Textures["MainTex"].UpdateImageContent( _cellColors, (uint)_width, (uint)_height );
             }
         }
         
@@ -128,7 +127,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     {
         
         var x = (int) (0.5 * _width);
-        var y = (int) (0.1 * _height);
+        var y = (int) (0.2 * _height);
         
         var index = ComputeIndex(x, y);
     
@@ -196,6 +195,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 _cellEntities[id].isComponentCellularAutomation = false;
                 _cellEntities[id].isComponentSand = false;
                 
+                //Debug.Log("move down");
                 SetCellColor(idDown, "sand");
                 SetCellColor(id, "none");
                 
@@ -210,6 +210,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 
                 _cellEntities[id].isComponentCellularAutomation = false;
                 _cellEntities[id].isComponentSand = false;
+                
+                //Debug.Log("move down left");
                 SetCellColor(idDownLeft, "sand");
                 SetCellColor(id, "none");
                 
@@ -219,11 +221,13 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
             else if(!_cellEntities[idDownRight].isComponentCellularAutomation)
             {
-                _cellEntities[idDownLeft].isComponentCellularAutomation = true;
-                _cellEntities[idDownLeft].isComponentSand = true;
+                _cellEntities[idDownRight].isComponentCellularAutomation = true;
+                _cellEntities[idDownRight].isComponentSand = true;
                 
                 _cellEntities[id].isComponentCellularAutomation = false;
                 _cellEntities[id].isComponentSand = false;
+                
+                //Debug.Log("move down right");
                 SetCellColor(idDownRight, "sand");
                 SetCellColor(id, "none");
                 

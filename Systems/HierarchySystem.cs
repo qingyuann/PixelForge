@@ -25,13 +25,16 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 0, 0, -1 );
 		camera.AddComponentCamera( 0, true, 0.5f );
 		camera.AddComponentBasicMove( true, 0.0005f );
-		camera.AddMatRenderSingle( true, 2, null );
-
+		//camera.AddMatRenderSingle( true, 2, null );
+		
+		
 		var globalLight = _contexts.game.CreateEntity();
 		globalLight.AddppLightSetting( true );
 		// globalLight.AddppBloom( true, new[]{ 2 }, 5f, 8, 0.8f, 2f, new BloomComputer() );
-		globalLight.AddppGaussianBlur( true, new[]{ 0 }, 10f, 1, new GaussianBlurComputer() );
-
+		// globalLight.AddppGaussianBlur( true, new[]{ 0 }, 10f, 1, new GaussianBlurComputer() );
+		
+		
+		/*
 		var quad1 = _contexts.game.CreateEntity();
 		quad1.AddComponentName( "quad1" );
 		quad1.AddComponentPosition( 0, -2, 0 );
@@ -51,15 +54,19 @@ public class HierarchySystem : IInitializeSystem {
 		quad2.AddMatPara( null, new Dictionary<string, object>(){
 			{ "MainTex", "silk3.png" }
 		} );
-
+		*/
+		
+		
 		var quad3 = _contexts.game.CreateEntity();
 		quad3.AddComponentName( "quad3" );
-		quad3.AddComponentPosition( 0, 3, 0 );
-		quad3.AddComponentSize( 0.5f, 0.5f );
+		quad3.AddComponentPosition( 0, 0, 0 );
+		quad3.AddComponentSize( 4f, 4f );
 		quad3.AddComponentRotation( 0 );
 		quad3.AddMatRenderSingle( true, 0, null );
-
-
+		quad3.isComponentCellAutoTexture = true;
+		
+		
+		/*
 		var quad4 = _contexts.game.CreateEntity();
 		quad4.AddComponentName( "quad4" );
 		quad4.AddComponentPosition( 3.5f, -2.8f, -0.5f );
@@ -89,6 +96,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad6.AddMatPara( null, new Dictionary<string, object>(){
 			{ "MainTex", "silk.png" }
 		} );
+		*/
 	}
 
 }
