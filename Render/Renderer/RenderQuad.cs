@@ -30,24 +30,23 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 	}
 
 	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) {
-		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor );
+		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out _, anchor );
 		Vertices = vert;
-		Indices = indices;
 		Vbo.UpdateBuffer( Vertices );
 	}
 
 	public override void Draw() {
 		unsafe {
-			Vao.Bind();
 			BaseShader.Use();
+			Vao.Bind();
+			
 			int textureNum = 0;
 			foreach( var tex in Textures ) {
 				BaseShader.SetUniform( textureNum, tex.Key, tex.Value );
 				textureNum++;
 			}
 			SetUniform( "viewMatrix", CameraSystem.MainCamViewMatrix );
-
-			BaseShader.Use();
+		
 			Gl.DrawElements( PrimitiveType.Triangles,
 				(uint)Indices.Length, DrawElementsType.UnsignedInt, null );
 

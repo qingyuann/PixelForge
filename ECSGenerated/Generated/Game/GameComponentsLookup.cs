@@ -10,19 +10,19 @@ public static class GameComponentsLookup {
 
     public const int ComponentBasicMove = 0;
     public const int ComponentCamera = 1;
-    public const int ComponentCellAutoTexture = 2;
-    public const int ComponentCellularAutomation = 3;
-    public const int ComponentName = 4;
-    public const int ComponentParent = 5;
-    public const int ComponentPosition = 6;
-    public const int ComponentRotation = 7;
-    public const int ComponentSand = 8;
-    public const int ComponentSize = 9;
-    public const int ComponentTexture = 10;
-    public const int GlobalPostProcessGroup = 11;
-    public const int MatPara = 12;
-    public const int MatRenderSingle = 13;
-    public const int MatSpriteInstanceRenderer = 14;
+    public const int ComponentCellularAutomaton = 2;
+    public const int ComponentName = 3;
+    public const int ComponentParent = 4;
+    public const int ComponentPosition = 5;
+    public const int ComponentRotation = 6;
+    public const int ComponentSize = 7;
+    public const int ComponentTexture = 8;
+    public const int MatPara = 9;
+    public const int MatRenderSingle = 10;
+    public const int MatSpriteInstanceRenderer = 11;
+    public const int ppBloom = 12;
+    public const int ppGaussianBlur = 13;
+    public const int ppLightSetting = 14;
 
     public const int TotalComponents = 15;
 
@@ -38,10 +38,12 @@ public static class GameComponentsLookup {
         "ComponentSand",
         "ComponentSize",
         "ComponentTexture",
-        "GlobalPostProcessGroup",
         "MatPara",
         "MatRenderSingle",
-        "MatSpriteInstanceRenderer"
+        "MatSpriteInstanceRenderer",
+        "ppBloom",
+        "ppGaussianBlur",
+        "ppLightSetting"
     };
 
     public static readonly System.Type[] componentTypes = {
@@ -56,9 +58,11 @@ public static class GameComponentsLookup {
         typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
         typeof(Component.TextureComponent),
-        typeof(Global.PostProcessGroupComponent),
         typeof(Mat.ParaComponent),
         typeof(Mat.RenderSingleComponent),
-        typeof(Mat.SpriteInstanceRendererComponent)
+        typeof(Mat.SpriteInstanceRendererComponent),
+        typeof(pp.BloomComponent),
+        typeof(pp.GaussianBlurComponent),
+        typeof(pp.LightSettingComponent)
     };
 }
