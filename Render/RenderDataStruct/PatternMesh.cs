@@ -14,12 +14,13 @@ public static class PatternMesh {
 	/// 
 	/// </summary>
 	/// <param name="pos"></param>
-	/// <param name="width"></param>
-	/// <param name="height"></param>
+	/// <param name="size"></param>
+	/// <param name="rotation"></param>
 	/// <param name="vertices"></param>
 	/// <param name="indices"></param>
 	/// <param name="anchor">Center->pos为中间，Bottom->下方，Top->上方</param>
-	/// <param name="fixedLength"></param>
+	/// <param name="relativeLength"></param>
+	/// <param name="invertV"></param>
 	public static void CreateQuad( Vector3 pos, Vector2 size, float rotation, out float[] vertices, out uint[] indices, Anchor anchor = Anchor.Center, bool relativeLength=false, bool invertV = false ) {
 		var width = size.X * 2;
 		var height = size.Y * 2;
