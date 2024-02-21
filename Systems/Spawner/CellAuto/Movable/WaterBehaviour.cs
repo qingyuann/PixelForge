@@ -68,7 +68,7 @@ public class WaterBehaviour : ICellBehaviour
             }
         }
         
-        
+        /*
         if (idLeft3 != -1)
         {
             if (!CellAutomationSystem._cellEntities[idLeft3].isComponentCellularAutomation)
@@ -87,6 +87,7 @@ public class WaterBehaviour : ICellBehaviour
                 return;
             }
         }
+        */
         
 
         if (idLeft != -1)
@@ -98,6 +99,7 @@ public class WaterBehaviour : ICellBehaviour
             }
         }
         
+        /*
         if (idRight3 != -1)
         {
             //Debug.Log(idRight3);
@@ -118,7 +120,7 @@ public class WaterBehaviour : ICellBehaviour
                 return;
             }
         }
-        
+        */
         
         if (idRight != -1)
         {
