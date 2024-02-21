@@ -1,5 +1,4 @@
 ﻿using Silk.NET.Input;
-using Silk.NET.SDL;
 using Silk.NET.Windowing;
 using System.Numerics;
 
@@ -14,8 +13,17 @@ public class InputSystem {
 	//每一帧按下的按键
 	static List<Key> _keyDown = new List<Key>();
 	static List<Key> _keyUp = new List<Key>();
+
+	static List<(MouseButton, Vector2)> _addWhenMouthDown = new List<(MouseButton, Vector2)>();
+	static List<(MouseButton, Vector2)> _addWhenMouthUp = new List<(MouseButton, Vector2)>();
+	//每一帧按下的按键
+	static List<(MouseButton, Vector2)> _mouseDown = new List<(MouseButton, Vector2)>();
+	static List<(MouseButton, Vector2)> _mouseUp = new List<(MouseButton, Vector2)>();
+
+
 	//管理所有action
 	List<KeyValuePair<KeyValuePair<Key, Action>, Action<Key>>> _keyDownActions = new List<KeyValuePair<KeyValuePair<Key, Action>, Action<Key>>>();
+
 
 	public InputSystem( IWindow _window ) {
 		//新建一个keyboard
@@ -39,6 +47,16 @@ public class InputSystem {
 				_keyUp.Add( key );
 			}
 		}
+		foreach( var mouse in _addWhenMouthDown ) {
+			if( !_mouseDown.Contains( mouse ) ) {
+				_mouseDown.Add( mouse );
+			}
+		}
+		foreach( var mouse in _addWhenMouthUp ) {
+			if( !_mouseUp.Contains( mouse ) ) {
+				_mouseUp.Add( mouse );
+			}
+		}
 	}
 
 	/// <summary>
@@ -51,8 +69,16 @@ public class InputSystem {
 		foreach( var key in _keyUp ) {
 			_addWhenKeyUp.Remove( key );
 		}
+		foreach( var mouse in _mouseDown ) {
+			_addWhenMouthDown.Remove( mouse );
+		}
+		foreach( var mouse in _mouseUp ) {
+			_addWhenMouthUp.Remove( mouse );
+		}
 		_keyDown.Clear();
 		_keyUp.Clear();
+		_mouseDown.Clear();
+		_mouseUp.Clear();
 	}
 
 	/// <summary>
@@ -66,6 +92,12 @@ public class InputSystem {
 			inputContext.Keyboards[i].KeyUp += ( keyboard, key, keyCode ) => {
 				_addWhenKeyUp.Add( key );
 			};
+			inputContext.Mice[i].MouseDown += ( mouse, button ) => {
+				_addWhenMouthDown.Add( ( button, mouse.Position ) );
+			};
+			inputContext.Mice[i].MouseUp += ( mouse, button ) => {
+				_addWhenMouthUp.Add( ( button, mouse.Position ) );
+			};
 		}
 	}
 
@@ -78,11 +110,33 @@ public class InputSystem {
 		return _keyDown.Contains( key );
 	}
 
+	public static bool GetMouseDown( MouseButton mouseButton , out Vector2 pos ) {
+		foreach( var m in _mouseDown ) {
+			if( m.Item1 == mouseButton ) {
+				pos = m.Item2;
+				return true;
+			}
+		}
+		pos = new Vector2();
+		return false;
+	}
+
 	/// <summary>
 	/// 当按键抬起时，返回一次true
 	/// </summary>
 	public static bool GetKeyUp( Key key ) {
 		return _keyUp.Contains( key );
+	}
+
+	public static bool GetMouseUp( MouseButton mouseButton , out Vector2 pos ) {
+		foreach( var m in _mouseUp ) {
+			if( m.Item1 == mouseButton ) {
+				pos = m.Item2;
+				return true;
+			}
+		}
+		pos = new Vector2();
+		return false;
 	}
 
 	/// <summary>
@@ -94,6 +148,17 @@ public class InputSystem {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	public static bool GetMouse( MouseButton mouseButton , out Vector2 pos ) {
+		for( int i = 0; i < inputContext.Mice.Count; i++ ) {
+			if( inputContext.Mice[i].IsButtonPressed( mouseButton ) ) {
+				pos = inputContext.Mice[i].Position;
+				return true;
+			}
+		}
+		pos = new Vector2();
 		return false;
 	}
 
@@ -232,7 +297,7 @@ public class InputSystem {
 			t.DoubleClick += action;
 		}
 	}
-	
+
 	/// <summary>
 	/// 删除鼠标双击的方法
 	/// </summary>
