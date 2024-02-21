@@ -16,16 +16,4 @@ public class CircleLightComponent : IComponent,ILightComponent
     public Vector3 Color;
     public float RadialFallOff;
     public float Angle;
-    //radialFalloff=pow(1-distance,radialFalloff)
-    //angle=smoothstep(maxAngle,minAngle,angle) (symmetric) 
-    //todo: support normal map
-    //normal map:n·l
-    //final=intensity*color*radialFalloff*angle*normalEffect
-    //shadeCol=baseCol*final
-    //shadeCol+=Volume*Color
-    //store the shadow in stencil
-    
-    // algorithm:https://github.com/mattdesl/lwjgl-basics/wiki/2D-Pixel-Perfect-Shadows
-    //https://ahamnett.blogspot.com/2013/05/2d-shadows-shader.html
-    // https://www.youtube.com/watch?v=eyDUco5zzLU
 }

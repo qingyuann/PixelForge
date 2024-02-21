@@ -1,4 +1,5 @@
 ﻿using Entitas;
+using System.Numerics;
 
 namespace Render.PostEffect;
 

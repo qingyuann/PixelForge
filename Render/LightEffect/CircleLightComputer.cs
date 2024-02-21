@@ -5,7 +5,7 @@ using pp;
 
 namespace Render.PostEffect;
 
-public class GlobalLightComputer : LightEffectComputer
+public class CircleLightComputer : LightEffectComputer
 {
     Vector3 _color;
     float _intensity;

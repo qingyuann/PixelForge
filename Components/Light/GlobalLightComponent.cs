@@ -11,5 +11,5 @@ public class GlobalLightComponent : IComponent, ILightComponent
     public int[] Layers { get; set; }
     public int LightOrder { get; set; }
     public Vector3 Color;
-    public Vector3 Intensity;
+    public float Intensity;
 }

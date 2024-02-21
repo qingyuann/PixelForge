@@ -1,4 +1,5 @@
 ﻿using PixelForge;
+using PixelForge.Light;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -20,7 +21,7 @@ public class RenderPipeline {
 
 		//create render layer
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight  ) );
+			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight ) );
 		}
 		_renderScreen = new RenderFullscreen();
 		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
@@ -47,6 +48,11 @@ public class RenderPipeline {
 			_layerRt[index].RenderToRt();
 			_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)ClearBufferMask.DepthBufferBit );
 			RenderSystem.Render( index );
+		}
+
+		//2d light
+		for( int i = 0; i < _layerCount; i++ ) {
+			LightSystem.RenderLights( i, _layerRt[i] );
 		}
 
 		//post process

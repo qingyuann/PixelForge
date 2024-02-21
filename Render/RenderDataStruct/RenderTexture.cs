@@ -6,11 +6,8 @@ namespace Render;
 public class RenderTexture : Texture {
 	public readonly uint _fbo;
 	readonly int _colorAttachment;
-	public readonly int Width;
-	public readonly int Height;
+	
 	public RenderTexture( GL gl, uint width, uint height, int colorAttachment = 0, bool addDepth = true ) : base( gl, new byte[width * height * 4], width, height ) {
-		Width = (int)width;
-		Height = (int)height;
 		_colorAttachment = colorAttachment;
 		_fbo = _gl.GenFramebuffer();
 		_gl.BindFramebuffer( GLEnum.Framebuffer, _fbo );

@@ -19,14 +19,15 @@ public static class GameComponentsLookup {
     public const int ComponentTexture = 8;
     public const int LightCircleLight = 9;
     public const int LightGlobalLight = 10;
-    public const int MatPara = 11;
-    public const int MatRenderSingle = 12;
-    public const int MatSpriteInstanceRenderer = 13;
-    public const int ppBloom = 14;
-    public const int ppGaussianBlur = 15;
-    public const int ppLightSetting = 16;
+    public const int LightShadowLight = 11;
+    public const int MatPara = 12;
+    public const int MatRenderSingle = 13;
+    public const int MatSpriteInstanceRenderer = 14;
+    public const int ppBloom = 15;
+    public const int ppGaussianBlur = 16;
+    public const int ppLightSetting = 17;
 
-    public const int TotalComponents = 17;
+    public const int TotalComponents = 18;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
@@ -40,6 +41,7 @@ public static class GameComponentsLookup {
         "ComponentTexture",
         "LightCircleLight",
         "LightGlobalLight",
+        "LightShadowLight",
         "MatPara",
         "MatRenderSingle",
         "MatSpriteInstanceRenderer",
@@ -60,6 +62,7 @@ public static class GameComponentsLookup {
         typeof(Component.TextureComponent),
         typeof(Light.CircleLightComponent),
         typeof(Light.GlobalLightComponent),
+        typeof(Light.ShadowLightComponent),
         typeof(Mat.ParaComponent),
         typeof(Mat.RenderSingleComponent),
         typeof(Mat.SpriteInstanceRendererComponent),

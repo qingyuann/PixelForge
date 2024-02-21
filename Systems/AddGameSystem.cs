@@ -1,3 +1,5 @@
+using PixelForge.Light;
+
 namespace PixelForge;
 
 using Entitas;
@@ -13,6 +15,7 @@ public sealed class AddGameSystem : Systems {
 		Add( new HierarchySystem( contexts ) );
 		//然后把渲染器设置好
 		Add( new RenderSystem( contexts ) );
+		Add( new LightSystem( contexts ) );
 		Add( new PostProcessSystem( contexts ) );
 
 
