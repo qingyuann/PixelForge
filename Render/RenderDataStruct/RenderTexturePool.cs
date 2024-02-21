@@ -3,30 +3,42 @@ using Silk.NET.OpenGL;
 
 namespace Render;
 
-public static class RenderTexturePool {
-	static Stack<RenderTexture> _pool = new Stack<RenderTexture>();
+public static class RenderTexturePool
+{
+    static Dictionary<(uint, uint), Stack<RenderTexture>> _pool = new Dictionary<(uint, uint), Stack<RenderTexture>>();
 
-	public static RenderTexture Get( uint width, uint height ) {
-		if( _pool.Count > 0 ) {
-			var rt = _pool.Pop();
-			if( rt.Width == width && rt.Height == height ) {
-				return rt;
-			} else {
-				rt.Dispose();
-			}
-		}
+    public static RenderTexture Get(uint width, uint height)
+    {
+        if (_pool.TryGetValue((width, height), out var stack))
+        {
+            if (stack.Count > 0)
+            {
+                return stack.Pop();
+            }
+            else
+            {
+                var rt = new RenderTexture(GlobalVariable.GL, width, height);
+                return rt;
+            }
+        }
+        else
+        {
+            var rt = new RenderTexture(GlobalVariable.GL, width, height);
+            _pool.Add((width, height), new Stack<RenderTexture>());
+            return rt;
+        }
+    }
 
-		return new RenderTexture( GlobalVariable.GL, width, height, 0 );
-	}
-
-	public static void Return( RenderTexture rt ) {
-		if (_pool.Count < 5)
-		{
-			_pool.Push(rt);
-		}
-		else
-		{
-			rt.Dispose();
-		}
-	}
+    public static void Return(RenderTexture rt)
+    {
+        if (_pool.TryGetValue(((uint)rt.Width, (uint)rt.Height), out var stack))
+        {
+            stack.Push(rt);
+        }
+        else
+        {
+            _pool.Add(((uint)rt.Width, (uint)rt.Height), new Stack<RenderTexture>());
+            _pool[((uint)rt.Width, (uint)rt.Height)].Push(rt);
+        }
+    }
 }

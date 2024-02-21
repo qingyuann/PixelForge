@@ -15,8 +15,6 @@ public class BloomComputer : PostProcessComputer {
 		_gaussianBlurComputer = new GaussianBlurComputer();
 		_bloom_extract_bright = new RenderFullscreen( "Blit.vert", "PPBloomExtractBright.frag" );
 		_bloom_add_to_screen = new RenderFullscreen( "Blit.vert", "PPBloomAddToScreen.frag" );
-		tempRT1 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
-		tempRT2 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
 	}
 
 	public override void Render( RenderTexture rt ) {
@@ -29,6 +27,8 @@ public class BloomComputer : PostProcessComputer {
 
 	public override void SetParams( IComponent param ) {
 		if( param is BloomComponent b ) {
+			tempRT1 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
+			tempRT2 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
 			var gaussianParam = new GaussianBlurComponent();
 			gaussianParam.Iterations = b.BlurIterations;
 			gaussianParam.Offset = b.BlurOffset;
@@ -37,6 +37,8 @@ public class BloomComputer : PostProcessComputer {
 			var bloomIntensity = b.BloomIntensity;
 			_bloom_extract_bright.SetUniform( "bloomThreshold", bloomThreshold );
 			_bloom_extract_bright.SetUniform( "bloomIntensity", bloomIntensity );
+			RenderTexturePool.Return( tempRT1 );
+			RenderTexturePool.Return( tempRT2 );
 		}
 	}
 

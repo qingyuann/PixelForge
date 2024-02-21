@@ -4,107 +4,110 @@ using pp;
 
 namespace Render.PostEffect;
 
-public class GaussianBlurComputer : PostProcessComputer {
-	RenderFullscreen _gausianBlurHorizontal;
-	RenderFullscreen _gaussianBlurVertical;
-	RenderTexture tempRT1;
-	RenderTexture tempRT2;
-	int _iterations;
-	float _offset;
-	static RenderFullscreen _renderFullscreen;
-	readonly uint _width = GameSetting.WindowWidth;
-	readonly uint _height = GameSetting.WindowHeight;
-	readonly uint _halfWidth = GameSetting.WindowWidth / 2;
-	readonly uint _halfHeight = GameSetting.WindowHeight / 2;
-	readonly uint _quarterWidth = GameSetting.WindowWidth / 4;
-	readonly uint _quarterHeight = GameSetting.WindowHeight / 4;
-	public GaussianBlurComputer() {
-		_gausianBlurHorizontal = new RenderFullscreen( "Blit.vert", "PPGaussianBlurHor.frag" );
-		_gaussianBlurVertical = new RenderFullscreen( "Blit.vert", "PPGaussianBlurVer.frag" );
-		_renderFullscreen = new RenderFullscreen( "Blit.vert", "Blit.frag" );
-	}
+public class GaussianBlurComputer : PostProcessComputer
+{
+    RenderFullscreen _gaussianBlurVertical;
+    RenderTexture tempRT1;
+    RenderTexture tempRT2;
+    int _iterations;
+    float _offset;
+    static RenderFullscreen _renderFullscreen;
+    readonly uint _width = GameSetting.WindowWidth;
+    readonly uint _height = GameSetting.WindowHeight;
+    readonly uint _halfWidth = GameSetting.WindowWidth / 2;
+    readonly uint _halfHeight = GameSetting.WindowHeight / 2;
+    readonly uint _quarterWidth = GameSetting.WindowWidth / 4;
+    readonly uint _quarterHeight = GameSetting.WindowHeight / 4;
+    readonly RenderFullscreen _gaussianBlurHorizontal;
 
-	public override void Render( RenderTexture rt ) {
-		tempRT1 = RenderTexturePool.Get( _width, _height );
-		tempRT2 = RenderTexturePool.Get( _width, _height );
-		_gausianBlurHorizontal.SetUniform( "screenWidth", _width );
-		_gausianBlurHorizontal.SetUniform( "screenHeight", _height );
-		_gaussianBlurVertical.SetUniform( "screenWidth", _width );
-		_gaussianBlurVertical.SetUniform( "screenHeight", _height );
-		_gausianBlurHorizontal.SetUniform( "offset", _offset );
-		_gaussianBlurVertical.SetUniform( "offset", _offset );
-		Blitter.Blit( rt, tempRT2);
-		Blitter.Blit( tempRT2, tempRT1, _gausianBlurHorizontal );
-		Blitter.Blit( tempRT1, tempRT2, _gaussianBlurVertical );
-		Blitter.Blit( tempRT1, rt);
-		RenderTexturePool.Return( tempRT1 );
-		RenderTexturePool.Return( tempRT2 );
-		return;
-		
-		
-		// tempRT1 = RenderTexturePool.Get( _halfWidth, _halfHeight );
-		// tempRT2 = RenderTexturePool.Get( _quarterWidth, _quarterHeight );
-		//
-		// //down sample then up sample
-		// _gausianBlurHorizontal.SetUniform( "offset", _offset );
-		// _gaussianBlurVertical.SetUniform( "offset", _offset );
+    public GaussianBlurComputer()
+    {
+        _gaussianBlurVertical = new RenderFullscreen("Blit_CustomUVScale.vert", "PPGaussianBlurVer.frag");
+        _gaussianBlurHorizontal = new RenderFullscreen("Blit_CustomUVScale.vert", "PPGaussianBlurHor.frag");
+        _renderFullscreen = new RenderFullscreen("Blit.vert", "Blit.frag");
+    }
 
-		// // half size
-		// _gausianBlurHorizontal.SetUniform( "screenWidth", _halfWidth );
-		// _gausianBlurHorizontal.SetUniform( "screenHeight", _halfHeight );
-		// _gaussianBlurVertical.SetUniform( "screenWidth", _halfWidth );
-		// _gaussianBlurVertical.SetUniform( "screenHeight", _halfHeight );
-		// Blitter.Blit( rt, tempRT1 );
-		// Blitter.Blit( tempRT1, tempRT2, _gausianBlurHorizontal );
-		// Blitter.Blit( tempRT2, tempRT1, _gaussianBlurVertical );
-		//
-		// // quarter size
-		// _gausianBlurHorizontal.SetUniform( "screenWidth", _quarterWidth );
-		// _gausianBlurHorizontal.SetUniform( "screenHeight", _quarterHeight );
-		// _gaussianBlurVertical.SetUniform( "screenWidth", _quarterWidth );
-		// _gaussianBlurVertical.SetUniform( "screenHeight", _quarterHeight );
-		// RenderTexturePool.Return( tempRT2 );
-		// tempRT2 = RenderTexturePool.Get( _quarterWidth, _quarterHeight );
-		// Blitter.Blit( tempRT1, tempRT2 );
-		// RenderTexturePool.Return( tempRT1 );
-		// tempRT1 = RenderTexturePool.Get( _quarterWidth, _quarterHeight );
-		// for( int i = 0; i < _iterations; i++ ) {
-		// 	Blitter.Blit( tempRT2, tempRT1, _gausianBlurHorizontal );
-		// 	Blitter.Blit( tempRT1, tempRT2, _gaussianBlurVertical );
-		// }
-		//
-		// //half size
-		// _gausianBlurHorizontal.SetUniform( "screenWidth", _halfWidth );
-		// _gausianBlurHorizontal.SetUniform( "screenHeight", _halfHeight );
-		// _gaussianBlurVertical.SetUniform( "screenWidth", _halfWidth );
-		// _gaussianBlurVertical.SetUniform( "screenHeight", _halfHeight );
-		// RenderTexturePool.Return( tempRT1 );
-		// tempRT1 = RenderTexturePool.Get( _halfWidth, _halfHeight );
-		// Blitter.Blit( tempRT2, tempRT1 );
-		// RenderTexturePool.Return( tempRT2 );
-		// tempRT2 = RenderTexturePool.Get( _halfWidth, _halfHeight );
-		// Blitter.Blit( tempRT1, tempRT2, _gausianBlurHorizontal );
-		// Blitter.Blit( tempRT2, tempRT1, _gaussianBlurVertical );
-		//
-		// //original size
-		// Blitter.Blit( tempRT1, rt );
-		//
+    public override void Render(RenderTexture rt)
+    {
+        _gaussianBlurVertical.SetUniform("offset", _offset);
+        _gaussianBlurHorizontal.SetUniform("offset", _offset);
+        
+        tempRT1 = RenderTexturePool.Get(_width, _height);
+        tempRT2 = RenderTexturePool.Get(_width, _height);
+        Blitter.Blit(rt, tempRT1);
 
-	}
+        //使用opengl自带的blit不会导致纹理坐标变化，但是使用自己的shader去blit半尺寸的纹理时，需要手动将uv坐标放大一倍（0-0.5 -> 0-1）
+        
 
-	public override void SetParams( IComponent param ) {
-		if( param is GaussianBlurComponent g ) {
-			_iterations = g.Iterations;
-			_offset = g.Offset;
-		}
-	}
 
-	public override void Dispose() {
-		RenderTexturePool.Return( tempRT1 );
-		RenderTexturePool.Return( tempRT2 );
-	}
+        if (_iterations >= 1)
+        {
+            CalculateGaussian(_width, _height, 1, ref tempRT1, ref tempRT2);
+            if (_iterations >= 3)
+            {
+                CalculateGaussian(_halfWidth, _halfHeight, 2, ref tempRT1, ref tempRT2);
+                if (_iterations >= 5)
+                {
+                    for (int i = 0; i < _iterations - 4; i++)
+                    {
+                        CalculateGaussian(_quarterWidth, _quarterHeight, 4, ref tempRT1, ref tempRT2);
+                    }
+                }
+                if (_iterations >= 4)
+                {
+                    CalculateGaussian(_halfWidth, _halfHeight, 2, ref tempRT1, ref tempRT2);
+                }
+            }
+            
+            CalculateGaussian(_halfWidth, _halfHeight, 2, ref tempRT1, ref tempRT2);
+        
+            if (_iterations >= 2)
+            {
+                CalculateGaussian(_width, _height, 1, ref tempRT1, ref tempRT2);
+            }
+        }
 
-	~GaussianBlurComputer() {
-		Dispose();
-	}
+        Blitter.Blit(tempRT1, rt);
+        RenderTexturePool.Return(tempRT1);
+        RenderTexturePool.Return(tempRT2);
+    }
+
+    // in rt1, out rt1
+    void CalculateGaussian(uint width, uint height, int uvScale, ref RenderTexture rt1, ref RenderTexture rt2)
+    {
+        _gaussianBlurVertical.SetUniform("screenWidth", width);
+        _gaussianBlurVertical.SetUniform("screenHeight", height);
+        _gaussianBlurVertical.SetUniform("_UVScale", uvScale);
+        _gaussianBlurHorizontal.SetUniform("screenWidth", width);
+        _gaussianBlurHorizontal.SetUniform("screenHeight", height);
+        _gaussianBlurHorizontal.SetUniform("_UVScale", uvScale);
+        RenderTexturePool.Return(rt2);
+        rt2 = RenderTexturePool.Get(width, height);
+        Blitter.Blit(rt1, rt2);
+        RenderTexturePool.Return(rt1);
+        rt1 = RenderTexturePool.Get(width, height);
+        Blitter.Blit(rt2, rt1, _gaussianBlurVertical);
+        Blitter.Blit(rt1, rt2, _gaussianBlurHorizontal);
+        Blitter.Blit(rt2, rt1);
+    }
+
+    public override void SetParams(IComponent param)
+    {
+        if (param is GaussianBlurComponent g)
+        {
+            _iterations = g.Iterations;
+            _offset = g.Offset;
+        }
+    }
+
+    public override void Dispose()
+    {
+        RenderTexturePool.Return(tempRT1);
+        RenderTexturePool.Return(tempRT2);
+    }
+
+    ~GaussianBlurComputer()
+    {
+        Dispose();
+    }
 }

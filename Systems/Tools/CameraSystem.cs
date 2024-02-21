@@ -34,6 +34,21 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem {
 			}
 		}
 	}
+	
+	/// <summary>
+	/// return a camera view matrix by given pos, scale
+	/// </summary>
+	/// <returns></returns>
+	public static Matrix4x4 GetCamMatrix(Vector3 pos, float scale) {
+		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation( new Vector3( -pos.X * GlobalVariable.XUnit, -pos.Y * GlobalVariable.YUnit, 0 ) );
+		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale( scale );
+		return translationMatrix * scaleMatrix;
+	}
+	
+	public static void GetMainCamPara(out Vector3 pos, out float scale) {
+		pos = new Vector3( MainCamViewMatrix.M41, MainCamViewMatrix.M42, MainCamViewMatrix.M43 );
+		scale = MainCamViewMatrix.M11;
+	}
 
 	public void Execute() {
 		SetCameraViewMatrix();

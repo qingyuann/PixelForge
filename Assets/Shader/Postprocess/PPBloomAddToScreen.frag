@@ -9,11 +9,11 @@ uniform sampler2D _ScreenCol;
 void main()
 {
     // get lightness
-    vec3 bloom = texture(_BlitTexture, fUv).rgb;
-    vec3 screen = texture(_ScreenCol, fUv).rgb;
+    vec4 bloom = texture(_BlitTexture, fUv);
+    vec4 screen = texture(_ScreenCol, fUv);
 
     bloom+=screen;
     
     // output the color
-    FragColor = vec4(bloom, 1.0);
+    FragColor = bloom;
 }
