@@ -12,9 +12,9 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 	public BufferObject<uint> Ebo { get; set; }
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
-	public RenderQuad( Vector3 pos, Vector2 scale, float rotation, int layer, Anchor anchor = Anchor.Center, string vertShaderName = "QuadBasic.vert", string fragShaderName = "QuadBasic.frag" ) : base( layer, vertShaderName, fragShaderName ) {
+	public RenderQuad( Vector3 pos, Vector2 scale, float rotation, int layer, Anchor anchor = Anchor.Center, string vertShaderName = "QuadBasic.vert", string fragShaderName = "QuadBasic.frag", bool relativeLength = false, bool invertV = false ) : base( layer, vertShaderName, fragShaderName ) {
 		GL gl = GlobalVariable.GL;
-		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor );
+		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor, relativeLength, invertV );
 		Vertices = vert;
 		Indices = indices;
 		Ebo = new BufferObject<uint>( Gl, Indices, BufferTargetARB.ElementArrayBuffer );
@@ -39,14 +39,14 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		unsafe {
 			BaseShader.Use();
 			Vao.Bind();
-			
+
 			int textureNum = 0;
 			foreach( var tex in Textures ) {
 				BaseShader.SetUniform( textureNum, tex.Key, tex.Value );
 				textureNum++;
 			}
 			SetUniform( "viewMatrix", CameraSystem.MainCamViewMatrix );
-		
+
 			Gl.DrawElements( PrimitiveType.Triangles,
 				(uint)Indices.Length, DrawElementsType.UnsignedInt, null );
 

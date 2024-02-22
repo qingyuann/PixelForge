@@ -14,7 +14,11 @@ public static partial class Image {
 	/// <returns></returns>
 	public static Vector4 TryGetColorPixelRGBA( byte[] data, int pixelX, int pixelY, int width, int height ) {
 		var index = TryGetIndex( pixelX, pixelY, width, height );
-		return index is null ? new Vector4( 0, 0, 0, 1 ) : new Vector4( data[index.Value * 4], data[index.Value * 4 + 1], data[index.Value * 4 + 2], data[index.Value * 4 + 3] );
+		if( index is null) {
+			Debug.Log( "index out of boundary" );
+			return new Vector4( 0, 0, 0, 1 );
+		}
+		return new Vector4( data[index.Value * 4], data[index.Value * 4 + 1], data[index.Value * 4 + 2], data[index.Value * 4 + 3] );
 	}
 
 	/// <summary>

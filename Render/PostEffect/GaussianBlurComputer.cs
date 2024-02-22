@@ -32,8 +32,8 @@ public class GaussianBlurComputer : PostProcessComputer
         _gaussianBlurVertical.SetUniform("offset", _offset);
         _gaussianBlurHorizontal.SetUniform("offset", _offset);
         
-        tempRT1 = RenderTexturePool.Get(_width, _height);
-        tempRT2 = RenderTexturePool.Get(_width, _height);
+        tempRT1 = TexturePool.GetRT(_width, _height);
+        tempRT2 = TexturePool.GetRT(_width, _height);
         Blitter.Blit(rt, tempRT1);
 
         //使用opengl自带的blit不会导致纹理坐标变化，但是使用自己的shader去blit半尺寸的纹理时，需要手动将uv坐标放大一倍（0-0.5 -> 0-1）
@@ -68,8 +68,8 @@ public class GaussianBlurComputer : PostProcessComputer
         }
 
         Blitter.Blit(tempRT1, rt);
-        RenderTexturePool.Return(tempRT1);
-        RenderTexturePool.Return(tempRT2);
+        TexturePool.ReturnRT(tempRT1);
+        TexturePool.ReturnRT(tempRT2);
     }
 
     // in rt1, out rt1
@@ -81,11 +81,11 @@ public class GaussianBlurComputer : PostProcessComputer
         _gaussianBlurHorizontal.SetUniform("screenWidth", width);
         _gaussianBlurHorizontal.SetUniform("screenHeight", height);
         _gaussianBlurHorizontal.SetUniform("_UVScale", uvScale);
-        RenderTexturePool.Return(rt2);
-        rt2 = RenderTexturePool.Get(width, height);
+        TexturePool.ReturnRT(rt2);
+        rt2 = TexturePool.GetRT(width, height);
         Blitter.Blit(rt1, rt2);
-        RenderTexturePool.Return(rt1);
-        rt1 = RenderTexturePool.Get(width, height);
+        TexturePool.ReturnRT(rt1);
+        rt1 = TexturePool.GetRT(width, height);
         Blitter.Blit(rt2, rt1, _gaussianBlurVertical);
         Blitter.Blit(rt1, rt2, _gaussianBlurHorizontal);
         Blitter.Blit(rt2, rt1);
@@ -102,8 +102,8 @@ public class GaussianBlurComputer : PostProcessComputer
 
     public override void Dispose()
     {
-        RenderTexturePool.Return(tempRT1);
-        RenderTexturePool.Return(tempRT2);
+        TexturePool.ReturnRT(tempRT1);
+        TexturePool.ReturnRT(tempRT2);
     }
 
     ~GaussianBlurComputer()

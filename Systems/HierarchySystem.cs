@@ -24,7 +24,7 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 0, 0, 1 );
 		camera.AddComponentCamera( 0, true, 1.000f );
 		camera.AddComponentBasicMove( true, 0.0005f );
-		camera.AddMatRenderSingle( true, 0, null );
+		// camera.AddMatRenderSingle( true, 0, null );
 		camera.AddMatPara( null, new Dictionary<string, object>(){
 			{ "MainTex", "red.png" }
 		} );
@@ -47,21 +47,22 @@ public class HierarchySystem : IInitializeSystem {
 		#endregion
 
 
-		#region quad
-		var quad0 = _contexts.game.CreateEntity();
-		quad0.AddComponentName( "quad0" );
-		quad0.AddComponentPosition( 0, 0, -0.1f );
-		quad0.AddComponentSize( 1f, 1f );
-		quad0.AddComponentRotation( 0 );
-		quad0.AddMatRenderSingle( true, 0, null );
-		quad0.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "blue.png" }
-		} );
 
+		#region quad
+		// var quad0 = _contexts.game.CreateEntity();
+		// quad0.AddComponentName( "quad0" );
+		// quad0.AddComponentPosition( 0, 0, -0.1f );
+		// quad0.AddComponentSize( 1f, 0.9f );
+		// quad0.AddComponentRotation( 0 );
+		// quad0.AddMatRenderSingle( true, 0, null );
+		// quad0.AddMatPara( null, new Dictionary<string, object>(){
+		// 	{ "MainTex", "blue.png" }
+		// } );
+	
 		var quad1 = _contexts.game.CreateEntity();
 		quad1.AddComponentName( "quad1" );
-		quad1.AddComponentPosition( 0, 0, 1 );
-		quad1.AddComponentSize( 0.1f, 0.1f );
+		quad1.AddComponentPosition( 0, 0.5f, 1 );
+		quad1.AddComponentSize( 0.5f, 0.1f );
 		quad1.AddComponentRotation( 0 );
 		quad1.AddMatRenderSingle( true, 0, null );
 		quad1.AddMatPara( null, new Dictionary<string, object>(){
@@ -70,8 +71,8 @@ public class HierarchySystem : IInitializeSystem {
 
 		var quad2 = _contexts.game.CreateEntity();
 		quad2.AddComponentName( "quad2" );
-		quad2.AddComponentPosition( -1f, 1f, 0 );
-		quad2.AddComponentSize( 0.1f, 0.1f );
+		quad2.AddComponentPosition( -0.5f, 0f, 0 );
+		quad2.AddComponentSize( 0.1f, 0.5f );
 		quad2.AddComponentRotation( 0 );
 		quad2.AddMatRenderSingle( true, 0, null );
 		quad2.AddMatPara( null, new Dictionary<string, object>(){
@@ -80,22 +81,25 @@ public class HierarchySystem : IInitializeSystem {
 
 		var quad3 = _contexts.game.CreateEntity();
 		quad3.AddComponentName( "quad3" );
-		quad3.AddComponentPosition( 1, -1, 0 );
-		quad3.AddComponentSize( 0.1f, 0.1f );
+		quad3.AddComponentPosition( 0.5f, 0, 0 );
+		quad3.AddComponentSize( 0.1f, 0.5f );
 		quad3.AddComponentRotation( 0 );
 		quad3.AddMatRenderSingle( true, 0, null );
-
+		quad3.AddMatPara( null, new Dictionary<string, object>(){
+			{ "MainTex", "green.png" }
+		} );
 
 		var quad4 = _contexts.game.CreateEntity();
 		quad4.AddComponentName( "quad4" );
-		quad4.AddComponentPosition( 1f, 1, -0f );
-		quad4.AddComponentSize( 0.1f, 0.1f );
+		quad4.AddComponentPosition( 0f, -0.5f, -0f );
+		quad4.AddComponentSize( 0.5f, 0.1f );
 		quad4.AddComponentRotation( 0 );
 		quad4.AddMatRenderSingle( true, 0, null );
 		quad4.AddMatPara( null, new Dictionary<string, object>(){
 			{ "MainTex", "red.png" }
 		} );
 
+		/*
 		var quad5 = _contexts.game.CreateEntity();
 		quad5.AddComponentName( "quad5" );
 		quad5.AddComponentPosition( 2f, 0f, 0 );
@@ -115,7 +119,11 @@ public class HierarchySystem : IInitializeSystem {
 		quad6.AddMatPara( null, new Dictionary<string, object>(){
 			{ "MainTex", "blue.png" }
 		} );
+		*/
+		
+		
 		#endregion
+	
 
 	}
 }

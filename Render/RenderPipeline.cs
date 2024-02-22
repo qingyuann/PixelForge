@@ -20,7 +20,7 @@ public class RenderPipeline {
 
 		//create render layer
 		for( int i = 0; i < _layerCount; i++ ) {
-			_layerRt.Add( RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight ) );
+			_layerRt.Add( TexturePool.GetRT( GameSetting.WindowWidth, GameSetting.WindowHeight ) );
 		}
 		_renderScreen = new RenderFullscreen();
 		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
@@ -66,7 +66,7 @@ public class RenderPipeline {
 	public void OnClose() {
 		_renderScreen.Dispose();
 		foreach( var rt in _layerRt ) {
-			RenderTexturePool.Return( rt );
+			TexturePool.ReturnRT( rt );
 		}
 	}
 }

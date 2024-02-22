@@ -27,8 +27,8 @@ public class BloomComputer : PostProcessComputer {
 
 	public override void SetParams( IComponent param ) {
 		if( param is BloomComponent b ) {
-			tempRT1 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
-			tempRT2 = RenderTexturePool.Get( GameSetting.WindowWidth, GameSetting.WindowHeight );
+			tempRT1 = TexturePool.GetRT( GameSetting.WindowWidth, GameSetting.WindowHeight );
+			tempRT2 = TexturePool.GetRT( GameSetting.WindowWidth, GameSetting.WindowHeight );
 			var gaussianParam = new GaussianBlurComponent();
 			gaussianParam.Iterations = b.BlurIterations;
 			gaussianParam.Offset = b.BlurOffset;
@@ -37,13 +37,13 @@ public class BloomComputer : PostProcessComputer {
 			var bloomIntensity = b.BloomIntensity;
 			_bloom_extract_bright.SetUniform( "bloomThreshold", bloomThreshold );
 			_bloom_extract_bright.SetUniform( "bloomIntensity", bloomIntensity );
-			RenderTexturePool.Return( tempRT1 );
-			RenderTexturePool.Return( tempRT2 );
+			TexturePool.ReturnRT( tempRT1 );
+			TexturePool.ReturnRT( tempRT2 );
 		}
 	}
 
 	public override void Dispose() {
-		RenderTexturePool.Return( tempRT1 );
+		TexturePool.ReturnRT( tempRT1 );
 		_gaussianBlurComputer.Dispose();
 	}
 

@@ -12,7 +12,7 @@ public class GlobalLightComputer : LightEffectComputer
     private RenderTexture _tempRt1;
     public override void Render(RenderTexture rt)
     {
-        _tempRt1 = RenderTexturePool.Get((uint)rt.Width, (uint)rt.Height);
+        _tempRt1 = TexturePool.GetRT((uint)rt.Width, (uint)rt.Height);
         Blitter.Blit(rt, _tempRt1);
     }
 

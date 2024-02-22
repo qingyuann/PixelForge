@@ -83,7 +83,7 @@ namespace Render {
 			_gl.ActiveTexture( textureSlot );
 			_gl.BindTexture( TextureTarget.Texture2D, _handle );
 		}
-
+		
 		/// <summary>
 		/// 应该在绘制之前绑定纹理，绘制之后解绑纹理
 		/// </summary>
