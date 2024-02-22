@@ -30,7 +30,7 @@ public class HierarchySystem : IInitializeSystem {
 		
 		var globalLight = _contexts.game.CreateEntity();
 		globalLight.AddppLightSetting( true );
-		// globalLight.AddppBloom( true, new[]{ 2 }, 5f, 8, 0.8f, 2f, new BloomComputer() );
+		globalLight.AddppBloom( true, new[]{ 0}, 1f, 3, 0.8f, 2f, new BloomComputer() );
 		// globalLight.AddppGaussianBlur( true, new[]{ 0 }, 10f, 1, new GaussianBlurComputer() );
 		
 		
