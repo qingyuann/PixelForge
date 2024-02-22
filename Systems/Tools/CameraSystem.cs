@@ -27,10 +27,8 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem {
 				_mainCamera = gameEntity;
 				var posComponent = gameEntity.componentPosition;
 				Vector2 pos = new Vector2( posComponent.X, posComponent.Y );
-				var scale = 1 / gameEntity.componentCamera.Scale;
-				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation( new Vector3( -pos.X * GlobalVariable.XUnit, -pos.Y * GlobalVariable.YUnit, 0 ) );
-				Matrix4x4 scaleMatrix = Matrix4x4.CreateScale( scale );
-				MainCamViewMatrix = translationMatrix * scaleMatrix;
+				var scale = gameEntity.componentCamera.Scale;
+				MainCamViewMatrix = GetCamMatrix( pos, scale );
 				//只有一个主相机
 				return;
 			}
@@ -41,7 +39,8 @@ public sealed class CameraSystem : IInitializeSystem, IExecuteSystem {
 	/// return a camera view matrix by given pos, scale
 	/// </summary>
 	/// <returns></returns>
-	public static Matrix4x4 GetCamMatrix( Vector3 pos, float scale ) {
+	public static Matrix4x4 GetCamMatrix( Vector2 pos, float scale ) {
+		scale = 1 /scale;
 		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation( new Vector3( -pos.X * GlobalVariable.XUnit, -pos.Y * GlobalVariable.YUnit, 0 ) );
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale( scale );
 		return translationMatrix * scaleMatrix;

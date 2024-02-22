@@ -12,7 +12,6 @@ public class RenderPipeline {
 	readonly List<RenderTexture> _layerRt = new List<RenderTexture>();
 
 	RenderQuad _quad;
-	RenderQuad _quad1;
 
 	public RenderPipeline( GL gl ) {
 		_gl = GlobalVariable.GL;
@@ -35,8 +34,6 @@ public class RenderPipeline {
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 
 		_quad = new RenderQuad( Vector3.Zero + new Vector3( 0f, 0f, 0.1f ), Vector2.One, 0, 0 );
-		_quad1 = new RenderQuad( Vector3.Zero + new Vector3( 1f, 1f, 0.2f ), Vector2.One * 0.5f, 0, 0 );
-		_quad1.SetTexture( "MainTex", "silk2.png" );
 	}
 
 	public void OnRender() {

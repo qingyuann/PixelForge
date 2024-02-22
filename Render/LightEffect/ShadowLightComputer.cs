@@ -34,14 +34,13 @@ public class ShadowLightComputer  : LightEffectComputer {
 		Vector2 posPixCenter = Transform.WorldToPixel( _position );
 		var centerIndex = (int)posPixCenter.X + (int)posPixCenter.Y * rt.Width;
 
-		var color=Image.GetColorPixelRGBA(_screenData, (int)posPixCenter.X, (int)posPixCenter.Y, rt.Width);
-		Debug.Log( "color：" +color);
 		
 		var startIndex = (int)posPixCenter.X - radiusPixelSize + (int)( posPixCenter.Y - radiusPixelSize ) * rt.Width;
 		//copy the screen data to light data
 		for( int i = 0; i < radiusPixelSize * 2; i++ ) {
-			Array.Copy( _screenData, startIndex * 4, _lightData, i * radiusPixelSize * 4, radiusPixelSize * 4 );
-			startIndex += rt.Width;
+			
+			
+
 		}
 		
 	}

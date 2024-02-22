@@ -22,12 +22,14 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentSize( 0.1f, 0.1f );
 		camera.AddComponentRotation( 0 );
 		camera.AddComponentPosition( 0, 0, 1 );
-		camera.AddComponentCamera( 0, true, 2f );
+		camera.AddComponentCamera( 0, true, 1.000f );
 		camera.AddComponentBasicMove( true, 0.0005f );
 		camera.AddMatRenderSingle( true, 0, null );
 		camera.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk3.png" }
+			{ "MainTex", "red.png" }
 		} );
+		camera.AddLightShadowLight( true, new[]{ 0 }, 0, new Vector2( 0f, 0f ), 0.5f, 1f, 1f, new Vector3( 1, 1, 1 ), 1f, 1f );
+
 
 		
 		// var postProcess = _contexts.game.CreateEntity();
@@ -37,33 +39,33 @@ public class HierarchySystem : IInitializeSystem {
 
 
 		#region Light
-		var shadowLight = _contexts.game.CreateEntity();
-		shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, new Vector2( 0f, 0f ), 0.5f, 1f, 1f, new Vector3( 1, 1, 1 ), 1f, 1f );
-
-		var globalLight = _contexts.game.CreateEntity();
-		globalLight.AddLightGlobalLight( true, new[]{ 0 }, 0, Vector3.One, 1f );
+		// var shadowLight = _contexts.game.CreateEntity();
+		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, new Vector2( 0f, 0f ), 0.5f, 1f, 1f, new Vector3( 1, 1, 1 ), 1f, 1f );
+		//
+		// // var globalLight = _contexts.game.CreateEntity();
+		// globalLight.AddLightGlobalLight( true, new[]{ 0 }, 0, Vector3.One, 1f );
 		#endregion
 
 
 		#region quad
 		var quad0 = _contexts.game.CreateEntity();
 		quad0.AddComponentName( "quad0" );
-		quad0.AddComponentPosition( 0, 0, 0 );
-		quad0.AddComponentSize( 10f, 10f );
+		quad0.AddComponentPosition( 0, 0, -0.1f );
+		quad0.AddComponentSize( 1f, 1f );
 		quad0.AddComponentRotation( 0 );
 		quad0.AddMatRenderSingle( true, 0, null );
 		quad0.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk2.png" }
+			{ "MainTex", "blue.png" }
 		} );
 
 		var quad1 = _contexts.game.CreateEntity();
 		quad1.AddComponentName( "quad1" );
-		quad1.AddComponentPosition( -1, -1, 0 );
+		quad1.AddComponentPosition( 0, 0, 1 );
 		quad1.AddComponentSize( 0.1f, 0.1f );
 		quad1.AddComponentRotation( 0 );
 		quad1.AddMatRenderSingle( true, 0, null );
 		quad1.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk2.png" }
+			{ "MainTex", "yellow.png" }
 		} );
 
 		var quad2 = _contexts.game.CreateEntity();
@@ -73,7 +75,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad2.AddComponentRotation( 0 );
 		quad2.AddMatRenderSingle( true, 0, null );
 		quad2.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk3.png" }
+			{ "MainTex", "green.png" }
 		} );
 
 		var quad3 = _contexts.game.CreateEntity();
@@ -91,7 +93,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad4.AddComponentRotation( 0 );
 		quad4.AddMatRenderSingle( true, 0, null );
 		quad4.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk3.png" }
+			{ "MainTex", "red.png" }
 		} );
 
 		var quad5 = _contexts.game.CreateEntity();
@@ -101,7 +103,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad5.AddComponentRotation( 0 );
 		quad5.AddMatRenderSingle( true, 0, null );
 		quad5.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk2.png" }
+			{ "MainTex", "red.png" }
 		} );
 
 		var quad6 = _contexts.game.CreateEntity();
@@ -111,7 +113,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad6.AddComponentRotation( 0 );
 		quad6.AddMatRenderSingle( true, 0, null );
 		quad6.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "silk.png" }
+			{ "MainTex", "blue.png" }
 		} );
 		#endregion
 
