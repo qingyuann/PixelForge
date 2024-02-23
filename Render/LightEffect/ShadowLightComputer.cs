@@ -106,7 +106,7 @@ public class ShadowLightComputer : LightEffectComputer {
 				return;
 			}
 
-			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length - 1 ) * 4 );
+			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length  ) * 4 );
 		} );
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////

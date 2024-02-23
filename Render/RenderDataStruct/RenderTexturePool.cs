@@ -1,5 +1,6 @@
 ﻿using PixelForge;
 using Silk.NET.OpenGL;
+using System.Buffers;
 
 namespace Render;
 
@@ -40,7 +41,9 @@ public static class TexturePool
             }
             else
             {
-                var tex = new Texture(GlobalVariable.GL, new byte[width * height * 4], width, height);
+                byte [] data = ArrayPool<byte>.Shared.Rent((int)width * (int)height * 4);
+                var tex = new Texture(GlobalVariable.GL, data, width, height);
+                ArrayPool<byte>.Shared.Return(data);
                 return tex;
             }
         }

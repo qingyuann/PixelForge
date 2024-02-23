@@ -1,8 +1,8 @@
 ﻿namespace PixelForge;
 
 public static class GameSetting {
-	public const int WindowWidth = 1000;
-	public const int WindowHeight = 1000;
+	public const int WindowWidth = 1920;
+	public const int WindowHeight = 1080;
 	public const string Name = "PixelForge";
 	//public const string ProjectPath = @"./";
 	public static string ProjectPath
@@ -31,7 +31,7 @@ public static class GameSetting {
 	public static int DeltaTime {
 		get;
 		private set;
-	}
+	}=10;
 
 	public static void Load() {
 		//加载资源
