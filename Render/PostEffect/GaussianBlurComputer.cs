@@ -29,11 +29,12 @@ public class GaussianBlurComputer : PostProcessComputer
 
     public override void Render(RenderTexture rt)
     {
+        tempRT1 = TexturePool.GetRT(_width, _height);
+        tempRT2 = TexturePool.GetRT(_width, _height);
+        
         _gaussianBlurVertical.SetUniform("offset", _offset);
         _gaussianBlurHorizontal.SetUniform("offset", _offset);
         
-        tempRT1 = TexturePool.GetRT(_width, _height);
-        tempRT2 = TexturePool.GetRT(_width, _height);
         Blitter.Blit(rt, tempRT1);
 
         //使用opengl自带的blit不会导致纹理坐标变化，但是使用自己的shader去blit半尺寸的纹理时，需要手动将uv坐标放大一倍（0-0.5 -> 0-1）
@@ -66,7 +67,6 @@ public class GaussianBlurComputer : PostProcessComputer
                 CalculateGaussian(_width, _height, 1, ref tempRT1, ref tempRT2);
             }
         }
-
         Blitter.Blit(tempRT1, rt);
         TexturePool.ReturnRT(tempRT1);
         TexturePool.ReturnRT(tempRT2);

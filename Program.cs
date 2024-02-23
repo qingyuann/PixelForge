@@ -28,8 +28,8 @@ namespace PixelForge {
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
 				Title = GameSetting.Name,
-				FramesPerSecond = 120,
-				UpdatesPerSecond = 120,
+				FramesPerSecond = 60,
+				UpdatesPerSecond = 60,
 				VSync = true,
 				WindowBorder = WindowBorder.Resizable,
 				ShouldSwapAutomatically = true
@@ -68,7 +68,7 @@ namespace PixelForge {
 
 		static void EarlyUpdate( double deltaTime ) {
 			//更新deltaTime
-			GameSetting.Update( 0.1 );
+			GameSetting.Update( deltaTime );
 			_inputSystem.CheckKeys();
 		}
 
@@ -82,10 +82,26 @@ namespace PixelForge {
 
 		static void OnRender( double deltaTime ) {
 			_renderPipeline.OnRender();
+			CalculateFrameRate( deltaTime );
 		}
 
 		static void OnClose() {
 			_renderPipeline.OnClose();
+		}
+
+		static int _frameCount;
+		static double _lastFrameTime;
+		private static void CalculateFrameRate(double deltaTime)
+		{
+			_frameCount++;
+			if (_window.Time - _lastFrameTime >= 1.0)
+			{
+				double fps = _frameCount / ( _window.Time - _lastFrameTime);
+				_window.Title = $"FPS: {fps:F2}";
+
+				_frameCount = 0;
+				_lastFrameTime = _window.Time;
+			}
 		}
 	}
 }
