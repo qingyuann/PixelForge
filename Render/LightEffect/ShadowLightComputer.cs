@@ -66,17 +66,20 @@ public class ShadowLightComputer : LightEffectComputer {
 		Vector2 posPixCenter = Transform.WorldToPixel( _position, true );
 
 		//copy the screen data to light data within the lightMap
-		for( int i = 0; i < radiusPixelSize * 2; i++ ) {
-			var screenY = (int)posPixCenter.Y - radiusPixelSize + i;
+		//concurrent version!!! Best performance!!!
+		Parallel.For( 0, radiusPixelSize * 2, j => {
+
+			var screenY = (int)posPixCenter.Y - radiusPixelSize + j;
 			if( screenY < 0 || screenY >= rt.Height ) {
-				continue;
+				// Console.WriteLine( "screenY < 0 || screenY >= rt.Height" );
+				return;
 			}
 
-			var lightY = i;
+			var lightY = j;
 			var screenX = (int)posPixCenter.X - radiusPixelSize;
 			var length = radiusPixelSize * 2;
 			var lightX = 0;
-			
+
 			// if screen left < 0, cut the light left
 			if( screenX < 0 ) {
 				lightX = -screenX;
@@ -87,32 +90,32 @@ public class ShadowLightComputer : LightEffectComputer {
 
 			// if screen right > screen right, cut the light right
 			if( screenX + length > rt.Width ) {
-				length -= (screenX + length - rt.Width);
+				length -= ( screenX + length - rt.Width );
 				// Console.WriteLine( "light right > screen right, length=" + length );
 			}
 
 			if( length <= 0 ) {
 				// Console.WriteLine( "length < 0" );
-				continue;
+				return;
 			}
 
 			var screenIndex = Image.TryGetIndex( screenX, screenY, rt.Width, rt.Height );
 			if( screenIndex is null ) {
 				Debug.LogError( "screenIndex is null" );
-				continue;
+				return;
 			}
-	
+
 			var lightIndex = Image.TryGetIndex( lightX, lightY, radiusPixelSize * 2, radiusPixelSize * 2 );
 			if( lightIndex is null ) {
 				Debug.LogError( "lightIndex is null" );
-				continue;
+				return;
 			}
 
-			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, (length-1) * 4 );
+			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length - 1 ) * 4 );
 			// var color = Image.TryGetColorPixelRGBA( _lightData, radiusPixelSize*2-1, 0, radiusPixelSize * 2, radiusPixelSize * 2 );
 			// Console.WriteLine( color );
-		}
 
+		} );
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////
 		/////////////////////////////////////////////////////
@@ -153,19 +156,19 @@ public class ShadowLightComputer : LightEffectComputer {
 		_shadowLightDraw.SetUniform( "volumeIntensity", _volume );
 		_shadowLightDraw.SetUniform( "edgeInfringe", _edgeInfringe );
 		Blitter.Blit( null, tempRt, _shadowLightDraw );
-		
+
 		//////////////////////////////
 		//// step4: blur the light////
 		//////////////////////////////
 		_gaussianBlurComputer.Render( tempRt );
-		
+
 		//////////////////////////////////////
 		//// step5: merge the light to rt ////
 		//////////////////////////////////////
 		var tempRt2 = TexturePool.GetRT( (uint)rt.Width, (uint)rt.Height, false );
 		tempRt2.RenderToRt();
 		_mergeTwoTex_add.SetTexture( "_MergeTexture", tempRt );
-		Blitter.Blit(  rt, tempRt2, _mergeTwoTex_add );
+		Blitter.Blit( rt, tempRt2, _mergeTwoTex_add );
 		Blitter.Blit( tempRt2, rt );
 		// Blitter.Blit( tempRt, rt );
 
