@@ -13,6 +13,7 @@ public sealed class AddGameSystem : Systems {
 	public AddGameSystem( Contexts contexts ) {
 		//先添加场景物体
 		Add( new HierarchySystem( contexts ) );
+		
 		//然后把渲染器设置好
 		Add( new RenderSystem( contexts ) );
 		Add( new LightSystem( contexts ) );

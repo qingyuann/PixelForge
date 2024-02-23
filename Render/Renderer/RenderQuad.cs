@@ -24,9 +24,6 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		Vao.VertexAttributePointer( 0, 3, VertexAttribPointerType.Float, 5, 0 );
 		//set uv
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
-		if( fragShaderName == "QuadBasic.frag" ) {
-			SetTexture( "MainTex", "silk.png" );
-		}
 	}
 
 	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) {

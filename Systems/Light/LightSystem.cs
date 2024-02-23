@@ -97,6 +97,7 @@ public class LightSystem : IExecuteSystem, IInitializeSystem
 
     public static void RenderLights(int layer, RenderTexture rt)
     {
+        
         // //Render Global Lights
         // RenderLight( rt, layer, typeof( GlobalLightComponent ) );
         //

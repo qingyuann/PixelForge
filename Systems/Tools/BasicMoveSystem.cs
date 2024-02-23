@@ -22,7 +22,6 @@ public class BasicMoveSystem : IInitializeSystem, IExecuteSystem {
 			var move = e.componentBasicMove;
 			if( move.IsActive ) {
 				var pos = e.componentPosition;
-				var update = false;
 				if( InputSystem.GetKey( Key.W ) ) {
 					pos.Y += move.Speed * GameSetting.DeltaTime*_accelerator;
 				}

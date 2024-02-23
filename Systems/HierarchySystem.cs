@@ -33,8 +33,7 @@ public class HierarchySystem : IInitializeSystem
         {
             { "MainTex", "red.png" }
         });
-        camera.AddLightShadowLight(true, new[] { 0 }, 0, 0.5f, 2f, 0.3f,
-            new Vector3(0.5f, 0.5f, 0f), 1.5f, 1f);
+        camera.AddLightShadowLight(true, new[] { 0 }, 0, 0.5f, 2f, 0.3f, new Vector3(0.5f, 0.5f, 0f), 1.5f, 1f);
 
 
         // var postProcess = _contexts.game.CreateEntity();
@@ -54,16 +53,17 @@ public class HierarchySystem : IInitializeSystem
 
         #region quad
 
-        var quad0 = _contexts.game.CreateEntity();
-        quad0.AddComponentName("quad0");
-        quad0.AddComponentPosition(0, 0, -0.1f);
-        quad0.AddComponentSize(0.5f, 0.5f);
-        quad0.AddComponentRotation(0);
-        quad0.AddMatRenderSingle(true, 0, null);
-        quad0.AddMatPara(null, new Dictionary<string, object>()
-        {
-            { "MainTex", "2_4circle.png" }
-        });
+        //
+        // var quad0 = _contexts.game.CreateEntity();
+        // quad0.AddComponentName("quad0");
+        // quad0.AddComponentPosition(0, 0, -0.1f);
+        // quad0.AddComponentSize(0.5f, 0.5f);
+        // quad0.AddComponentRotation(0);
+        // quad0.AddMatRenderSingle(true, 0, null);
+        // quad0.AddMatPara(null, new Dictionary<string, object>()
+        // {
+        //     { "MainTex", "2_4circle.png" }
+        // });
 
         var listPic = new List<string>()
         {
@@ -72,31 +72,23 @@ public class HierarchySystem : IInitializeSystem
             "blue.png",
             "yellow.png"
         };
-        // var quad = _contexts.game.CreateEntity();
-        // quad.AddComponentPosition(0.1f, 0.1f, 0);
-        // quad.AddComponentSize(0.1f, 0.1f);
-        // quad.AddComponentRotation(0);
-        // quad.AddMatRenderSingle(true, 0, null);
-        // quad.AddMatPara(null, new Dictionary<string, object>()
-        // {
-        //     { "MainTex", listPic[Tools.RandomTool.Range(0,4)] }
-        // });
-        for(int i=-1;i<1;i++)
+        var edgesize = 10;
+        GameEntity[,] quads = new GameEntity[edgesize,edgesize];
+        for (int i = 0; i < edgesize; i++)
         {
-            for(int j=-1;j<1;j++)
+            for (int j = 0; j < edgesize; j++)
             {
-                var quad = _contexts.game.CreateEntity();
-                quad.AddComponentPosition((float)i*0.1f, (float)j*0.1f, 0);
-                quad.AddComponentSize((float)i*0.1f, (float)j*0.1f);
-                quad.AddComponentRotation(0);
-                quad.AddMatRenderSingle(true, 0, null);
-                quad.AddMatPara(null, new Dictionary<string, object>()
+                quads[i, j] = _contexts.game.CreateEntity();
+                quads[i, j].AddComponentPosition(i * 0.5f, j * 0.5f, 0);
+                quads[i, j].AddComponentSize(0.1f, 0.1f);
+                quads[i, j].AddComponentRotation(0);
+                quads[i, j].AddMatRenderSingle(true, 0, null);
+                quads[i, j].AddMatPara(null, new Dictionary<string, object>()
                 {
-                    { "MainTex", listPic[Tools.RandomTool.Range(0,4)] }
+                    { "MainTex", listPic[Tools.RandomTool.Range(0, 4)] }
                 });
             }
         }
-     
 
         #endregion
     }

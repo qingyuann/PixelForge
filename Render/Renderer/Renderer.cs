@@ -85,15 +85,11 @@ public class Renderer
         ApplyUniform(name, value);
     }
 
-    public void SetTexture(string texName, Texture texture, bool keepOld = true)
+    public void SetTexture(string texName, Texture texture)
     {
         if (Textures.ContainsKey(texName))
         {
-            if (!keepOld)
-            {
-                Textures[texName].Dispose();
-            }
-
+            TexturePool.ReturnTex(Textures[texName]);
             Textures[texName] = texture;
         }
         else
@@ -102,17 +98,14 @@ public class Renderer
         }
     }
 
-    public void SetTexture(string texName, string textureName, bool keepOld = true)
+    public void SetTexture(string texName, string textureName)
     {
         var path = AssetManager.GetAssetPath(textureName);
         var tex = new Texture(Gl, path);
         if (Textures.TryAdd(texName, tex))
             return;
-        if (!keepOld)
-        {
-            Textures[texName].Dispose();
-        }
-
+        TexturePool.ReturnTex(Textures[texName]);
         Textures[texName] = tex;
     }
+
 }
