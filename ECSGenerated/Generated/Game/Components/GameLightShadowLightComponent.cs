@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Light.ShadowLightComponent lightShadowLight { get { return (Light.ShadowLightComponent)GetComponent(GameComponentsLookup.LightShadowLight); } }
     public bool hasLightShadowLight { get { return HasComponent(GameComponentsLookup.LightShadowLight); } }
 
-    public void AddLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
+    public void AddLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newEdgeInfringe) {
         var index = GameComponentsLookup.LightShadowLight;
         var component = (Light.ShadowLightComponent)CreateComponent(index, typeof(Light.ShadowLightComponent));
         component.Enabled = newEnabled;
@@ -22,11 +22,11 @@ public partial class GameEntity {
         component.Volume = newVolume;
         component.Color = newColor;
         component.RadialFallOff = newRadialFallOff;
-        component.Angle = newAngle;
+        component.EdgeInfringe = newEdgeInfringe;
         AddComponent(index, component);
     }
 
-    public void ReplaceLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
+    public void ReplaceLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newEdgeInfringe) {
         var index = GameComponentsLookup.LightShadowLight;
         var component = (Light.ShadowLightComponent)CreateComponent(index, typeof(Light.ShadowLightComponent));
         component.Enabled = newEnabled;
@@ -37,7 +37,7 @@ public partial class GameEntity {
         component.Volume = newVolume;
         component.Color = newColor;
         component.RadialFallOff = newRadialFallOff;
-        component.Angle = newAngle;
+        component.EdgeInfringe = newEdgeInfringe;
         ReplaceComponent(index, component);
     }
 

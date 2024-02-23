@@ -14,16 +14,18 @@ public static class Blitter {
 		_renderFullscreen = new RenderFullscreen( "Blit.vert", "Blit.frag" );
 	}
 
-	public static void Blit( Texture rt1, RenderTexture rt2, Renderer renderer ) {
+	public static void Blit( Texture? rt1, RenderTexture rt2, Renderer renderer ) {
 		RecordState();
 		rt2.RenderToRt();
 		_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
-		renderer.SetTexture( "_BlitTexture", rt1 );
+		if( rt1 is not null ) {
+			renderer.SetTexture( "_BlitTexture", rt1 );
+		}
 		renderer.Draw();
 		RecoverState();
 	}
-	
-	public static void Blit( Texture rt1, RenderTexture rt2 ) {
+
+	public static void Blit( Texture? rt1, RenderTexture rt2 ) {
 		Blit( rt1, rt2, _renderFullscreen );
 	}
 

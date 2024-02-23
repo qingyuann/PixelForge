@@ -12,20 +12,12 @@ public class ShadowLightComponent : IComponent,ILightComponent
     public int LightOrder { get; set; }
     public float Radius;
     public float Intensity;
+    //how much the background will be lighted
     public float Volume;
     public Vector3 Color;
+    //attenuation of light with respect to distance
     public float RadialFallOff;
-    public float Angle;
-    //radialFalloff=pow(1-distance,radialFalloff)
-    //angle=smoothstep(maxAngle,minAngle,angle) (symmetric) 
-    //todo: support normal map
-    //normal map:n·l
-    //final=intensity*color*radialFalloff*angle*normalEffect
-    //shadeCol=baseCol*final
-    //shadeCol+=Volume*Color
-    //store the shadow in stencil
-    
+    //how much the edge of pic will be lighted
+    public float EdgeInfringe;
     // algorithm:https://github.com/mattdesl/lwjgl-basics/wiki/2D-Pixel-Perfect-Shadows
-    //https://ahamnett.blogspot.com/2013/05/2d-shadows-shader.html
-    // https://www.youtube.com/watch?v=eyDUco5zzLU
 }

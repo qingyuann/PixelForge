@@ -26,14 +26,14 @@ public class HierarchySystem : IInitializeSystem
         camera.AddComponentSize(0.1f, 0.1f);
         camera.AddComponentRotation(0);
         camera.AddComponentPosition(0, 0, 1);
-        camera.AddComponentCamera(0, true, 1.000f);
-        camera.AddComponentBasicMove(true, 0.0002f);
+        camera.AddComponentCamera(0, true, 2f);
+        camera.AddComponentBasicMove(true, 0.0003f);
         camera.AddMatRenderSingle(true, 1, null);
         camera.AddMatPara(null, new Dictionary<string, object>()
         {
             { "MainTex", "red.png" }
         });
-        camera.AddLightShadowLight(true, new[] { 0 }, 0, 0.5f, 2f, 0.3f, new Vector3(0.5f, 0.5f, 0f), 1.5f, 1f);
+        camera.AddLightShadowLight(true, new[] { 0 }, 0, 1f, 2f, 0.5f, new Vector3(0.5f, 0.5f, 0f), 2f, 15f);
 
 
         // var postProcess = _contexts.game.CreateEntity();
@@ -50,7 +50,7 @@ public class HierarchySystem : IInitializeSystem
         // globalLight.AddLightGlobalLight( true, new[]{ 0 }, 0, Vector3.One, 1f );
 
         #endregion
-
+  
         #region quad
 
         //
