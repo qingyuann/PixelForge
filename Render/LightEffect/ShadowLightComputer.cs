@@ -78,7 +78,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			var screenX = (int)posPixCenter.X - radiusPixelSize;
 			var length = radiusPixelSize * 2;
 			var lightX = 0;
-
+			// if screen left < 0, cut the light left
 			if( screenX < 0 ) {
 				lightX = -screenX;
 				length += screenX;
@@ -107,7 +107,6 @@ public class ShadowLightComputer : LightEffectComputer {
 			}
 
 			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length - 1 ) * 4 );
-
 		} );
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////
