@@ -6,6 +6,7 @@ using PixelForge;
 using PixelForge.Tools;
 using pp;
 using Silk.NET.OpenGL;
+using System.Buffers;
 
 namespace Render.PostEffect;
 
@@ -48,17 +49,19 @@ public class ShadowLightComputer : LightEffectComputer {
 		//// step1: cut the light map from render texture ////
 		//////////////////////////////////////////////////////
 		//get the screen data
-		if( _screenData.Length != rt.Width * rt.Height * 4 ) {
-			_screenData = new byte[rt.Width * rt.Height * 4];
-		}
+		// if( _screenData.Length != rt.Width * rt.Height * 4 ) {
+		// 	_screenData = new byte[rt.Width * rt.Height * 4];
+		// }
+		_screenData = ArrayPool<byte>.Shared.Rent( (int)rt.Width * (int)rt.Height * 4 );
 
 		rt.GetImage( _screenData );
 
 		//get the light data
 		int radiusPixelSize = (int)Transform.WorldToPixelSize( _radius );
-		if( _lightData.Length != radiusPixelSize * 2 * radiusPixelSize * 2 * 4 ) {
-			_lightData = new byte[radiusPixelSize * 2 * radiusPixelSize * 2 * 4];
-		}
+		// if( _lightData.Length != radiusPixelSize * 2 * radiusPixelSize * 2 * 4 ) {
+		// 	_lightData = new byte[radiusPixelSize * 2 * radiusPixelSize * 2 * 4];
+		// }
+		_lightData = ArrayPool<byte>.Shared.Rent( radiusPixelSize * 2 * radiusPixelSize * 2 * 4 );
 
 		//clear the light data
 		Array.Fill( _lightData, (byte)0 );
@@ -68,12 +71,10 @@ public class ShadowLightComputer : LightEffectComputer {
 		//copy the screen data to light data within the lightMap
 		//concurrent version!!! Best performance!!!
 		Parallel.For( 0, radiusPixelSize * 2, j => {
-
 			var screenY = (int)posPixCenter.Y - radiusPixelSize + j;
 			if( screenY < 0 || screenY >= rt.Height ) {
 				return;
 			}
-
 			var lightY = j;
 			var screenX = (int)posPixCenter.X - radiusPixelSize;
 			var length = radiusPixelSize * 2;
@@ -84,30 +85,26 @@ public class ShadowLightComputer : LightEffectComputer {
 				length += screenX;
 				screenX = 0;
 			}
-
 			// if screen right > screen right, cut the light right
 			if( screenX + length > rt.Width ) {
 				length -= ( screenX + length - rt.Width );
 			}
-
 			if( length <= 0 ) {
 				return;
 			}
-
 			var screenIndex = Image.TryGetIndex( screenX, screenY, rt.Width, rt.Height );
 			if( screenIndex is null ) {
 				Debug.LogError( "screenIndex is null" );
 				return;
 			}
-
 			var lightIndex = Image.TryGetIndex( lightX, lightY, radiusPixelSize * 2, radiusPixelSize * 2 );
 			if( lightIndex is null ) {
 				Debug.LogError( "lightIndex is null" );
 				return;
 			}
-
-			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length  ) * 4 );
+			Array.Copy( _screenData, screenIndex.Value * 4, _lightData, lightIndex.Value * 4, ( length ) * 4 );
 		} );
+
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////
 		/////////////////////////////////////////////////////
@@ -121,16 +118,6 @@ public class ShadowLightComputer : LightEffectComputer {
 		_shadowLightShadowMap.Draw();
 		GlobalVariable.GL.Finish();
 		TexturePool.ReturnTex( _lightMap );
-
-		// #region testShadowMap
-		//  _shadowMap.GetImage(_shadowData);
-		//  var col = new List<Vector4>();
-		//  for (int i = 0; i < ShadowLightPrecisionAngular; i++)
-		//  {
-		//  	col.Add(Image.TryGetColorPixelRGBA( _shadowData, i, 0, ShadowLightPrecisionAngular, 1 ));
-		//  }
-		//  col.Select((i,j)=>new {i,j}).ToList().ForEach(i=>Console.WriteLine(i.j + " " + i.i));
-		// #endregion
 
 		////////////////////////////////////
 		//// step3: render the 2d light ////
@@ -162,10 +149,14 @@ public class ShadowLightComputer : LightEffectComputer {
 		_mergeTwoTex_add.SetTexture( "_MergeTexture", tempRt );
 		Blitter.Blit( rt, tempRt2, _mergeTwoTex_add );
 		Blitter.Blit( tempRt2, rt );
-		// Blitter.Blit( tempRt, rt );
 
+		/////////////////////////////////
+		//// step6: release the data ////
+		/////////////////////////////////
 		TexturePool.ReturnRT( tempRt );
 		TexturePool.ReturnRT( tempRt2 );
+		ArrayPool<byte>.Shared.Return( _screenData );
+		ArrayPool<byte>.Shared.Return( _lightData );
 	}
 
 	public override void SetParams( IComponent param ) {

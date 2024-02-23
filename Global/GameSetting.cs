@@ -21,7 +21,7 @@ public static class GameSetting {
 		}
 	}
 	public const int MaxInstancePerDrawCall = 50;
-	public const int MaxRenderLayer = 1;
+	public const int MaxRenderLayer = 3;
 
 	
 	

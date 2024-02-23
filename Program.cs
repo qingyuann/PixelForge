@@ -82,10 +82,25 @@ namespace PixelForge {
 
 		static void OnRender( double deltaTime ) {
 			_renderPipeline.OnRender();
+			CalculateFrameRate( deltaTime );
 		}
 
 		static void OnClose() {
 			_renderPipeline.OnClose();
+		}
+
+
+		static int _frameCount = 0;
+		static double _lastFrameTime = 0;
+		static void CalculateFrameRate( double deltaTime ) {
+			_frameCount++;
+			if( _window.Time - _lastFrameTime >= 1.0 ) {
+				double fps = _frameCount / ( _window.Time - _lastFrameTime );
+				_window.Title = $"FPS: {fps:F2}";
+
+				_frameCount = 0;
+				_lastFrameTime = _window.Time;
+			}
 		}
 	}
 }
