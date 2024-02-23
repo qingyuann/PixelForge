@@ -16,6 +16,7 @@ uniform float lightRadiusPix;
 uniform vec3 lightColor;
 uniform float falloff;
 uniform float intensity;
+uniform float volumeIntensity;
 
 float angleBetweenVectors(vec2 v1, vec2 v2) {
     float dotProduct = dot(normalize(v1), normalize(v2));
@@ -55,7 +56,7 @@ void main(void) {
         //angle=smoothstep(maxAngle,minAngle,angle) (symmetric) 
         //todo: support normal map
         //normal map:n·l
-        vec3 cor=intensity*radialFalloff*lightColor;     
+        vec3 cor=intensity*radialFalloff*lightColor*volumeIntensity;     
         FragColor =vec4(cor,0.3);
     }
 }

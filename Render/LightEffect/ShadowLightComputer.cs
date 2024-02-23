@@ -154,6 +154,7 @@ public class ShadowLightComputer : LightEffectComputer
         _ShadowLightDraw.SetUniform("lightColor", _color);
         _ShadowLightDraw.SetUniform("falloff", _radialFallOff);
         _ShadowLightDraw.SetUniform("intensity",    _intensity);
+        _ShadowLightDraw.SetUniform("volumeIntensity",    _volume);
         Blitter.Blit(rt, tempRt, _ShadowLightDraw);
         Blitter.Blit(tempRt, rt);
         TexturePool.ReturnRT(tempRt);
