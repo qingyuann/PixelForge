@@ -9,7 +9,7 @@ using Component;
 
 namespace PixelForge.Light;
 
-public class LightSystem :  IInitializeSystem
+public class LightSystem : IExecuteSystem, IInitializeSystem
 {
     public static LightSystem Instance { get; private set; }
 
@@ -90,10 +90,14 @@ public class LightSystem :  IInitializeSystem
         }
     }
 
+    public void Execute()
+    {
+    }
 
 
     public static void RenderLights(int layer, RenderTexture rt)
     {
+        
         // //Render Global Lights
         // RenderLight( rt, layer, typeof( GlobalLightComponent ) );
         //
