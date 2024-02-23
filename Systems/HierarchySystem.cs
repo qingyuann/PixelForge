@@ -49,55 +49,55 @@ public class HierarchySystem : IInitializeSystem {
 
 
 		#region quad
-		// var quad0 = _contexts.game.CreateEntity();
-		// quad0.AddComponentName( "quad0" );
-		// quad0.AddComponentPosition( 0, 0, -0.1f );
-		// quad0.AddComponentSize( 1f, 0.9f );
-		// quad0.AddComponentRotation( 0 );
-		// quad0.AddMatRenderSingle( true, 0, null );
-		// quad0.AddMatPara( null, new Dictionary<string, object>(){
-		// 	{ "MainTex", "blue.png" }
-		// } );
+		var quad0 = _contexts.game.CreateEntity();
+		quad0.AddComponentName( "quad0" );
+		quad0.AddComponentPosition( 0, 0, -0.1f );
+		quad0.AddComponentSize( 1f, 1f );
+		quad0.AddComponentRotation( 0 );
+		quad0.AddMatRenderSingle( true, 0, null );
+		quad0.AddMatPara( null, new Dictionary<string, object>(){
+			{ "MainTex", "circle.png" }
+		} );
 	
-		var quad1 = _contexts.game.CreateEntity();
-		quad1.AddComponentName( "quad1" );
-		quad1.AddComponentPosition( 0, 0.5f, 1 );
-		quad1.AddComponentSize( 0.5f, 0.1f );
-		quad1.AddComponentRotation( 0 );
-		quad1.AddMatRenderSingle( true, 0, null );
-		quad1.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "yellow.png" }
-		} );
-
-		var quad2 = _contexts.game.CreateEntity();
-		quad2.AddComponentName( "quad2" );
-		quad2.AddComponentPosition( -0.5f, 0f, 0 );
-		quad2.AddComponentSize( 0.1f, 0.5f );
-		quad2.AddComponentRotation( 0 );
-		quad2.AddMatRenderSingle( true, 0, null );
-		quad2.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "green.png" }
-		} );
-
-		var quad3 = _contexts.game.CreateEntity();
-		quad3.AddComponentName( "quad3" );
-		quad3.AddComponentPosition( 0.5f, 0, 0 );
-		quad3.AddComponentSize( 0.1f, 0.5f );
-		quad3.AddComponentRotation( 0 );
-		quad3.AddMatRenderSingle( true, 0, null );
-		quad3.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "green.png" }
-		} );
-
-		var quad4 = _contexts.game.CreateEntity();
-		quad4.AddComponentName( "quad4" );
-		quad4.AddComponentPosition( 0f, -0.5f, -0f );
-		quad4.AddComponentSize( 0.5f, 0.1f );
-		quad4.AddComponentRotation( 0 );
-		quad4.AddMatRenderSingle( true, 0, null );
-		quad4.AddMatPara( null, new Dictionary<string, object>(){
-			{ "MainTex", "red.png" }
-		} );
+		// var quad1 = _contexts.game.CreateEntity();
+		// quad1.AddComponentName( "quad1" );
+		// quad1.AddComponentPosition( 0, 0.5f, 1 );
+		// quad1.AddComponentSize( 0.5f, 0.1f );
+		// quad1.AddComponentRotation( 0 );
+		// quad1.AddMatRenderSingle( true, 0, null );
+		// quad1.AddMatPara( null, new Dictionary<string, object>(){
+		// 	{ "MainTex", "yellow.png" }
+		// } );
+		//
+		// var quad2 = _contexts.game.CreateEntity();
+		// quad2.AddComponentName( "quad2" );
+		// quad2.AddComponentPosition( -0.5f, 0f, 0 );
+		// quad2.AddComponentSize( 0.1f, 0.5f );
+		// quad2.AddComponentRotation( 0 );
+		// quad2.AddMatRenderSingle( true, 0, null );
+		// quad2.AddMatPara( null, new Dictionary<string, object>(){
+		// 	{ "MainTex", "green.png" }
+		// } );
+		//
+		// var quad3 = _contexts.game.CreateEntity();
+		// quad3.AddComponentName( "quad3" );
+		// quad3.AddComponentPosition( 0.5f, 0, 0 );
+		// quad3.AddComponentSize( 0.1f, 0.5f );
+		// quad3.AddComponentRotation( 0 );
+		// quad3.AddMatRenderSingle( true, 0, null );
+		// quad3.AddMatPara( null, new Dictionary<string, object>(){
+		// 	{ "MainTex", "green.png" }
+		// } );
+		//
+		// var quad4 = _contexts.game.CreateEntity();
+		// quad4.AddComponentName( "quad4" );
+		// quad4.AddComponentPosition( 0f, -0.5f, -0f );
+		// quad4.AddComponentSize( 0.5f, 0.1f );
+		// quad4.AddComponentRotation( 0 );
+		// quad4.AddMatRenderSingle( true, 0, null );
+		// quad4.AddMatPara( null, new Dictionary<string, object>(){
+		// 	{ "MainTex", "red.png" }
+		// } );
 
 		/*
 		var quad5 = _contexts.game.CreateEntity();

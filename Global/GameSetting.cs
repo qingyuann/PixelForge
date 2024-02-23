@@ -23,6 +23,8 @@ public static class GameSetting {
 	public const int MaxInstancePerDrawCall = 50;
 	public const int MaxRenderLayer = 1;
 
+	
+	
 	/// <summary>
 	/// 每帧获取deltaTime,毫秒
 	/// </summary>

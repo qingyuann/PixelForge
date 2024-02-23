@@ -9,6 +9,8 @@ using Silk.NET.OpenGL;
 namespace Render.PostEffect;
 
 public class ShadowLightComputer : LightEffectComputer {
+	const int ShadowLightPrecisionAngular = 360;
+	const int ShadowLightPrecisionMarch = 50;
 	Vector3 _color;
 	float _intensity;
 	Vector2 _position;
@@ -23,9 +25,9 @@ public class ShadowLightComputer : LightEffectComputer {
 	byte[] _shadowData = Array.Empty<byte>();
 	RenderFullscreen _shadowRenderFullscreen;
 	public ShadowLightComputer() {
-		_shadowMap = TexturePool.GetRT( 360, 1, false );
-		_shadowRenderFullscreen = new RenderFullscreen( "Blit.vert", "ShadowLightShadowMap.frag" );
-		_shadowData = new byte[360 * 4];
+		_shadowMap = TexturePool.GetRT( ShadowLightPrecisionAngular, 1, false );
+		_shadowRenderFullscreen = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightShadowMap.frag" );
+		_shadowData = new byte[ShadowLightPrecisionAngular * 4];
 	}
 
 	public override void Render( RenderTexture rt ) {
@@ -88,13 +90,15 @@ public class ShadowLightComputer : LightEffectComputer {
 		_lightMap = TexturePool.GetTex( (uint)radiusPixelSize * 2, (uint)radiusPixelSize * 2 );
 		_lightMap.UpdateImageContent( _lightData, (uint)radiusPixelSize * 2, (uint)radiusPixelSize * 2 );
 
+		var uvScale = GameSetting.WindowWidth / (float)ShadowLightPrecisionAngular;
 		_shadowMap.RenderToRt();
 		_shadowRenderFullscreen.SetTexture( "_BlitTexture", _lightMap );
-		_shadowRenderFullscreen.SetUniform( "resolution", 50 );
+		_shadowRenderFullscreen.SetUniform( "resolution", ShadowLightPrecisionMarch );
+		_shadowRenderFullscreen.SetUniform( "_UVScale", uvScale );
 		_shadowRenderFullscreen.Draw();
 		GlobalVariable.GL.Finish();
 		_shadowMap.GetImage( _shadowData );
-		var col = Image.TryGetColorPixelRGBA( _shadowData, 359, 0, 360, 1 );
+		var col = Image.TryGetColorPixelRGBA( _shadowData, 359, 0, ShadowLightPrecisionAngular, 1 );
 		Console.WriteLine( col );
 		
 		TexturePool.ReturnTex( _lightMap );
