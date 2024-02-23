@@ -5,6 +5,7 @@ using Render;
 using Render.PostEffect;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Component;
 
 namespace PixelForge.Light;
 
@@ -32,8 +33,8 @@ public class LightSystem : IExecuteSystem, IInitializeSystem
     Contexts _contexts;
 
     //lightComponent,  computer
-    static Dictionary<Type, List<(IComponent, LightEffectComputer)>> _computers =
-        new Dictionary<Type, List<(IComponent, LightEffectComputer)>>();
+    static Dictionary<Type, List<(IComponent, LightEffectComputer, PositionComponent)>> _computers =
+        new Dictionary<Type, List<(IComponent, LightEffectComputer, PositionComponent)>>();
 
     public LightSystem(Contexts contexts)
     {
@@ -50,7 +51,8 @@ public class LightSystem : IExecuteSystem, IInitializeSystem
 
     public void Initialize()
     {
-        _lightsGroup = _contexts.game.GetGroup(GameMatcher.AnyOf(_matchers.ToArray()));
+        _lightsGroup =
+            _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ComponentPosition).AnyOf(_matchers.ToArray()));
         foreach (var e in _lightsGroup)
         {
             AddNewComputer(e);
@@ -71,13 +73,15 @@ public class LightSystem : IExecuteSystem, IInitializeSystem
                     if (_computers.ContainsKey(c.GetType()))
                     {
                         var list = _computers[c.GetType()];
-                        list.Add((c, computer));
+                        list.Add((c, computer, e.componentPosition));
                         list = list.OrderBy(c => ((ILightComponent)c.Item1).LightOrder).ToList();
                         _computers[c.GetType()] = list;
                     }
                     else
                     {
-                        _computers.Add(c.GetType(), new List<(IComponent, LightEffectComputer)>() { (c, computer) });
+                        _computers.Add(c.GetType(),
+                            new List<(IComponent, LightEffectComputer, PositionComponent)>()
+                                { (c, computer, e.componentPosition) });
                     }
 
                     break;
@@ -117,6 +121,7 @@ public class LightSystem : IExecuteSystem, IInitializeSystem
             {
                 var c = computerInLayer[i];
                 c.Item2.SetParams(c.Item1);
+                c.Item2.SetParams(c.Item3);
                 c.Item2.Render(rt);
             }
         }

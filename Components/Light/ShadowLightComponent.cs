@@ -10,7 +10,6 @@ public class ShadowLightComponent : IComponent,ILightComponent
     public bool Enabled { get; set; }
     public int[] Layers { get; set; }
     public int LightOrder { get; set; }
-    public Vector2 Position;
     public float Radius;
     public float Intensity;
     public float Volume;

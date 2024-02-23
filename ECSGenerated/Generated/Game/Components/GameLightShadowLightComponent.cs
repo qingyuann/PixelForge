@@ -11,13 +11,12 @@ public partial class GameEntity {
     public Light.ShadowLightComponent lightShadowLight { get { return (Light.ShadowLightComponent)GetComponent(GameComponentsLookup.LightShadowLight); } }
     public bool hasLightShadowLight { get { return HasComponent(GameComponentsLookup.LightShadowLight); } }
 
-    public void AddLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector2 newPosition, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
+    public void AddLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
         var index = GameComponentsLookup.LightShadowLight;
         var component = (Light.ShadowLightComponent)CreateComponent(index, typeof(Light.ShadowLightComponent));
         component.Enabled = newEnabled;
         component.Layers = newLayers;
         component.LightOrder = newLightOrder;
-        component.Position = newPosition;
         component.Radius = newRadius;
         component.Intensity = newIntensity;
         component.Volume = newVolume;
@@ -27,13 +26,12 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector2 newPosition, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
+    public void ReplaceLightShadowLight(bool newEnabled, int[] newLayers, int newLightOrder, float newRadius, float newIntensity, float newVolume, System.Numerics.Vector3 newColor, float newRadialFallOff, float newAngle) {
         var index = GameComponentsLookup.LightShadowLight;
         var component = (Light.ShadowLightComponent)CreateComponent(index, typeof(Light.ShadowLightComponent));
         component.Enabled = newEnabled;
         component.Layers = newLayers;
         component.LightOrder = newLightOrder;
-        component.Position = newPosition;
         component.Radius = newRadius;
         component.Intensity = newIntensity;
         component.Volume = newVolume;

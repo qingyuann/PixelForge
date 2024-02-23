@@ -37,8 +37,10 @@ public static class Transform {
 		return pos;
 	}
 
-	public static float WorldToPixelSize( float value ) {
-		return value * GlobalVariable.UnitPixel;
+	public static float WorldToPixelSize( float value )
+	{
+		CameraSystem.GetMainCamPara(out var camPos, out var camScale);
+		return value * GlobalVariable.UnitPixel/camScale;
 	}
 	
 	public static float PixelToWorldSize( float value ) {

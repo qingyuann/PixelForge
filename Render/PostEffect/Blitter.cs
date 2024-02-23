@@ -22,7 +22,7 @@ public static class Blitter {
 		renderer.Draw();
 		RecoverState();
 	}
-
+	
 	public static void Blit( Texture rt1, RenderTexture rt2 ) {
 		Blit( rt1, rt2, _renderFullscreen );
 	}

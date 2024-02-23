@@ -94,7 +94,7 @@ namespace Render {
 			}
 			_gl.Uniform3( location, value.X, value.Y, value.Z );
 		}
-
+		
 		public void SetUniform( string name, Vector4 value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
