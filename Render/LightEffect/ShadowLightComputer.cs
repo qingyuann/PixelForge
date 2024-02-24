@@ -13,8 +13,8 @@ namespace Render.PostEffect;
 
 public class ShadowLightComputer : LightEffectComputer {
 	//sooooo expensive...
-	const int ShadowLightPrecisionAngular = 360;
-	const int ShadowLightPrecisionMarch = 200;
+	const int AngularPrecision = 360*2;
+	const int RadiusPrecision =  500;
 	Vector3 _color;
 	float _intensity;
 	Vector2 _position;
@@ -22,7 +22,6 @@ public class ShadowLightComputer : LightEffectComputer {
 	float _volume;
 	float _radialFallOff;
 	float _edgeInfringe;
-	RenderTexture _shadowMap;
 	RenderFullscreen _shadowLightLightMap;
 	RenderFullscreen _shadowLightShadowMap;
 	RenderFullscreen _shadowLightDraw;
@@ -30,7 +29,6 @@ public class ShadowLightComputer : LightEffectComputer {
 	GaussianBlurComputer _gaussianBlurComputer;
 
 	public ShadowLightComputer() {
-		_shadowMap = TexturePool.GetRT( ShadowLightPrecisionAngular, 1, false );
 		_shadowLightLightMap = new RenderFullscreen( "Blit.vert", "ShadowLightLightMap.frag" );
 		_shadowLightShadowMap = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightShadowMap.frag" );
 		_shadowLightDraw = new RenderFullscreen( "Blit.vert", "ShadowLightDraw.frag" );
@@ -49,43 +47,48 @@ public class ShadowLightComputer : LightEffectComputer {
 		//// step0: prepare the light data ////
 		///////////////////////////////////////
 		int radiusPixelSize = (int)Transform.WorldToPixelSize( _radius );
+		
+		// position of light in pixel
 		Vector2 posPixCenter = Transform.WorldToPixel( _position, true );
-		Vector2 posLightMapScreenCenter = new Vector2( radiusPixelSize, radiusPixelSize );
 
+		RenderTexture shadowMap = TexturePool.GetRT( AngularPrecision, 1, false );
 		RenderTexture tempRt2 = TexturePool.GetRT( (uint)rt.Width, (uint)rt.Height, false );
 		RenderTexture tempRt = TexturePool.GetRT( (uint)rt.Width, (uint)rt.Height, false );
-		RenderTexture lightMap = TexturePool.GetRT( (uint)radiusPixelSize * 2, (uint)radiusPixelSize * 2 );
 
+		// if radius is too large, cut it to the screen size
+		float radiusXCut = MathF.Min( _radius, GameSetting.WindowWidth / 2 );
+		float radiusYCut = MathF.Min( _radius, GameSetting.WindowHeight / 2 );
+		int radiusPixelSizeXCut  = (int)Transform.WorldToPixelSize( radiusXCut );
+		int radiusPixelSizeYCut = (int)Transform.WorldToPixelSize( radiusYCut );
+		RenderTexture lightMap = TexturePool.GetRT( (uint)radiusPixelSizeXCut * 2, (uint)radiusPixelSizeYCut * 2 );
 
 		//////////////////////////////////////////////////////
 		//// step1: cut the light map from render texture ////
 		//////////////////////////////////////////////////////
-		float lightMapUvMoveX = ( posPixCenter.X - posLightMapScreenCenter.X ) / GameSetting.WindowWidth; //from light center to screen center
-		float lightMapUvMoveY = ( posPixCenter.Y - posLightMapScreenCenter.Y ) / GameSetting.WindowHeight; //from light center to screen center
+		float lightMapUvMoveX = ( posPixCenter.X - radiusPixelSizeXCut ) / GameSetting.WindowWidth; //from light center to screen center
+		float lightMapUvMoveY = ( posPixCenter.Y - radiusPixelSizeYCut ) / GameSetting.WindowHeight; //from light center to screen center
 		Vector2 lightMapUvMove = new Vector2( lightMapUvMoveX, lightMapUvMoveY ); //from light center to screen center
 		_shadowLightLightMap.SetUniform( "lightMapUVMove", lightMapUvMove );
 		Blitter.Blit( rt, lightMap, _shadowLightLightMap );
 
-
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////
 		/////////////////////////////////////////////////////
-		var uvScale = GameSetting.WindowWidth / (float)ShadowLightPrecisionAngular;
-		_shadowMap.RenderToRt();
+		var uvScale = GameSetting.WindowWidth / (float)AngularPrecision;
 		_shadowLightShadowMap.SetTexture( "_BlitTexture", lightMap );
-		_shadowLightShadowMap.SetUniform( "resolution", Math.Min( ShadowLightPrecisionMarch * _radius, ShadowLightPrecisionMarch ) );
+		_shadowLightShadowMap.SetUniform( "lightRadius", RadiusPrecision * _radius );
 		_shadowLightShadowMap.SetUniform( "_UVScale", uvScale );
-		_shadowLightShadowMap.Draw();
+		Blitter.Blit( null, shadowMap, _shadowLightShadowMap);
 
 		////////////////////////////////////
 		//// step3: render the 2d light ////
 		////////////////////////////////////
 		tempRt.RenderToRt();
-		_shadowLightDraw.SetTexture( "_ShadowMap", _shadowMap );
+		_shadowLightDraw.SetTexture( "_ShadowMap", shadowMap );
 		_shadowLightDraw.SetUniform( "screenW", rt.Width );
 		_shadowLightDraw.SetUniform( "screenH", rt.Height );
 		_shadowLightDraw.SetUniform( "lightPosPix", posPixCenter );
-		_shadowLightDraw.SetUniform( "lightRadiusPix", radiusPixelSize );
+		_shadowLightDraw.SetUniform( "lightRadiusPix", MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut ) );
 		_shadowLightDraw.SetUniform( "lightColor", _color );
 		_shadowLightDraw.SetUniform( "falloff", _radialFallOff );
 		_shadowLightDraw.SetUniform( "intensity", _intensity );
@@ -97,7 +100,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		//////////////////////////////
 		//// step4: blur the light////
 		//////////////////////////////
-		_gaussianBlurComputer.Render( tempRt );
+		// _gaussianBlurComputer.Render( tempRt );
 
 		//////////////////////////////////////
 		//// step5: merge the light to rt ////
@@ -105,17 +108,16 @@ public class ShadowLightComputer : LightEffectComputer {
 		tempRt2.RenderToRt();
 		_mergeTwoTex_add.SetTexture( "_MergeTexture", tempRt );
 		Blitter.Blit( rt, tempRt2, _mergeTwoTex_add );
-		Blitter.Blit( tempRt2, rt );
+		// Blitter.Blit( tempRt2, rt );
+		Blitter.Blit( lightMap, rt );
 
 		/////////////////////////////////
 		//// step6: release the data ////
 		/////////////////////////////////
-		// TexturePool.ReturnRT( tempRt );
 		TexturePool.ReturnRT( tempRt );
 		TexturePool.ReturnRT( tempRt2 );
 		TexturePool.ReturnRT( lightMap );
-
-
+		TexturePool.ReturnRT( shadowMap );
 	}
 
 	public override void SetParams( IComponent param ) {
