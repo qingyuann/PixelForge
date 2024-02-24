@@ -27,9 +27,13 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 1f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 15f );
 
 		// var shadowLight = _contexts.game.CreateEntity();
-		// shadowLight.AddComponentPosition( 0, 0, 1 );
-		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, 2f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
+		// shadowLight.AddComponentPosition( 0, 1, 0 );
+		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 1, 1f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
 
+
+		// var shadowLigh1 = _contexts.game.CreateEntity();
+		// shadowLigh1.AddComponentPosition( 0, 1, 1 );
+		// shadowLigh1.AddLightShadowLight( true, new[]{ 0 }, 0, 0.5f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
 
 		// var postProcess = _contexts.game.CreateEntity();
 		// postProcess.AddppLightSetting( true );

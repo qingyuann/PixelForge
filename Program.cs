@@ -28,9 +28,9 @@ namespace PixelForge {
 			WindowOptions options = WindowOptions.Default with{
 				Size = new Vector2D<int>( GameSetting.WindowWidth, GameSetting.WindowHeight ),
 				Title = GameSetting.Name,
-				FramesPerSecond = 120,
-				UpdatesPerSecond = 120,
-				VSync = true,
+				FramesPerSecond = 60,
+				UpdatesPerSecond = 60,
+				VSync = false,
 				WindowBorder = WindowBorder.Resizable,
 				ShouldSwapAutomatically = true
 			};
