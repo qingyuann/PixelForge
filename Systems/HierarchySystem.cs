@@ -28,7 +28,7 @@ public class HierarchySystem : IInitializeSystem {
 
 		// var shadowLight = _contexts.game.CreateEntity();
 		// shadowLight.AddComponentPosition( 0, 0, 1 );
-		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, 0.5f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 15f );
+		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, 2f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
 
 
 		// var postProcess = _contexts.game.CreateEntity();
