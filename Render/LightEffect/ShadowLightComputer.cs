@@ -76,7 +76,6 @@ public class ShadowLightComputer : LightEffectComputer {
 		_shadowLightShadowMap.SetUniform( "resolution", Math.Min( ShadowLightPrecisionMarch * _radius, ShadowLightPrecisionMarch ) );
 		_shadowLightShadowMap.SetUniform( "_UVScale", uvScale );
 		_shadowLightShadowMap.Draw();
-		TexturePool.ReturnTex( lightMap );
 
 		////////////////////////////////////
 		//// step3: render the 2d light ////
