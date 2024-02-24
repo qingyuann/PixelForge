@@ -1,8 +1,8 @@
 ﻿namespace PixelForge;
 
 public static class GameSetting {
-	public const int WindowWidth = 3840;
-	public const int WindowHeight = 2160;
+	public const int WindowWidth = 1920;
+	public const int WindowHeight = 1080;
 	public const string Name = "PixelForge";
 	//public const string ProjectPath = @"./";
 	public static string ProjectPath

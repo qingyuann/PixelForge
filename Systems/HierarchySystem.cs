@@ -1,4 +1,5 @@
 ﻿using Entitas;
+using PixelForge.Tools;
 using Render;
 using Render.PostEffect;
 using System.Numerics;
@@ -24,50 +25,30 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 0, 0, 1 );
 		camera.AddComponentCamera( 0, true, 2f );
 		camera.AddComponentBasicMove( true, 0.0003f );
-		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 1f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 15f );
-
-		// var shadowLight = _contexts.game.CreateEntity();
-		// shadowLight.AddComponentPosition( 0, 1, 0 );
-		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 1, 1f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
-
-
-		// var shadowLigh1 = _contexts.game.CreateEntity();
-		// shadowLigh1.AddComponentPosition( 0, 1, 1 );
-		// shadowLigh1.AddLightShadowLight( true, new[]{ 0 }, 0, 0.5f, 2f, 0.5f, new Vector3( 0.5f, 0f, 0f ), 2f, 15f );
-
-		// var postProcess = _contexts.game.CreateEntity();
-		// postProcess.AddppLightSetting( true );
-		// postProcess.AddppBloom( true, new[]{ 0 }, 2f, 5, 0.8f, 5f, new BloomComputer() );
-		// postProcess.AddppGaussianBlur( true, new[]{ 1 }, 5f, 5, new GaussianBlurComputer() );
+		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 2f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 15f );
 
 		#region Light
-		// var shadowLight = _contexts.game.CreateEntity();
-		// shadowLight.AddLightShadowLight( true, new[]{ 0 }, 0, new Vector2( 0f, 0f ), 0.5f, 1f, 1f, new Vector3( 1, 1, 1 ), 1f, 1f );
-		//
-		// // var globalLight = _contexts.game.CreateEntity();
-		// globalLight.AddLightGlobalLight( true, new[]{ 0 }, 0, Vector3.One, 1f );
+		var lightSize = 5;
+		GameEntity[,] lights = new GameEntity[lightSize, lightSize];
+		for( int i = 0; i < lightSize; i++ ) {
+			for( int j = 0; j < lightSize; j++ ) {
+				lights[i, j] = _contexts.game.CreateEntity();
+				lights[i, j].AddComponentPosition( 
+					RandomTool.Range( 0.1f,(float)lightSize ), 
+					0.25f + RandomTool.Range( 0, lightSize) * 0.5f, 
+					0 );
+				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j, 0.5f, 0.3f + RandomTool.Float() * 2f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
+			}
+		}
 		#endregion
-
 		#region quad
-		//
-		// var quad0 = _contexts.game.CreateEntity();
-		// quad0.AddComponentName("quad0");
-		// quad0.AddComponentPosition(0, 0, -0.1f);
-		// quad0.AddComponentSize(0.5f, 0.5f);
-		// quad0.AddComponentRotation(0);
-		// quad0.AddMatRenderSingle(true, 0, null);
-		// quad0.AddMatPara(null, new Dictionary<string, object>()
-		// {
-		//     { "MainTex", "2_4circle.png" }
-		// });
-
 		var listPic = new List<string>(){
 			"red.png",
 			"green.png",
 			"blue.png",
 			"yellow.png"
 		};
-		var edgesize = 10;
+		var edgesize = 30;
 		GameEntity[,] quads = new GameEntity[edgesize, edgesize];
 		for( int i = 0; i < edgesize; i++ ) {
 			for( int j = 0; j < edgesize; j++ ) {

@@ -39,17 +39,15 @@ public class ShadowLightComputer : LightEffectComputer {
 		//para: high quality:2,5, low quality: 5,3
 		_gaussianBlurComputer.SetParams( new GaussianBlurComponent(){
 			Offset = 4f,
-			Iterations = 3
+			Iterations = 2
 		} );
 
 	}
 
 	public override void Render( RenderTexture rt ) {
-		Stopwatch stopwatch = new Stopwatch();
 		////////////////////////////////////////
 		//// step0: prepare the light data ////
 		///////////////////////////////////////
-		stopwatch.Start();
 		int radiusPixelSize = (int)Transform.WorldToPixelSize( _radius );
 		Vector2 posPixCenter = Transform.WorldToPixel( _position, true );
 		Vector2 posLightMapScreenCenter = new Vector2( radiusPixelSize, radiusPixelSize );
@@ -58,26 +56,20 @@ public class ShadowLightComputer : LightEffectComputer {
 		RenderTexture tempRt = TexturePool.GetRT( (uint)rt.Width, (uint)rt.Height, false );
 		RenderTexture lightMap = TexturePool.GetRT( (uint)radiusPixelSize * 2, (uint)radiusPixelSize * 2 );
 
-		stopwatch.Stop();
-		Console.WriteLine( "Prepare: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		//////////////////////////////////////////////////////
 		//// step1: cut the light map from render texture ////
 		//////////////////////////////////////////////////////
-		stopwatch.Restart();
 		float lightMapUvMoveX = ( posPixCenter.X - posLightMapScreenCenter.X ) / GameSetting.WindowWidth; //from light center to screen center
 		float lightMapUvMoveY = ( posPixCenter.Y - posLightMapScreenCenter.Y ) / GameSetting.WindowHeight; //from light center to screen center
 		Vector2 lightMapUvMove = new Vector2( lightMapUvMoveX, lightMapUvMoveY ); //from light center to screen center
 		_shadowLightLightMap.SetUniform( "lightMapUVMove", lightMapUvMove );
 		Blitter.Blit( rt, lightMap, _shadowLightLightMap );
 
-		stopwatch.Stop();
-		Console.WriteLine( "LightMap: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		/////////////////////////////////////////////////////
 		//// step2: render the shadow map from light map ////
 		/////////////////////////////////////////////////////
-		stopwatch.Restart();
 		var uvScale = GameSetting.WindowWidth / (float)ShadowLightPrecisionAngular;
 		_shadowMap.RenderToRt();
 		_shadowLightShadowMap.SetTexture( "_BlitTexture", lightMap );
@@ -85,13 +77,10 @@ public class ShadowLightComputer : LightEffectComputer {
 		_shadowLightShadowMap.SetUniform( "_UVScale", uvScale );
 		_shadowLightShadowMap.Draw();
 		TexturePool.ReturnTex( lightMap );
-		stopwatch.Stop();
-		Console.WriteLine( "ShadowMap: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		////////////////////////////////////
 		//// step3: render the 2d light ////
 		////////////////////////////////////
-		stopwatch.Restart();
 		tempRt.RenderToRt();
 		_shadowLightDraw.SetTexture( "_ShadowMap", _shadowMap );
 		_shadowLightDraw.SetUniform( "screenW", rt.Width );
@@ -105,27 +94,19 @@ public class ShadowLightComputer : LightEffectComputer {
 		_shadowLightDraw.SetUniform( "edgeInfringe", _edgeInfringe );
 		Blitter.Blit( null, tempRt, _shadowLightDraw );
 		GlobalVariable.GL.Finish();
-		stopwatch.Stop();
-		Console.WriteLine( "2D Light: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		//////////////////////////////
 		//// step4: blur the light////
 		//////////////////////////////
-		stopwatch.Restart();
 		_gaussianBlurComputer.Render( tempRt );
-		stopwatch.Stop();
-		Console.WriteLine( "Blur: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		//////////////////////////////////////
 		//// step5: merge the light to rt ////
 		//////////////////////////////////////
-		stopwatch.Restart();
 		tempRt2.RenderToRt();
 		_mergeTwoTex_add.SetTexture( "_MergeTexture", tempRt );
 		Blitter.Blit( rt, tempRt2, _mergeTwoTex_add );
 		Blitter.Blit( tempRt2, rt );
-		stopwatch.Stop();
-		Console.WriteLine( "Blur: " + stopwatch.ElapsedMilliseconds + "ms" );
 
 		/////////////////////////////////
 		//// step6: release the data ////
