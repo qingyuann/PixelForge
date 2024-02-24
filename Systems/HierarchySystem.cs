@@ -23,7 +23,7 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentSize( 0.1f, 0.1f );
 		camera.AddComponentRotation( 0 );
 		camera.AddComponentPosition( 0, 0, -1 );
-		camera.AddComponentCamera( 0, true, 0.5f );
+		camera.AddComponentCamera( 0, true, 2f );
 		camera.AddComponentBasicMove( true, 0.0005f );
 		//camera.AddMatRenderSingle( true, 2, null );
 		

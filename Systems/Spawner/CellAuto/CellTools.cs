@@ -5,6 +5,8 @@ public class CellTools
     private static readonly List<byte> SandColor = new List<byte>{ 194, 178, 128, 255 };
     private static readonly List<byte> WaterColor = new List<byte>{ 135, 206, 250, 255 };
     private static readonly List<byte> StoneColor = new List<byte>{ 153, 101, 40, 255 };
+    private static readonly List<byte> FireColor = new List<byte>{ 255, 165, 0, 255 };
+    private static readonly List<byte> SteamColor = new List<byte> { 255, 220, 220, 150};
     
     
     public static int ComputeIndex(int i, int j)
@@ -56,6 +58,25 @@ public class CellTools
             CellAutomationSystem._cellColors[offset + 2] = StoneColor[2];
             CellAutomationSystem._cellColors[offset + 3] = StoneColor[3];
         }
+        
+        if (colorType == "fire")
+        {
+            var offset = index * 4;
+            CellAutomationSystem._cellColors[offset] = FireColor[0];
+            CellAutomationSystem._cellColors[offset + 1] = FireColor[1];
+            CellAutomationSystem._cellColors[offset + 2] = FireColor[2];
+            CellAutomationSystem._cellColors[offset + 3] = FireColor[3];
+        }
+
+        if (colorType == "steam")
+        {
+            var offset = index * 4;
+            CellAutomationSystem._cellColors[offset] = SteamColor[0];
+            CellAutomationSystem._cellColors[offset + 1] = SteamColor[1];
+            CellAutomationSystem._cellColors[offset + 2] = SteamColor[2];
+            CellAutomationSystem._cellColors[offset + 3] = SteamColor[3];
+        }
+        
     }
     
     

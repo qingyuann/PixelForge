@@ -30,9 +30,6 @@ public class WaterBehaviour : ICellBehaviour
         var idLeft3 = CellTools.ComputeIndex(i - 3, j);
         var idLeft4 = CellTools.ComputeIndex(i - 4, j);
         
-        
-        
-        
         var idRight = CellTools.ComputeIndex(i + 1, j);
         var idRight2 = CellTools.ComputeIndex(i + 2, j);
         var idRight3 = CellTools.ComputeIndex(i + 3, j);
@@ -68,7 +65,7 @@ public class WaterBehaviour : ICellBehaviour
             }
         }
         
-        /*
+        
         if (idLeft3 != -1)
         {
             if (!CellAutomationSystem._cellEntities[idLeft3].isComponentCellularAutomation)
@@ -87,7 +84,7 @@ public class WaterBehaviour : ICellBehaviour
                 return;
             }
         }
-        */
+        
         
 
         if (idLeft != -1)
@@ -99,11 +96,9 @@ public class WaterBehaviour : ICellBehaviour
             }
         }
         
-        /*
+        
         if (idRight3 != -1)
         {
-            //Debug.Log(idRight3);
-            //Debug.Log(CellAutomationSystem._cellEntities[idRight3].isComponentCellularAutomation);
             
             if (!CellAutomationSystem._cellEntities[idRight3].isComponentCellularAutomation)
             {
@@ -120,18 +115,17 @@ public class WaterBehaviour : ICellBehaviour
                 return;
             }
         }
-        */
+        
         
         if (idRight != -1)
         {
-            //Debug.Log(idRight);
-            //Debug.Log(CellAutomationSystem._cellEntities[idRight].isComponentWater);
             if(!CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation)
             {
-                //Debug.Log("move right");
                 MoveToTarget(id, idRight);
                 return;
             }
         }
+        
+        
     }
 }

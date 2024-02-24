@@ -1,4 +1,5 @@
 using System.Drawing;
+using Component;
 using Entitas;
 using PixelForge.Spawner.CellAuto.Movable;
 using Silk.NET.Input;
@@ -41,6 +42,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             }
         }
         
+        TestGenerateStone();
+        
         //generate a sand on click position
         InputSystem.AddMouseDownEvent( OnMouseDown );
     }
@@ -49,7 +52,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     
     public void Execute()
     {
-        TestGenerateStone();
+        
         if (InputSystem.GetKey(Key.K))
         {
             TestGenerateSand();
@@ -66,6 +69,11 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             for (int i = _width-1; i >= 0; i--)
             {
                 var e = _cellEntities[CellTools.ComputeIndex(i, j)];
+                if (e.isComponentFire)
+                {
+                    FireBehaviour.Act(i, j);
+                    continue;
+                }
                 if (e.isComponentSand)
                 {
                     SandBehaviour.Act(i, j);
@@ -74,6 +82,12 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 {
                     WaterBehaviour.Act(i, j);
                 }
+
+                if (e.isComponentSteam)
+                {
+                    SteamBehaviour.Act(i, j);
+                }
+               
             }
         
         //update the color of the texture
@@ -184,9 +198,9 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                         var e = _cellEntities[index];
                         e.isComponentCellularAutomation = true;
-                        e.isComponentWater = true;
+                        e.isComponentFire = true;
 
-                        CellTools.SetCellColor(index, "water");
+                        CellTools.SetCellColor(index, "fire");
                     }
                 }
             }
@@ -223,6 +237,22 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         e.isComponentWater = true;
 
         CellTools.SetCellColor(index, "water");
+    }
+    
+    private void TestGenerateFire()
+    {
+        
+        var x = (int) (0.5 * _width);
+        var y = (int) (0.2 * _height);
+        
+        var index = CellTools.ComputeIndex(x, y);
+    
+        //Debug.Log("index" + index);
+        var e = _cellEntities[index];
+        e.isComponentCellularAutomation = true;
+        e.isComponentFire = true;
+
+        CellTools.SetCellColor(index, "fire");
     }
     
 

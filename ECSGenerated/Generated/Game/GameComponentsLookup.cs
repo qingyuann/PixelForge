@@ -12,40 +12,46 @@ public static class GameComponentsLookup {
     public const int ComponentCamera = 1;
     public const int ComponentCellAutoTexture = 2;
     public const int ComponentCellularAutomation = 3;
-    public const int ComponentName = 4;
-    public const int ComponentParent = 5;
-    public const int ComponentPosition = 6;
-    public const int ComponentRotation = 7;
-    public const int ComponentSand = 8;
-    public const int ComponentSize = 9;
-    public const int ComponentStone = 10;
-    public const int ComponentTexture = 11;
-    public const int ComponentWater = 12;
-    public const int LightCircleLight = 13;
-    public const int LightGlobalLight = 14;
-    public const int MatPara = 15;
-    public const int MatRenderSingle = 16;
-    public const int MatSpriteInstanceRenderer = 17;
-    public const int ppBloom = 18;
-    public const int ppGaussianBlur = 19;
-    public const int ppLightSetting = 20;
+    public const int ComponentFire = 4;
+    public const int ComponentName = 5;
+    public const int ComponentParent = 6;
+    public const int ComponentPosition = 7;
+    public const int ComponentRotation = 8;
+    public const int ComponentSand = 9;
+    public const int ComponentSize = 10;
+    public const int ComponentSteam = 11;
+    public const int ComponentStone = 12;
+    public const int ComponentTexture = 13;
+    public const int ComponentWater = 14;
+    public const int ComponentWood = 15;
+    public const int LightCircleLight = 16;
+    public const int LightGlobalLight = 17;
+    public const int MatPara = 18;
+    public const int MatRenderSingle = 19;
+    public const int MatSpriteInstanceRenderer = 20;
+    public const int ppBloom = 21;
+    public const int ppGaussianBlur = 22;
+    public const int ppLightSetting = 23;
 
-    public const int TotalComponents = 21;
+    public const int TotalComponents = 24;
 
     public static readonly string[] componentNames = {
         "ComponentBasicMove",
         "ComponentCamera",
         "ComponentCellAutoTexture",
         "ComponentCellularAutomation",
+        "ComponentFire",
         "ComponentName",
         "ComponentParent",
         "ComponentPosition",
         "ComponentRotation",
         "ComponentSand",
         "ComponentSize",
+        "ComponentSteam",
         "ComponentStone",
         "ComponentTexture",
         "ComponentWater",
+        "ComponentWood",
         "LightCircleLight",
         "LightGlobalLight",
         "MatPara",
@@ -61,15 +67,18 @@ public static class GameComponentsLookup {
         typeof(Component.CameraComponent),
         typeof(Component.CellAutoTexture),
         typeof(Component.CellularAutomationComponent),
+        typeof(Component.FireComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
         typeof(Component.PositionComponent),
         typeof(Component.RotationComponent),
         typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
+        typeof(Component.SteamComponent),
         typeof(Component.StoneComponent),
         typeof(Component.TextureComponent),
         typeof(Component.WaterComponent),
+        typeof(Component.WoodComponent),
         typeof(Light.CircleLightComponent),
         typeof(Light.GlobalLightComponent),
         typeof(Mat.ParaComponent),
