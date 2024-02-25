@@ -25,7 +25,7 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 2.25f, 2.25f, 1 );
 		camera.AddComponentCamera( 0, true, 2f );
 		camera.AddComponentBasicMove( true, 0.0003f );
-		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 1.5f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 0f, 15f );
+		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 3f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 1f, 15f );
 
 		#region Light
 		// var lightSize = 5;
@@ -48,7 +48,7 @@ public class HierarchySystem : IInitializeSystem {
 			"blue.png",
 			"yellow.png"
 		};
-		var edgesize = 30;
+		var edgesize = 10;
 		GameEntity[,] quads = new GameEntity[edgesize, edgesize];
 		for( int i = 0; i < edgesize; i++ ) {
 			for( int j = 0; j < edgesize; j++ ) {
