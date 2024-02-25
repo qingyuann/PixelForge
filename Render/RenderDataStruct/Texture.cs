@@ -1,4 +1,3 @@
-using PixelForge;
 using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -16,14 +15,6 @@ namespace Render {
 		}
 		protected readonly GL _gl;
 
-		static Dictionary<string, Image<Rgba32>> Images = new Dictionary<string, Image<Rgba32>>();
-		public static void RefreshImgDic() {
-			foreach( var img in Images ) {
-				img.Value.Dispose();
-				Images.Remove( img.Key );
-			}
-		}
-		
 		public unsafe Texture( GL gl, string path ) {
 			_gl = gl;
 
@@ -31,28 +22,21 @@ namespace Render {
 			Bind( TextureUnit.Texture31 );
 			//传入path,载入图片，逐行写入
 			//使用using可以自动释放资源
-			Image<Rgba32> img;
-			if( !Images.TryGetValue( path, out img ) ) {
-				img = Image.Load<Rgba32>( path );
-				Images.Add( path, img );
-			} 
-			Width = img.Width;
-			Height = img.Height;
-			gl.TexImage2D( TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)img.Width, (uint)img.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null );
+			using( var img = Image.Load<Rgba32>( path ) ) {
+				Width = img.Width;
+				Height = img.Height;
+				gl.TexImage2D( TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)img.Width, (uint)img.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null );
 
-			img.ProcessPixelRows( accessor => {
-				for( int y = 0; y < accessor.Height; y++ ) {
-					fixed (void* data = accessor.GetRowSpan( y )) {
-						gl.TexSubImage2D( TextureTarget.Texture2D, 0, 0, y, (uint)accessor.Width, 1, PixelFormat.Rgba, PixelType.UnsignedByte, data );
+				img.ProcessPixelRows( accessor => {
+					for( int y = 0; y < accessor.Height; y++ ) {
+						fixed (void* data = accessor.GetRowSpan( y )) {
+							gl.TexSubImage2D( TextureTarget.Texture2D, 0, 0, y, (uint)accessor.Width, 1, PixelFormat.Rgba, PixelType.UnsignedByte, data );
+						}
 					}
-				}
-			} );
-			
+				} );
+			}
 			SetParameters();
 		}
-
-
-
 
 		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ) {
 			_gl = gl;
