@@ -41,6 +41,8 @@ public class HierarchySystem : IInitializeSystem {
 		// 	}
 		// }
 		#endregion
+		
+		
 		#region quad
 		var listPic = new List<string>(){
 			"red.png",

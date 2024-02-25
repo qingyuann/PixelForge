@@ -9,122 +9,84 @@ using Component;
 
 namespace PixelForge.Light;
 
-public class LightSystem : IExecuteSystem, IInitializeSystem
-{
-    public static LightSystem Instance { get; private set; }
+public class LightSystem : IExecuteSystem, IInitializeSystem {
+	public static LightSystem Instance { get; private set; }
 
-    Dictionary<Type, Type> _lightComputers = new Dictionary<Type, Type>()
-    {
-        { typeof(GlobalLightComponent), typeof(GlobalLightComputer) },
-        { typeof(CircleLightComponent), typeof(CircleLightComputer) },
-        { typeof(ShadowLightComponent), typeof(ShadowLightComputer) },
-    };
+	static Dictionary<Type, (LightEffectComputer, List<(ILightComponent, PositionComponent)>)> _lightComputers = new Dictionary<Type, (LightEffectComputer, List<(ILightComponent, PositionComponent)>)>(){
+		{ typeof( GlobalLightComponent ), ( new ShadowLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
+		{ typeof( CircleLightComponent ), ( new CircleLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
+		{ typeof( ShadowLightComponent ), ( new ShadowLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
+	};
 
-    List<IMatcher<GameEntity>> _matchers = new List<IMatcher<GameEntity>>()
-    {
-        GameMatcher.LightGlobalLight,
-        GameMatcher.LightCircleLight,
-        GameMatcher.LightShadowLight,
-    };
+	List<IMatcher<GameEntity>> _matchers = new List<IMatcher<GameEntity>>(){
+		GameMatcher.LightGlobalLight,
+		GameMatcher.LightCircleLight,
+		GameMatcher.LightShadowLight,
+	};
 
-    /************************************************************************/
-    IGroup<GameEntity> _lightsGroup;
+	/************************************************************************/
+	IGroup<GameEntity> _lightsGroup;
 
-    Contexts _contexts;
-
-    //lightComponent,  computer
-    static Dictionary<Type, List<(IComponent, LightEffectComputer, PositionComponent)>> _computers =
-        new Dictionary<Type, List<(IComponent, LightEffectComputer, PositionComponent)>>();
-
-    public LightSystem(Contexts contexts)
-    {
-        _contexts = contexts;
-        if (Instance is null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            throw new Exception("LightSystem is a singleton");
-        }
-    }
-
-    public void Initialize()
-    {
-        _lightsGroup =
-            _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ComponentPosition).AnyOf(_matchers.ToArray()));
-        foreach (var e in _lightsGroup)
-        {
-            AddNewComputer(e);
-        }
-
-        _lightsGroup.OnEntityAdded += (_, entity, _, _) => { AddNewComputer(entity); };
-    }
-
-    void AddNewComputer(GameEntity e)
-    {
-        foreach (var c in e.GetComponents())
-        {
-            foreach (var light in _lightComputers)
-            {
-                if (light.Key == c.GetType())
-                {
-                    var computer = (LightEffectComputer)Activator.CreateInstance(light.Value)!;
-                    if (_computers.ContainsKey(c.GetType()))
-                    {
-                        var list = _computers[c.GetType()];
-                        list.Add((c, computer, e.componentPosition));
-                        list = list.OrderBy(c => ((ILightComponent)c.Item1).LightOrder).ToList();
-                        _computers[c.GetType()] = list;
-                    }
-                    else
-                    {
-                        _computers.Add(c.GetType(),
-                            new List<(IComponent, LightEffectComputer, PositionComponent)>()
-                                { (c, computer, e.componentPosition) });
-                    }
-
-                    break;
-                }
-            }
-        }
-    }
-
-    public void Execute()
-    {
-    }
+	Contexts _contexts;
 
 
-    public static void RenderLights(int layer, RenderTexture rt)
-    {
-        
-        // //Render Global Lights
-        // RenderLight( rt, layer, typeof( GlobalLightComponent ) );
-        //
-        // //Render Other Lights
-        // var otherLights = _computers.Where( c => c.Key != typeof( GlobalLightComponent ) && c.Key != typeof( ShadowLightComponent ) );
-        // foreach( var light in otherLights ) {
-        // 	RenderLight( rt, layer, light.Key );
-        // }
+	public LightSystem( Contexts contexts ) {
+		_contexts = contexts;
+		if( Instance is null ) {
+			Instance = this;
+		} else {
+			throw new Exception( "LightSystem is a singleton" );
+		}
+	}
 
-        //Render Shadow Lights
-        RenderLight(rt, layer, typeof(ShadowLightComponent));
-    }
+	public void Initialize() {
+		_lightsGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentPosition ).AnyOf( _matchers.ToArray() ) );
+		foreach( var e in _lightsGroup ) {
+			AddNewComputer( e );
+		}
 
-    static void RenderLight(RenderTexture rt, int layer, Type type)
-    {
-        _computers.TryGetValue(type, out var lights);
-        if (lights?.Count > 0)
-        {
-            var computerInLayer = lights.Where(c => ((ILightComponent)c.Item1).Layers.Contains(layer)).ToList();
+		_lightsGroup.OnEntityAdded += ( _, entity, _, _ ) => {
+			AddNewComputer( entity );
+		};
+	}
 
-            for (int i = 0; i < computerInLayer.Count; i++)
-            {
-                var c = computerInLayer[i];
-                c.Item2.SetParams(c.Item1);
-                c.Item2.SetParams(c.Item3);
-                c.Item2.Render(rt);
-            }
-        }
-    }
+	void AddNewComputer( GameEntity e ) {
+		foreach( var c in e.GetComponents() ) {
+			Console.WriteLine( c is ILightComponent );
+			if( c is ILightComponent lightComponent ) {
+				if( _lightComputers.TryGetValue( c.GetType(), out (LightEffectComputer, List<(ILightComponent, PositionComponent)>) com ) ) {
+					com.Item2.Add( ( lightComponent, e.componentPosition ) );
+				}
+			}
+		}
+	}
+
+	public void Execute() {
+	}
+
+
+	public static void RenderLights( int layer, RenderTexture rt ) {
+
+		// //Render Global Lights
+		// RenderLight( rt, layer, typeof( GlobalLightComponent ) );
+		//
+		// //Render Other Lights
+		// var otherLights = _computers.Where( c => c.Key != typeof( GlobalLightComponent ) && c.Key != typeof( ShadowLightComponent ) );
+		// foreach( var light in otherLights ) {
+		// 	RenderLight( rt, layer, light.Key );
+		// }
+
+		//Render Shadow Lights
+		RenderLight( rt, layer, typeof( ShadowLightComponent ) );
+	}
+
+	static void RenderLight( RenderTexture rt, int layer, Type type ) {
+		if( _lightComputers.TryGetValue( type, out (LightEffectComputer, List<(ILightComponent, PositionComponent)>) com ) ) {
+			var computer = com.Item1;
+			var param = com.Item2;
+			param = param.Where( x => x.Item1.Layers.Contains( layer ) ).OrderBy( p => p.Item1.LightOrder ).ToList();
+			computer.SetParams( param );
+			computer.Render( rt );
+		}
+	}
 }

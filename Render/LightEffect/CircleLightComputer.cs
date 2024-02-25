@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Component;
+using System.Numerics;
 using Entitas;
 using Light;
 using pp;
@@ -15,15 +16,10 @@ public class CircleLightComputer : LightEffectComputer
         _tempRt1 = TexturePool.GetRT((uint)rt.Width, (uint)rt.Height);
         Blitter.Blit(rt, _tempRt1);
     }
-
-    public override void SetParams(IComponent param)
-    {
-        if (param is GlobalLightComponent globalLightComponent)
-        {
-            _color = globalLightComponent.Color;
-            _intensity = globalLightComponent.Intensity;
-        }
+    public override void SetParams( List<(ILightComponent, PositionComponent)> param ) {
     }
+
+
 
     public override void Dispose()
     {
