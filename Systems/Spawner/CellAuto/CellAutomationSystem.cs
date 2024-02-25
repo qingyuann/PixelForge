@@ -3,7 +3,8 @@ using Component;
 using Entitas;
 using PixelForge.Spawner.CellAuto.Movable;
 using Silk.NET.Input;
-using Render;
+using Silk.NET.OpenGL;
+using Texture = Render.Texture;
 
 
 namespace PixelForge.Spawner.CellAuto;
@@ -69,25 +70,34 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             for (int i = _width-1; i >= 0; i--)
             {
                 var e = _cellEntities[CellTools.ComputeIndex(i, j)];
-                if (e.isComponentFire)
+                if (e.hasComponentFire)
                 {
+                    
                     FireBehaviour.Act(i, j);
                     continue;
                 }
                 if (e.isComponentSand)
                 {
+                    
                     SandBehaviour.Act(i, j);
                 }
+                
                 if (e.isComponentWater)
                 {
                     WaterBehaviour.Act(i, j);
                 }
-
+                
+            }
+        
+        for(int j = 0; j < _height; j++)
+            for (int i = _width-1; i >= 0; i--)
+            {
+                var e = _cellEntities[CellTools.ComputeIndex(i, j)];
                 if (e.isComponentSteam)
                 {
                     SteamBehaviour.Act(i, j);
                 }
-               
+
             }
         
         //update the color of the texture
@@ -138,15 +148,15 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             
             //Debug.Log("x: " + x + " y: " + y);
             
-            int widthSize = 20; 
-            int heightSize = 3;
+            int widthSize = 30; 
+            int heightSize = 10;
             Random random = new Random();
             
             for (int i = -widthSize / 2; i <= widthSize / 2; i++)
             {
                 for (int j = -heightSize / 2; j <= heightSize / 2; j++)
                 {
-                    if (random.NextDouble() < 0.4)
+                    if (random.NextDouble() < 0.6)
                     {
                         var currentX = x + i;
                         var currentY = y + j;
@@ -162,7 +172,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                         e.isComponentCellularAutomation = true;
                         e.isComponentSand = true;
 
-                        CellTools.SetCellColor(index, "sand");
+                        CellTools.SetCellColor(index, "steam");
                     }
                     
                 }
@@ -198,7 +208,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                         var e = _cellEntities[index];
                         e.isComponentCellularAutomation = true;
-                        e.isComponentFire = true;
+                        if(!e.hasComponentFire){e.AddComponentFire(300);}
 
                         CellTools.SetCellColor(index, "fire");
                     }
@@ -250,7 +260,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         //Debug.Log("index" + index);
         var e = _cellEntities[index];
         e.isComponentCellularAutomation = true;
-        e.isComponentFire = true;
+        e.AddComponentFire(300);
 
         CellTools.SetCellColor(index, "fire");
     }

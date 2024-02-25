@@ -2,7 +2,6 @@ namespace PixelForge.Spawner.CellAuto.Movable;
 
 public class SandBehaviour : ICellBehaviour
 {
-    private static int Velocity = 3;
     public static void Act(int i, int j)
     {
         var id = CellTools.ComputeIndex(i, j);
@@ -44,22 +43,8 @@ public class SandBehaviour : ICellBehaviour
                 return;
             }
         }
-
-        if (idDownLeft != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
-            {
-                CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation = true;
-                CellAutomationSystem._cellEntities[idDownLeft].isComponentSand = true;
-                CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
-                CellAutomationSystem._cellEntities[id].isComponentSand = false;
-                //Debug.Log("move down left");
-                CellTools.SetCellColor(idDownLeft, "sand");
-                CellTools.SetCellColor(id, "none");
-                return;
-
-            }
-        }
+        
+        
 
         if(idDownRight != -1)
         {
@@ -76,6 +61,23 @@ public class SandBehaviour : ICellBehaviour
                 return;
             }
         }
+        
+        if (idDownLeft != -1)
+        {
+            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
+            {
+                CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation = true;
+                CellAutomationSystem._cellEntities[idDownLeft].isComponentSand = true;
+                CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
+                CellAutomationSystem._cellEntities[id].isComponentSand = false;
+                //Debug.Log("move down left");
+                CellTools.SetCellColor(idDownLeft, "sand");
+                CellTools.SetCellColor(id, "none");
+                return;
+            }
+        }
+        
+        
     }
 
     private static void MoveToTarget(int idSource, int idTarget)
