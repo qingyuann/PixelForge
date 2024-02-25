@@ -13,11 +13,11 @@ using Debug = PixelForge.Debug;
 namespace Render.PostEffect;
 
 public class ShadowLightComputer : LightEffectComputer {
-	const int MaxResolution = 500;
+	const int MaxResolution =500;
 
 	//sooooo expensive...
-	const int AngularPrecision = 360 * 2;
-	const int RadiusPrecision = 500;
+	const int AngularPrecision = 360 ;
+	const int RadiusPrecision = 100;
 	List<Vector3> _color = new List<Vector3>();
 	List<float> _intensity = new List<float>();
 	List<Vector2> _position = new List<Vector2>();
@@ -47,9 +47,6 @@ public class ShadowLightComputer : LightEffectComputer {
 	}
 
 	public override void Render( RenderTexture rt ) {
-		// a texture to store the merged light
-		RenderTexture mergeLightRT = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
-
 		for( int i = 0; i < _radius.Count; i++ ) {
 			/////////////////////////////////////////
 			//// step -1: down sample the screen ////
@@ -58,6 +55,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			while( MathF.Max( rt.Width / rtDownRatio, rt.Height / rtDownRatio ) > MaxResolution ) {
 				rtDownRatio *= 2;
 			}
+			
 			////////////////////////////////////////
 			//// step0: prepare the light data ////
 			///////////////////////////////////////
@@ -111,17 +109,18 @@ public class ShadowLightComputer : LightEffectComputer {
 			_shadowLightDraw.SetUniform( "edgeInfringe", _edgeInfringe[i] );
 			_shadowLightDraw.SetUniform( "_UVScale", rtDownRatio );
 			Blitter.Blit( null, lightRt, _shadowLightDraw );
-			GlobalVariable.GL.Finish();
 
 			lightTextures.Add( lightRt );
 			TexturePool.ReturnRT( lightMap );
 			TexturePool.ReturnRT( shadowMap );
 		}
-
 		///////////////////////////////
 		//// step4: merge all light////
 		///////////////////////////////
-		mergeLightRT.RenderToRt();
+		// a texture to store the merged light
+		RenderTexture mergeLightRt = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
+
+		mergeLightRt.RenderToRt();
 		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 		GlobalVariable.GL.Enable( EnableCap.Blend );
 		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha );
@@ -134,13 +133,13 @@ public class ShadowLightComputer : LightEffectComputer {
 		///////////////////////////////
 		//// step5: blur the light ////
 		///////////////////////////////
-		_gaussianBlurComputer.Render( mergeLightRT );
+		_gaussianBlurComputer.Render( mergeLightRt );
 
 		//////////////////////////////////////
 		//// step6: merge the light to rt ////
 		//////////////////////////////////////
 		rt.RenderToRt();
-		_mergeLight.SetTexture( "MainTex", mergeLightRT );
+		_mergeLight.SetTexture( "MainTex", mergeLightRt );
 		_mergeLight.Draw();
 
 		/////////////////////////////////
@@ -148,7 +147,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		/////////////////////////////////
 		lightTextures.ForEach( TexturePool.ReturnRT );
 		lightTextures.Clear();
-		TexturePool.ReturnRT( mergeLightRT );
+		TexturePool.ReturnRT( mergeLightRt );
 	}
 
 	public override void SetParams( List<(ILightComponent, PositionComponent)> param ) {
