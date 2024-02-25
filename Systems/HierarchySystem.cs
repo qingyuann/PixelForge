@@ -28,16 +28,16 @@ public class HierarchySystem : IInitializeSystem {
 		// camera.AddLightShadowLight( true, new[]{ 0 }, 0, 1f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 1f, 15f );
 
 		#region Light
-		var lightSize =15;
+		var lightSize =10;
 		GameEntity[,] lights = new GameEntity[lightSize, lightSize];
 		for( int i = 0; i < lightSize; i++ ) {
 			for( int j = 0; j < lightSize; j++ ) {
 				lights[i, j] = _contexts.game.CreateEntity();
 				lights[i, j].AddComponentPosition( 
-					RandomTool.Range( 0.1f,(float)lightSize*2 ), 
+					RandomTool.Range( 0.1f,(float)lightSize ), 
 					0.25f + RandomTool.Range( 0, lightSize*2) * 0.5f, 
 					0 );
-				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j, 0.8f, 0.3f + RandomTool.Float() * 2f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
+				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j, 2f, 0.3f + RandomTool.Float() * 2f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
 			}
 		}
 
