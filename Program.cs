@@ -10,6 +10,7 @@ using Silk.NET.Windowing;
 using Silk.NET.GLFW;
 using Entitas;
 using Silk.NET.OpenGL;
+using Texture = Silk.NET.OpenGL.Texture;
 
 namespace PixelForge {
 	class MainLoop {
@@ -36,7 +37,7 @@ namespace PixelForge {
 			};
 
 			_window = Window.Create( options );
-
+			GlobalVariable.Window = _window;
 
 			_window.Load += OnLoad;
 			_window.Update += OnUpdate;
@@ -78,6 +79,7 @@ namespace PixelForge {
 
 		static void LateUpdate( double deltaTime ) {
 			_inputSystem.Clear();
+			Render.Texture.RefreshImgDic();
 		}
 
 		static void OnRender( double deltaTime ) {
