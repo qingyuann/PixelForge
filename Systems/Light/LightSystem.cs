@@ -52,7 +52,6 @@ public class LightSystem : IExecuteSystem, IInitializeSystem {
 
 	void AddNewComputer( GameEntity e ) {
 		foreach( var c in e.GetComponents() ) {
-			Console.WriteLine( c is ILightComponent );
 			if( c is ILightComponent lightComponent ) {
 				if( _lightComputers.TryGetValue( c.GetType(), out (LightEffectComputer, List<(ILightComponent, PositionComponent)>) com ) ) {
 					com.Item2.Add( ( lightComponent, e.componentPosition ) );
@@ -85,6 +84,9 @@ public class LightSystem : IExecuteSystem, IInitializeSystem {
 			var computer = com.Item1;
 			var param = com.Item2;
 			param = param.Where( x => x.Item1.Layers.Contains( layer ) ).OrderBy( p => p.Item1.LightOrder ).ToList();
+			if( param.Count == 0 ) {
+				return;
+			}
 			computer.SetParams( param );
 			computer.Render( rt );
 		}

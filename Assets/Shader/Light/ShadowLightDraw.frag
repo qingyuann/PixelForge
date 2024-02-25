@@ -51,7 +51,7 @@ void main(void) {
         float distToEdge = dist - shadow * lightRadiusPix;
         if (distToEdge < edgeInfringe) {
             vec3 cor = lightColor.xyz * radialFalloff * intensity * (1 - distToEdge / edgeInfringe);
-            FragColor = vec4(cor, 0.3);
+            FragColor = vec4(cor, volumeIntensity*radialFalloff);
             return;
         }
         else {
@@ -61,8 +61,8 @@ void main(void) {
         return;
     }
     else {
-        vec3 cor = radialFalloff * lightColor * intensity * volumeIntensity;
-        FragColor = vec4(cor, 0.3);
+        vec3 cor = radialFalloff * lightColor * intensity;
+        FragColor = vec4(cor, volumeIntensity*radialFalloff);
 
         return;
     }

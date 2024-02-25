@@ -12,7 +12,7 @@ using Debug = PixelForge.Debug;
 
 namespace Render.PostEffect;
 
-public class ShadowLightComputer : LightEffectComputer {
+public class ShadowLightCompsuter : LightEffectComputer {
 	const int MaxResolution = 500;
 
 	//sooooo expensive...
@@ -32,24 +32,22 @@ public class ShadowLightComputer : LightEffectComputer {
 	RenderFullscreen _mergeTwoTex_add;
 	GaussianBlurComputer _gaussianBlurComputer;
 	List<RenderTexture> lightTextures = new List<RenderTexture>();
-	public ShadowLightComputer() {
+	public ShadowLightCompsuter() {
 		_shadowLightLightMap = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightLightMap.frag" );
 		_shadowLightShadowMap = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightShadowMap.frag" );
 		_shadowLightDraw = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightDraw.frag" );
 		_mergeTwoTex_add = new RenderFullscreen( "Blit.vert", "MergeTwoTex_add.frag" );
 		_mergeLight = new RenderFullscreen( "Blit.vert", "QuadBasic.frag" );
 		_gaussianBlurComputer = new GaussianBlurComputer();
+		//para: high quality:2,5, low quality: 5,3
 		_gaussianBlurComputer.SetParams( new GaussianBlurComponent(){
-			Offset = 2f,
-			Iterations = 1
+			Offset = 3f,
+			Iterations = 2
 		} );
 
 	}
 
 	public override void Render( RenderTexture rt ) {
-		// a texture to store the merged light
-		RenderTexture mergeLightRT = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
-
 		for( int i = 0; i < _radius.Count; i++ ) {
 			/////////////////////////////////////////
 			//// step -1: down sample the screen ////
@@ -79,8 +77,8 @@ public class ShadowLightComputer : LightEffectComputer {
 			//////////////////////////////////////////////////////
 			//// step1: cut the light map from render texture ////
 			//////////////////////////////////////////////////////
-			float lightMapUvMoveX = ( posPixCenter.X - radiusPixelSizeXCut ) / GameSetting.WindowWidth ; //from light center to screen center
-			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixelSizeYCut ) / GameSetting.WindowHeight ; //from light center to screen center
+			float lightMapUvMoveX = ( posPixCenter.X - radiusPixelSizeXCut ) / GameSetting.WindowWidth / rtDownRatio; //from light center to screen center
+			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixelSizeYCut ) / GameSetting.WindowHeight / rtDownRatio; //from light center to screen center
 			Vector2 lightMapUvMove = new Vector2( lightMapUvMoveX, lightMapUvMoveY ); //from light center to screen center
 			_shadowLightLightMap.SetUniform( "lightMapUVMove", lightMapUvMove );
 			_shadowLightLightMap.SetUniform( "_UVScale", rtDownRatio );
@@ -113,6 +111,8 @@ public class ShadowLightComputer : LightEffectComputer {
 			Blitter.Blit( null, lightRt, _shadowLightDraw );
 			GlobalVariable.GL.Finish();
 
+			
+			Blitter.Blit( lightRt, rt );
 			lightTextures.Add( lightRt );
 			TexturePool.ReturnRT( lightMap );
 			TexturePool.ReturnRT( shadowMap );
@@ -121,30 +121,30 @@ public class ShadowLightComputer : LightEffectComputer {
 		///////////////////////////////
 		//// step4: merge all light////
 		///////////////////////////////
+		RenderTexture mergeLightRT = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
 		mergeLightRT.RenderToRt();
-		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
-		GlobalVariable.GL.Enable( EnableCap.Blend );
+		GlobalVariable.GL.Enable(EnableCap.Blend);
 		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha );
 		foreach( RenderTexture lightRt in lightTextures ) {
+			
 			_mergeLight.SetTexture( "MainTex", lightRt );
 			_mergeLight.Draw();
 		}
-		GlobalVariable.GL.Disable( EnableCap.Blend );
-
-		///////////////////////////////
-		//// step5: blur the light ////
-		///////////////////////////////
+		GlobalVariable.GL.Disable(EnableCap.Blend);
+		//////////////////////////////
+		//// step4: blur the light////
+		//////////////////////////////
 		_gaussianBlurComputer.Render( mergeLightRT );
 
 		//////////////////////////////////////
-		//// step6: merge the light to rt ////
+		//// step5: merge the light to rt ////
 		//////////////////////////////////////
-		rt.RenderToRt();
-		_mergeLight.SetTexture( "MainTex", mergeLightRT );
-		_mergeLight.Draw();
+		_mergeTwoTex_add.SetTexture( "_MergeTexture", mergeLightRT );
+		Blitter.Blit( rt, mergeLightRT, _mergeTwoTex_add );
+		// Blitter.Blit( lightTextures[0], rt );
 
 		/////////////////////////////////
-		//// step7: release the data ////
+		//// step6: release the data ////
 		/////////////////////////////////
 		lightTextures.ForEach( TexturePool.ReturnRT );
 		lightTextures.Clear();
@@ -155,10 +155,6 @@ public class ShadowLightComputer : LightEffectComputer {
 		ClearPara();
 		for( int i = 0; i < param.Count; i++ ) {
 			if( param[i].Item1 is ShadowLightComponent globalLightComponent ) {
-				if( globalLightComponent.Radius <= 0 || globalLightComponent.Intensity <= 0 || globalLightComponent.Volume <= 0 || globalLightComponent.RadialFallOff <= 0 || globalLightComponent.EdgeInfringe <= 0 || globalLightComponent.Color == Vector3.Zero || globalLightComponent.Layers == null || globalLightComponent.Layers.Length == 0 ) {
-					Debug.Log( "Light Component has invalid value" );
-					return;
-				}
 				_color.Add( globalLightComponent.Color );
 				_intensity.Add( globalLightComponent.Intensity );
 				_radius.Add( globalLightComponent.Radius );
@@ -167,8 +163,9 @@ public class ShadowLightComputer : LightEffectComputer {
 				_edgeInfringe.Add( globalLightComponent.EdgeInfringe );
 			}
 
-			var positionComponent = param[i].Item2;
-			_position.Add( new Vector2( positionComponent.X, positionComponent.Y ) );
+			if( param[i].Item2 is PositionComponent positionComponent ) {
+				_position.Add( new Vector2( positionComponent.X, positionComponent.Y ) );
+			}
 		}
 	}
 
