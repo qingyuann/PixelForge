@@ -25,20 +25,20 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentPosition( 0.25f, 0.25f, 0 );
 		camera.AddComponentCamera( 0, true, 2f );
 		camera.AddComponentBasicMove( true, 0.0003f );
-		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 3f, 1f, 0.8f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 30f );
+		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 3f, 2f, 1f, new Vector3( 0.5f, 0.5f, 0f ), 1f, 30f );
 		
 		#region Light
 		RandomTool.SetSeed( 10 );
-		var lightSize =10;
+		var lightSize =5;
 		GameEntity[,] lights = new GameEntity[lightSize, lightSize];
 		for( int i = 0; i < lightSize; i++ ) {
 			for( int j = 0; j < lightSize; j++ ) {
 				lights[i, j] = _contexts.game.CreateEntity();
 				lights[i, j].AddComponentPosition( 
-					RandomTool.Range( 0.1f,10 ), 
-					0.25f + RandomTool.Range( 0, 10*2) * 0.5f, 
+					RandomTool.Range( 0.1f,5 ), 
+					0.25f + RandomTool.Range( 0, 5*2) * 0.5f, 
 					0 );
-				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j+1, 2f, RandomTool.Float() * 0.8f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
+				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j+1, 2f, RandomTool.Float() * 1f, 0.8f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
 			}
 		}
 		#endregion
@@ -50,7 +50,7 @@ public class HierarchySystem : IInitializeSystem {
 			"blue.png",
 			"yellow.png"
 		};
-		var edgesize = 20;
+		var edgesize = 10;
 		GameEntity[,] quads = new GameEntity[edgesize, edgesize];
 		for( int i = 0; i < edgesize; i++ ) {
 			for( int j = 0; j < edgesize; j++ ) {
