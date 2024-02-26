@@ -22,25 +22,25 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentName( "mainCamera" );
 		camera.AddComponentSize( 0.1f, 0.1f );
 		camera.AddComponentRotation( 0 );
-		camera.AddComponentPosition( 0f, 0f, 1 );
+		camera.AddComponentPosition( 0.25f, 0.25f, 0 );
 		camera.AddComponentCamera( 0, true, 2f );
 		camera.AddComponentBasicMove( true, 0.0003f );
-		// camera.AddLightShadowLight( true, new[]{ 0 }, 0, 1f, 2f, 0.5f, new Vector3( 0.5f, 0.5f, 0f ), 1f, 15f );
-
+		camera.AddLightShadowLight( true, new[]{ 0 }, 0, 3f, 1f, 0.8f, new Vector3( 0.5f, 0.5f, 0f ), 2f, 30f );
+		
 		#region Light
-		var lightSize =1;
+		RandomTool.SetSeed( 10 );
+		var lightSize =10;
 		GameEntity[,] lights = new GameEntity[lightSize, lightSize];
 		for( int i = 0; i < lightSize; i++ ) {
 			for( int j = 0; j < lightSize; j++ ) {
 				lights[i, j] = _contexts.game.CreateEntity();
 				lights[i, j].AddComponentPosition( 
-					RandomTool.Range( 0.1f,(float)lightSize ), 
-					0.25f + RandomTool.Range( 0, lightSize*2) * 0.5f, 
+					RandomTool.Range( 0.1f,10 ), 
+					0.25f + RandomTool.Range( 0, 10*2) * 0.5f, 
 					0 );
-				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j, 3f, 0.3f + RandomTool.Float() * 2f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
+				lights[i, j].AddLightShadowLight( true, new[]{ 0 }, j + i * j+1, 2f, RandomTool.Float() * 0.8f, 0.5f, new Vector3( RandomTool.Float(), RandomTool.Float(), RandomTool.Float() ), 2f * RandomTool.Float() + 0.8f, 5f * RandomTool.Float() );
 			}
 		}
-
 		#endregion
 		
 		#region quad

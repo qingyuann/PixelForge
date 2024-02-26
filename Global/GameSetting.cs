@@ -4,7 +4,16 @@ public static class GameSetting {
 	public const int WindowWidth = 1920;
 	public const int WindowHeight = 1080;
 	public const string Name = "PixelForge";
-	//public const string ProjectPath = @"./";
+
+	// light setting
+	public const int LightQuality =0;//best:0,good:1,low:2
+	public const int LightBlurIterations = 1;
+	public const int LightBlurOffset = 3;
+	public const int LightAngularPrecision = 360;
+	public const int LightRadiusPrecision = 200;
+	
+	
+	
 	public static string ProjectPath
 	{
 		get
@@ -23,7 +32,8 @@ public static class GameSetting {
 	public const int MaxInstancePerDrawCall = 50;
 	public const int MaxRenderLayer = 3;
 
-	
+
+
 	
 	/// <summary>
 	/// 每帧获取deltaTime,毫秒

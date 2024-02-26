@@ -13,11 +13,21 @@ using Debug = PixelForge.Debug;
 namespace Render.PostEffect;
 
 public class ShadowLightComputer : LightEffectComputer {
-	const int MaxResolution =500;
+	//////////////////////
+	/// global setting ///
+	//////////////////////
+	//max resolution of light, down sample the light map if it's larger than this
+	int MaxResolution {
+		get {
+			int minSize = (int)MathF.Min( GameSetting.WindowWidth, GameSetting.WindowHeight );
+			return minSize >> GameSetting.LightQuality;
+		}
+	}
+	const int BlurIterations = GameSetting.LightBlurIterations;
+	const int BlurOffset = GameSetting.LightBlurOffset;
+	const int AngularPrecision = GameSetting.LightAngularPrecision;
+	const int RadiusPrecision = GameSetting.LightRadiusPrecision;
 
-	//sooooo expensive...
-	const int AngularPrecision = 360 ;
-	const int RadiusPrecision = 100;
 	List<Vector3> _color = new List<Vector3>();
 	List<float> _intensity = new List<float>();
 	List<Vector2> _position = new List<Vector2>();
@@ -29,21 +39,18 @@ public class ShadowLightComputer : LightEffectComputer {
 	RenderFullscreen _shadowLightShadowMap;
 	RenderFullscreen _shadowLightDraw;
 	RenderFullscreen _mergeLight;
-	RenderFullscreen _mergeTwoTex_add;
 	GaussianBlurComputer _gaussianBlurComputer;
 	List<RenderTexture> lightTextures = new List<RenderTexture>();
 	public ShadowLightComputer() {
 		_shadowLightLightMap = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightLightMap.frag" );
 		_shadowLightShadowMap = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightShadowMap.frag" );
 		_shadowLightDraw = new RenderFullscreen( "Blit_CustomUVScale.vert", "ShadowLightDraw.frag" );
-		_mergeTwoTex_add = new RenderFullscreen( "Blit.vert", "MergeTwoTex_add.frag" );
 		_mergeLight = new RenderFullscreen( "Blit.vert", "QuadBasic.frag" );
 		_gaussianBlurComputer = new GaussianBlurComputer();
 		_gaussianBlurComputer.SetParams( new GaussianBlurComponent(){
-			Offset = 2f,
-			Iterations = 1
+			Offset = BlurOffset,
+			Iterations = BlurIterations
 		} );
-
 	}
 
 	public override void Render( RenderTexture rt ) {
@@ -55,7 +62,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			while( MathF.Max( rt.Width / rtDownRatio, rt.Height / rtDownRatio ) > MaxResolution ) {
 				rtDownRatio *= 2;
 			}
-			
+
 			////////////////////////////////////////
 			//// step0: prepare the light data ////
 			///////////////////////////////////////
@@ -71,25 +78,25 @@ public class ShadowLightComputer : LightEffectComputer {
 			int halfHeight = rt.Height / 2;
 			int radiusPixelSizeXCut = (int)MathF.Min( radiusPixel, halfWidth );
 			int radiusPixelSizeYCut = (int)MathF.Min( radiusPixel, halfHeight );
-			RenderTexture lightMap = TexturePool.GetRT( (uint)( radiusPixelSizeXCut * 2 / rtDownRatio ), (uint)( radiusPixelSizeYCut * 2 / rtDownRatio ) );
-			_radius[i] = Transform.PixelToWorldSize( MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut ) );
+			radiusPixel = (int)( MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut ) * MathF.Sqrt( 2 ) );
+			RenderTexture lightRangeRt = TexturePool.GetRT( (uint)( radiusPixel * 2 / rtDownRatio ), (uint)( radiusPixel * 2 / rtDownRatio ) );
 
 			//////////////////////////////////////////////////////
 			//// step1: cut the light map from render texture ////
 			//////////////////////////////////////////////////////
-			float lightMapUvMoveX = ( posPixCenter.X - radiusPixelSizeXCut ) / GameSetting.WindowWidth ; //from light center to screen center
-			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixelSizeYCut ) / GameSetting.WindowHeight ; //from light center to screen center
+			float lightMapUvMoveX = ( posPixCenter.X - radiusPixel ) / GameSetting.WindowWidth; //from light center to screen center
+			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixel ) / GameSetting.WindowHeight; //from light center to screen center
 			Vector2 lightMapUvMove = new Vector2( lightMapUvMoveX, lightMapUvMoveY ); //from light center to screen center
 			_shadowLightLightMap.SetUniform( "lightMapUVMove", lightMapUvMove );
 			_shadowLightLightMap.SetUniform( "_UVScale", rtDownRatio );
-			Blitter.Blit( rt, lightMap, _shadowLightLightMap );
+			Blitter.Blit( rt, lightRangeRt, _shadowLightLightMap );
 
 			/////////////////////////////////////////////////////
 			//// step2: render the shadow map from light map ////
 			/////////////////////////////////////////////////////
 			var uvScale = GameSetting.WindowWidth / (float)AngularPrecision;
-			_shadowLightShadowMap.SetTexture( "_BlitTexture", lightMap );
-			_shadowLightShadowMap.SetUniform( "lightRadius", RadiusPrecision * _radius[i] );
+			_shadowLightShadowMap.SetTexture( "_BlitTexture", lightRangeRt );
+			_shadowLightShadowMap.SetUniform( "lightRadius", RadiusPrecision );
 			_shadowLightShadowMap.SetUniform( "_UVScale", uvScale );
 			Blitter.Blit( null, shadowMap, _shadowLightShadowMap );
 
@@ -101,7 +108,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			_shadowLightDraw.SetUniform( "screenW", rt.Width );
 			_shadowLightDraw.SetUniform( "screenH", rt.Height );
 			_shadowLightDraw.SetUniform( "lightPosPix", posPixCenter );
-			_shadowLightDraw.SetUniform( "lightRadiusPix", MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut ) );
+			_shadowLightDraw.SetUniform( "lightRadiusPix", radiusPixel );
 			_shadowLightDraw.SetUniform( "lightColor", _color[i] );
 			_shadowLightDraw.SetUniform( "falloff", _radialFallOff[i] );
 			_shadowLightDraw.SetUniform( "intensity", _intensity[i] );
@@ -111,9 +118,10 @@ public class ShadowLightComputer : LightEffectComputer {
 			Blitter.Blit( null, lightRt, _shadowLightDraw );
 
 			lightTextures.Add( lightRt );
-			TexturePool.ReturnRT( lightMap );
+			TexturePool.ReturnRT( lightRangeRt );
 			TexturePool.ReturnRT( shadowMap );
 		}
+		
 		///////////////////////////////
 		//// step4: merge all light////
 		///////////////////////////////
@@ -123,7 +131,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		mergeLightRt.RenderToRt();
 		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 		GlobalVariable.GL.Enable( EnableCap.Blend );
-		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha );
+		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.One );
 		foreach( RenderTexture lightRt in lightTextures ) {
 			_mergeLight.SetTexture( "MainTex", lightRt );
 			_mergeLight.Draw();
@@ -133,14 +141,17 @@ public class ShadowLightComputer : LightEffectComputer {
 		///////////////////////////////
 		//// step5: blur the light ////
 		///////////////////////////////
-		_gaussianBlurComputer.Render( mergeLightRt );
+		if( BlurIterations > 0 && BlurOffset > 0 ) _gaussianBlurComputer.Render( mergeLightRt );
 
 		//////////////////////////////////////
 		//// step6: merge the light to rt ////
 		//////////////////////////////////////
 		rt.RenderToRt();
+		GlobalVariable.GL.Enable( EnableCap.Blend );
+		GlobalVariable.GL.Clear(  (uint)GLEnum.DepthBufferBit );
 		_mergeLight.SetTexture( "MainTex", mergeLightRt );
 		_mergeLight.Draw();
+		GlobalVariable.GL.Disable( EnableCap.Blend );
 
 		/////////////////////////////////
 		//// step7: release the data ////
@@ -154,7 +165,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		ClearPara();
 		for( int i = 0; i < param.Count; i++ ) {
 			if( param[i].Item1 is ShadowLightComponent globalLightComponent ) {
-				if( globalLightComponent.Radius <= 0 || globalLightComponent.Intensity <= 0 || globalLightComponent.Volume <= 0 || globalLightComponent.RadialFallOff <= 0 || globalLightComponent.EdgeInfringe <= 0 || globalLightComponent.Color == Vector3.Zero || globalLightComponent.Layers == null || globalLightComponent.Layers.Length == 0 ) {
+				if( globalLightComponent.Radius <= 0 || globalLightComponent.Intensity <= 0 || globalLightComponent.Volume < 0 || globalLightComponent.RadialFallOff < 0 || globalLightComponent.EdgeInfringe < 0 || globalLightComponent.Color == Vector3.Zero || globalLightComponent.Layers == null || globalLightComponent.Layers.Length == 0 ) {
 					Debug.Log( "Light Component has invalid value" );
 					return;
 				}

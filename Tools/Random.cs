@@ -3,6 +3,11 @@
 public static class RandomTool
 {
     private static Random _random;
+    public static void SetSeed(int seed)
+    {
+        _random = new Random(seed);
+    }
+    
     static RandomTool()
     {
         _random = new Random();
