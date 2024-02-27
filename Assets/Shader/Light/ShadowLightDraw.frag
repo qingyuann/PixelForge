@@ -47,24 +47,16 @@ void main(void) {
     float shadow = texture(_ShadowMap, vec2(angleNorm, 0.5)).r;
 
     float radialFalloff = pow(1 - dist / lightRadiusPix, falloff);
-    if (dist > shadow * lightRadiusPix) {
-        float distToEdge = dist - shadow * lightRadiusPix;
-        if (distToEdge < edgeInfringe) {
-            vec3 cor = lightColor.xyz * radialFalloff * intensity * (1 - distToEdge / edgeInfringe);
-            FragColor = vec4(cor, intensity*radialFalloff);
-            return;
-        }
-        else {               
-            FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-            return;
-        }
+
+    float distToEdge = dist - shadow * lightRadiusPix;
+    if (distToEdge < edgeInfringe) {
+        vec3 cor = lightColor.xyz * radialFalloff * intensity;
+        FragColor = vec4(cor, radialFalloff * volumeIntensity);
         return;
     }
     else {
-        vec3 cor = radialFalloff * lightColor * intensity;
-        FragColor = vec4(cor, volumeIntensity*radialFalloff);
-
+        FragColor = vec4(0.0, 0.0, 0.0, 0.0);
         return;
     }
 }
-//sample from the 1D distance map
+
