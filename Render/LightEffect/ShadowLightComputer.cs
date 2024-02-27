@@ -54,7 +54,6 @@ public class ShadowLightComputer : LightEffectComputer {
 		} );
 	}
 
-	[SuppressMessage( "ReSharper.DPA", "DPA0000: DPA issues" )]
 	public override void Render( RenderTexture rt ) {
 		for( int i = 0; i < _radius.Count; i++ ) {
 			/////////////////////////////////////////
@@ -73,7 +72,7 @@ public class ShadowLightComputer : LightEffectComputer {
 
 			RenderTexture shadowMap = TexturePool.GetRT( AngularPrecision, 1, false );
 			RenderTexture lightRt = TexturePool.GetRT( (uint)( rt.Width / rtDownRatio ), (uint)( rt.Height / rtDownRatio ), false );
-
+			
 			// if radius is too large, cut it to the screen size
 			int radiusPixel = Transform.WorldToPixelSize( _radius[i] );
 			int halfWidth = rt.Width / 2;
@@ -96,7 +95,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			/////////////////////////////////////////////////////
 			//// step2: render the shadow map from light map ////
 			/////////////////////////////////////////////////////
-			_shadowLightShadowMap.SetUniform( "lightRadiusResolution", RadiusPrecision );
+			_shadowLightShadowMap.SetUniform( "lightRadiusResolution", RadiusPrecision*_radius[i] );
 			float ratio = radiusPixelSizeXCut / (float)radiusPixelSizeYCut;
 			_shadowLightShadowMap.SetUniform( "ratioScale", ratio );
 			var uvScale = GameSetting.WindowWidth / (float)AngularPrecision;
@@ -132,6 +131,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		RenderTexture mergeLightRt = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
 		mergeLightRt.RenderToRt();
 		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
+		GlobalVariable.GL.DepthMask(false); 
 		GlobalVariable.GL.Enable( EnableCap.Blend );
 		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.One );
 		foreach( RenderTexture lightRt in lightTextures ) {
@@ -139,8 +139,6 @@ public class ShadowLightComputer : LightEffectComputer {
 			_mergeLight.Draw();
 		}
 		GlobalVariable.GL.Disable( EnableCap.Blend );
-		
-		// Blitter.Blit( mergeLightRt, rt );
 		
 		///////////////////////////////
 		//// step5: blur the light ////
@@ -151,11 +149,13 @@ public class ShadowLightComputer : LightEffectComputer {
 		//// step6: merge the light to rt ////
 		//////////////////////////////////////
 		rt.RenderToRt();
-		GlobalVariable.GL.Enable( EnableCap.Blend );
 		GlobalVariable.GL.Clear(  (uint)GLEnum.DepthBufferBit );
+		GlobalVariable.GL.Enable( EnableCap.Blend );
+		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.One );
 		_mergeLight.SetTexture( "MainTex", mergeLightRt );
 		_mergeLight.Draw();
 		GlobalVariable.GL.Disable( EnableCap.Blend );
+		GlobalVariable.GL.DepthMask( true );
 
 		/////////////////////////////////
 		//// step7: release the data ////

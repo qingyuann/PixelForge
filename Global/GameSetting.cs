@@ -9,8 +9,8 @@ public static class GameSetting {
 	public const int LightQuality =0;//best:0,good:1,low:2
 	public const int LightBlurIterations =1;
 	public const int LightBlurOffset = 0;
-	public const int LightAngularPrecision = 720;
-	public const int LightRadiusPrecision = 400;
+	public const int LightAngularPrecision = 360;
+	public const int LightRadiusPrecision = 100;
 	
 	public static string ProjectPath
 	{

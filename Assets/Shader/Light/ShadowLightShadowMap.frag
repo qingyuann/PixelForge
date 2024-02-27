@@ -16,7 +16,7 @@ out vec4 FragColor;
 void main(void) {
     float d = 1.0;
 
-    for (float y = 0.0; y <= lightRadiusResolution; y += 1.0) {
+    for (float y = 0.0; y < lightRadiusResolution; y += 1.0) {
         //rectangular to polar filter
         float angle = fUv.x * PI * 2.0; //0,2pi
         float radius = y / lightRadiusResolution; //0,1
