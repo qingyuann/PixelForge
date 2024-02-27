@@ -8,6 +8,7 @@ using pp;
 using Silk.NET.OpenGL;
 using System.Buffers;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Debug = PixelForge.Debug;
 
 namespace Render.PostEffect;
@@ -19,7 +20,7 @@ public class ShadowLightComputer : LightEffectComputer {
 	//max resolution of light, down sample the light map if it's larger than this
 	int MaxResolution {
 		get {
-			int minSize = (int)MathF.Min( GameSetting.WindowWidth, GameSetting.WindowHeight );
+			int minSize = (int)MathF.Max( GameSetting.WindowWidth, GameSetting.WindowHeight );
 			return minSize >> GameSetting.LightQuality;
 		}
 	}
@@ -53,6 +54,7 @@ public class ShadowLightComputer : LightEffectComputer {
 		} );
 	}
 
+	[SuppressMessage( "ReSharper.DPA", "DPA0000: DPA issues" )]
 	public override void Render( RenderTexture rt ) {
 		for( int i = 0; i < _radius.Count; i++ ) {
 			/////////////////////////////////////////
@@ -78,14 +80,14 @@ public class ShadowLightComputer : LightEffectComputer {
 			int halfHeight = rt.Height / 2;
 			int radiusPixelSizeXCut = (int)MathF.Min( radiusPixel, halfWidth );
 			int radiusPixelSizeYCut = (int)MathF.Min( radiusPixel, halfHeight );
-			radiusPixel = (int)( MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut ) * MathF.Sqrt( 2 ) );
-			RenderTexture lightRangeRt = TexturePool.GetRT( (uint)( radiusPixel * 2 / rtDownRatio ), (uint)( radiusPixel * 2 / rtDownRatio ) );
+			radiusPixel = (int)( MathF.Max( radiusPixelSizeXCut, radiusPixelSizeYCut )  );
+			RenderTexture lightRangeRt = TexturePool.GetRT( (uint)( radiusPixelSizeXCut * 2 / rtDownRatio ), (uint)( radiusPixelSizeYCut * 2 / rtDownRatio ) );
 
 			//////////////////////////////////////////////////////
 			//// step1: cut the light map from render texture ////
 			//////////////////////////////////////////////////////
-			float lightMapUvMoveX = ( posPixCenter.X - radiusPixel ) / GameSetting.WindowWidth; //from light center to screen center
-			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixel ) / GameSetting.WindowHeight; //from light center to screen center
+			float lightMapUvMoveX = ( posPixCenter.X - radiusPixelSizeXCut ) / GameSetting.WindowWidth; //from light center to screen center
+			float lightMapUvMoveY = ( posPixCenter.Y - radiusPixelSizeYCut ) / GameSetting.WindowHeight; //from light center to screen center
 			Vector2 lightMapUvMove = new Vector2( lightMapUvMoveX, lightMapUvMoveY ); //from light center to screen center
 			_shadowLightLightMap.SetUniform( "lightMapUVMove", lightMapUvMove );
 			_shadowLightLightMap.SetUniform( "_UVScale", rtDownRatio );
@@ -94,11 +96,12 @@ public class ShadowLightComputer : LightEffectComputer {
 			/////////////////////////////////////////////////////
 			//// step2: render the shadow map from light map ////
 			/////////////////////////////////////////////////////
+			_shadowLightShadowMap.SetUniform( "lightRadiusResolution", RadiusPrecision );
+			float ratio = radiusPixelSizeXCut / (float)radiusPixelSizeYCut;
+			_shadowLightShadowMap.SetUniform( "ratioScale", ratio );
 			var uvScale = GameSetting.WindowWidth / (float)AngularPrecision;
-			_shadowLightShadowMap.SetTexture( "_BlitTexture", lightRangeRt );
-			_shadowLightShadowMap.SetUniform( "lightRadius", RadiusPrecision );
 			_shadowLightShadowMap.SetUniform( "_UVScale", uvScale );
-			Blitter.Blit( null, shadowMap, _shadowLightShadowMap );
+			Blitter.Blit( lightRangeRt, shadowMap, _shadowLightShadowMap );
 
 			////////////////////////////////////
 			//// step3: render the 2d light ////
@@ -115,7 +118,7 @@ public class ShadowLightComputer : LightEffectComputer {
 			_shadowLightDraw.SetUniform( "volumeIntensity", _volume[i] );
 			_shadowLightDraw.SetUniform( "edgeInfringe", _edgeInfringe[i] );
 			_shadowLightDraw.SetUniform( "_UVScale", rtDownRatio );
-			Blitter.Blit( null, lightRt, _shadowLightDraw );
+			Blitter.Blit( null,lightRt , _shadowLightDraw );
 
 			lightTextures.Add( lightRt );
 			TexturePool.ReturnRT( lightRangeRt );
@@ -127,7 +130,6 @@ public class ShadowLightComputer : LightEffectComputer {
 		///////////////////////////////
 		// a texture to store the merged light
 		RenderTexture mergeLightRt = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
-
 		mergeLightRt.RenderToRt();
 		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 		GlobalVariable.GL.Enable( EnableCap.Blend );
@@ -137,7 +139,9 @@ public class ShadowLightComputer : LightEffectComputer {
 			_mergeLight.Draw();
 		}
 		GlobalVariable.GL.Disable( EnableCap.Blend );
-
+		
+		// Blitter.Blit( mergeLightRt, rt );
+		
 		///////////////////////////////
 		//// step5: blur the light ////
 		///////////////////////////////

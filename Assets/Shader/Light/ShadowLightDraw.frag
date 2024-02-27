@@ -33,17 +33,21 @@ float angleBetweenVectors(vec2 v1, vec2 v2) {
 void main(void) {
     vec2 uvPosPix = vec2(fUv.x * screenW, fUv.y * screenH);
     float dist = distance(uvPosPix, lightPosPix);
-
+  
     //if the pixel is outside the light radius, return the screen color
     if (dist > lightRadiusPix) {
         FragColor = vec4(0.0, 0.0, 0.0, 0.0);
         return;
     }
 
+
+ 
+
     vec2 direction = uvPosPix - lightPosPix;
     float angle = angleBetweenVectors(vec2(0.0, 1.0), direction);
     float angleNorm = angle / (2.0 * PI);
 
+    
     float shadow = texture(_ShadowMap, vec2(angleNorm, 0.5)).r;
 
     float radialFalloff = pow(1 - dist / lightRadiusPix, falloff);
