@@ -8,38 +8,45 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int ComponentBasicMove = 0;
-    public const int ComponentCamera = 1;
-    public const int ComponentCellAutoTexture = 2;
-    public const int ComponentCellularAutomation = 3;
-    public const int ComponentFire = 4;
-    public const int ComponentName = 5;
-    public const int ComponentParent = 6;
-    public const int ComponentPosition = 7;
-    public const int ComponentRotation = 8;
-    public const int ComponentSand = 9;
-    public const int ComponentSize = 10;
-    public const int ComponentSteam = 11;
-    public const int ComponentStone = 12;
-    public const int ComponentTexture = 13;
-    public const int ComponentWater = 14;
-    public const int ComponentWood = 15;
-    public const int LightCircleLight = 16;
-    public const int LightGlobalLight = 17;
-    public const int MatPara = 18;
-    public const int MatRenderSingle = 19;
-    public const int MatSpriteInstanceRenderer = 20;
-    public const int ppBloom = 21;
-    public const int ppGaussianBlur = 22;
-    public const int ppLightSetting = 23;
+    public const int ComponentAcid = 0;
+    public const int ComponentBasicMove = 1;
+    public const int ComponentCamera = 2;
+    public const int ComponentCellAutoTexture = 3;
+    public const int ComponentCellularAutomation = 4;
+    public const int ComponentCellUpdate = 5;
+    public const int ComponentExplodeFire = 6;
+    public const int ComponentFire = 7;
+    public const int ComponentName = 8;
+    public const int ComponentParent = 9;
+    public const int ComponentPosition = 10;
+    public const int ComponentRotation = 11;
+    public const int ComponentSand = 12;
+    public const int ComponentSize = 13;
+    public const int ComponentSmoke = 14;
+    public const int ComponentSteam = 15;
+    public const int ComponentStone = 16;
+    public const int ComponentTexture = 17;
+    public const int ComponentWater = 18;
+    public const int ComponentWood = 19;
+    public const int LightCircleLight = 20;
+    public const int LightGlobalLight = 21;
+    public const int MatPara = 22;
+    public const int MatRenderSingle = 23;
+    public const int MatSpriteInstanceRenderer = 24;
+    public const int ppBloom = 25;
+    public const int ppGaussianBlur = 26;
+    public const int ppLightSetting = 27;
 
-    public const int TotalComponents = 24;
+    public const int TotalComponents = 28;
 
     public static readonly string[] componentNames = {
+        "ComponentAcid",
         "ComponentBasicMove",
         "ComponentCamera",
         "ComponentCellAutoTexture",
         "ComponentCellularAutomation",
+        "ComponentCellUpdate",
+        "ComponentExplodeFire",
         "ComponentFire",
         "ComponentName",
         "ComponentParent",
@@ -47,6 +54,7 @@ public static class GameComponentsLookup {
         "ComponentRotation",
         "ComponentSand",
         "ComponentSize",
+        "ComponentSmoke",
         "ComponentSteam",
         "ComponentStone",
         "ComponentTexture",
@@ -63,10 +71,13 @@ public static class GameComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(Component.AcidComponent),
         typeof(Component.BasicMoveComponent),
         typeof(Component.CameraComponent),
         typeof(Component.CellAutoTexture),
         typeof(Component.CellularAutomationComponent),
+        typeof(Component.CellUpdateComponent),
+        typeof(Component.ExplodeFireComponent),
         typeof(Component.FireComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
@@ -74,6 +85,7 @@ public static class GameComponentsLookup {
         typeof(Component.RotationComponent),
         typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
+        typeof(Component.SmokeComponent),
         typeof(Component.SteamComponent),
         typeof(Component.StoneComponent),
         typeof(Component.TextureComponent),

@@ -2,7 +2,7 @@ using PixelForge.Tools;
 
 namespace PixelForge.Spawner.CellAuto.Movable;
 
-public class SteamBehaviour : ICellBehaviour
+public class SmokeBehaviour : ICellBehaviour
 {
     public static void Act(int i, int j)
     {
@@ -21,45 +21,46 @@ public class SteamBehaviour : ICellBehaviour
             return;
         }
         
-        
-        if (idTop2 != -1)
+        var ran = RandomTool.Range(0, 4);
+
+        switch (ran)
         {
-            if (!CellAutomationSystem._cellEntities[idTop2].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idTop2);
-                return;
-            }
+            case 0:
+                if (idTopLeft != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idTopLeft);
+                        return;
+                    }
+                }
+                break;
+            case 1:
+                if (idTop != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("steam move up");
+                        MoveToTarget(id, idTop);
+                        return;
+                    }
+                }
+                break;
+            case 2:
+                if (idTopRight != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idTopRight);
+                        return;
+                    }
+                }
+                break;
+            case 3:
+                break;
         }
         
         
-        if (idTop != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation)
-            {
-                //Debug.Log("steam move up");
-                MoveToTarget(id, idTop);
-                return;
-            }
-        }
-        
-        if (idTopLeft != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idTopLeft);
-                return;
-            }
-        }
-        
-        
-        if (idTopRight != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idTopRight);
-                return;
-            }
-        }
         
         if(idTop != -1 || idTop2 != -1 || idTop3 != -1)
         {
@@ -73,15 +74,15 @@ public class SteamBehaviour : ICellBehaviour
     private static void MoveToTarget(int idSource, int idTarget)
     {
         CellAutomationSystem._cellEntities[idTarget].isComponentCellularAutomation = true;
-        CellAutomationSystem._cellEntities[idTarget].isComponentSteam = true;
+        CellAutomationSystem._cellEntities[idTarget].isComponentSmoke = true;
         
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
-        CellAutomationSystem._cellEntities[idSource].isComponentSteam = false;
+        CellAutomationSystem._cellEntities[idSource].isComponentSmoke = false;
         
         //Debug.Log("move down");
         
-        CellTools.SetCellColor(idTarget, "steam");
+        CellTools.SetCellColor(idTarget, "smoke");
         CellTools.SetCellColor(idSource, "none");
     }
-
+    
 }

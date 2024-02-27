@@ -2,17 +2,22 @@ using PixelForge.Tools;
 
 namespace PixelForge.Spawner.CellAuto.Movable;
 
+//Todo: Add a fire spread max time
+
+
+
 public class FireBehaviour : ICellBehaviour
 {
     private static void FireSpread(int idSource, int idTarget)
     {
-        CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire) { CellAutomationSystem._cellEntities[idSource].RemoveComponentFire(); }
+        CellAutomationSystem._cellEntities[idSource].isComponentSmoke = true;
 
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50); }
-
+        
+        CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
         CellTools.SetCellColor(idTarget, "fire");
-        CellTools.SetCellColor(idSource, "none");
+        CellTools.SetCellColor(idSource, "smoke");
     }
     
     private static void MoveToTarget(int idSource, int idTarget)
@@ -21,6 +26,7 @@ public class FireBehaviour : ICellBehaviour
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) {CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50);}
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire){CellAutomationSystem._cellEntities[idSource].RemoveComponentFire();}
+        CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
         //Debug.Log("move down");
         CellTools.SetCellColor(idTarget, "fire");
         CellTools.SetCellColor(idSource, "none");
@@ -43,6 +49,7 @@ public class FireBehaviour : ICellBehaviour
     
     public static void Act(int i, int j)
     {
+        
         var id = CellTools.ComputeIndex(i, j);
         var idTop = CellTools.ComputeIndex(i, j - 1);
         var idDown = CellTools.ComputeIndex(i, j + 1);
@@ -67,82 +74,81 @@ public class FireBehaviour : ICellBehaviour
                     CellAutomationSystem._cellEntities[id].RemoveComponentFire();
                     CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
                     CellTools.SetCellColor(id, "none");
+                    return;
                 }
-
-                
             }
         }
         
-        if (idDown != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idDown);
-                return;
-            }
-        }
         
+        var flag = false;
         switch (ran)
         {
             case 0:
                 if (idTop != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idTop].isComponentWater) { FireWithWater(id, idTop); return; }
-                    if (CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTop].hasComponentFire) { FireSpread(id, idTop); }
+                    if (CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTop].hasComponentFire) { FireSpread(id, idTop); flag = true;}
                 }
                 break;
             case 1:
                 if (idDown != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idDown].isComponentWater) { FireWithWater(id, idDown); return; }
-                    if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDown].hasComponentFire) { FireSpread(id, idDown); }
+                    if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDown].hasComponentFire) { FireSpread(id, idDown); flag = true;}
                 }
                 break;
             case 2:
                 if (idLeft != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idLeft].isComponentWater) { FireWithWater(id, idLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idLeft].hasComponentFire) { FireSpread(id, idLeft); }
+                    if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idLeft].hasComponentFire) { FireSpread(id, idLeft); flag = true;}
                 }
                 break;
             case 3:
                 if (idRight != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idRight].isComponentWater) { FireWithWater(id, idRight); return; }
-                    if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idRight].hasComponentFire) { FireSpread(id, idRight); }
+                    if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idRight].hasComponentFire) { FireSpread(id, idRight); flag = true;}
                 }
                 break;
             case 4:
                 if (idDownLeft != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idDownLeft].isComponentWater) { FireWithWater(id, idDownLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownLeft].hasComponentFire) { FireSpread(id, idDownLeft); }
+                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownLeft].hasComponentFire) { FireSpread(id, idDownLeft); flag = true;}
                 }
                 break;
             case 5:
                 if (idDownRight != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idDownRight].isComponentWater) { FireWithWater(id, idDownRight); return; }
-                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownRight].hasComponentFire) { FireSpread(id, idDownRight); }
+                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownRight].hasComponentFire) { FireSpread(id, idDownRight); flag = true;}
                 }
                 break;
             case 6:
                 if (idTopLeft != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idTopLeft].isComponentWater) { FireWithWater(id, idTopLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopLeft].hasComponentFire) { FireSpread(id, idTopLeft); }
+                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopLeft].hasComponentFire) { FireSpread(id, idTopLeft); flag = true;}
                 }
                 break;
             case 7:
                 if (idTopRight != -1)
                 {
                     if (CellAutomationSystem._cellEntities[idTopRight].isComponentWater) { FireWithWater(id, idTopRight); return; }
-                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopRight].hasComponentFire) { FireSpread(id, idTopRight); }
+                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopRight].hasComponentFire) { FireSpread(id, idTopRight); flag = true;}
                 }
                 break;
             
         }
 
+        if (!flag)
+        {
+            if(idDown != -1)
+                if (!CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation)
+                    MoveToTarget(id, idDown);
+        }
+        
         
         
 

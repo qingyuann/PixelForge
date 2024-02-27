@@ -1,7 +1,9 @@
 using System.Drawing;
+using System.Numerics;
 using Component;
 using Entitas;
 using PixelForge.Spawner.CellAuto.Movable;
+using PixelForge.Tools;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Texture = Render.Texture;
@@ -64,31 +66,51 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             TestGenerateWater();
         }
         
+        if (InputSystem.GetKeyDown(Key.J))
+        {
+            TestGenerateBombFire();
+        }
         
         
+        // from bottom to top, from right to left
         for(int j = _height-1; j >= 0; j--)
             for (int i = _width-1; i >= 0; i--)
             {
                 var e = _cellEntities[CellTools.ComputeIndex(i, j)];
-                if (e.hasComponentFire)
+                if (e.isComponentCellUpdate == false)
                 {
+                    if (e.hasComponentFire)
+                    {
                     
-                    FireBehaviour.Act(i, j);
-                    continue;
-                }
-                if (e.isComponentSand)
-                {
+                        FireBehaviour.Act(i, j);
+                        continue;
+                    }
+
+                    if (e.hasComponentExplodeFire)
+                    {
+                        ExplodeFireBehaviour.Act(i, j);
+                        continue;
+                    }
                     
-                    SandBehaviour.Act(i, j);
-                }
+                    
+                    if (e.isComponentSand)
+                    {
+                        SandBehaviour.Act(i, j);
+                        continue;
+                    }
                 
-                if (e.isComponentWater)
-                {
-                    WaterBehaviour.Act(i, j);
+                    if (e.isComponentWater)
+                    {
+                        WaterBehaviour.Act(i, j);
+                        continue;
+                    }
+                    
+                    
                 }
-                
+                e.isComponentCellUpdate = true;
             }
         
+        // from top to bottom, from right to left
         for(int j = 0; j < _height; j++)
             for (int i = _width-1; i >= 0; i--)
             {
@@ -98,6 +120,11 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                     SteamBehaviour.Act(i, j);
                 }
 
+                if (e.isComponentSmoke)
+                {
+                    SmokeBehaviour.Act(i, j);
+                }
+                e.isComponentCellUpdate = false;
             }
         
         //update the color of the texture
@@ -118,6 +145,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         {
             _cellEntities[i] = _contexts.game.CreateEntity();
             _cellEntities[i].isComponentCellularAutomation = false;
+            _cellEntities[i].isComponentCellUpdate = false;
         }
     }
     private void InitCellColors()
@@ -265,6 +293,32 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         CellTools.SetCellColor(index, "fire");
     }
     
+    private void TestGenerateBombFire()
+    {
+        var x = RandomTool.Range(0, _width);
+        var y = RandomTool.Range(0, _height);
+        
+        // x,y as the center of the bomb, generate a circle of fire bomb
+        // all fire bomb has a travel time of 40, direction is a circle (vector2) 
+        var l = GetCirclePoints(x, y, 3);
+        foreach (var (i, j) in l)
+        {
+            var index = CellTools.ComputeIndex(i, j);
+            var dir = new Vector2(i - x, j - y);
+            if (index != -1)
+            {
+                var e = _cellEntities[index];
+                e.isComponentCellularAutomation = true;
+                if (!e.hasComponentExplodeFire)
+                {
+                    e.AddComponentExplodeFire(dir, 40);
+                }
+                CellTools.SetCellColor(index, "bombFire");
+            }
+            
+        }
+        
+    }
 
     private void TestGenerateStone()
     {
@@ -300,4 +354,36 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
     }
     
+    List<(int, int)> GetCirclePoints(int centerX, int centerY, int radius)
+    {
+        List<(int, int)> points = new List<(int, int)>();
+        int x = 0, y = radius;
+        int d = 1 - radius;
+
+        while (x <= y)
+        {
+            // 利用对称性绘制八个点
+            points.Add((centerX + x, centerY + y));
+            points.Add((centerX + y, centerY + x));
+            points.Add((centerX - x, centerY + y));
+            points.Add((centerX - y, centerY + x));
+            points.Add((centerX + x, centerY - y));
+            points.Add((centerX + y, centerY - x));
+            points.Add((centerX - x, centerY - y));
+            points.Add((centerX - y, centerY - x));
+
+            if (d < 0)
+            {
+                d += 2 * x + 3;
+            }
+            else
+            {
+                d += 2 * (x - y) + 5;
+                y--;
+            }
+            x++;
+        }
+        
+        return points;
+    }
 }

@@ -1,10 +1,9 @@
+using PixelForge.Tools;
+
 namespace PixelForge.Spawner.CellAuto.Movable;
 
 public class WaterBehaviour : ICellBehaviour
 {
-    private static int _velocity = 2;
-    private static string _colorType = "water";
-
     private static void MoveToTarget(int idSource, int idTarget)
     {
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
@@ -12,6 +11,7 @@ public class WaterBehaviour : ICellBehaviour
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellularAutomation = true;
         CellAutomationSystem._cellEntities[idTarget].isComponentWater = true;
+        CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
 
         //Debug.Log("move down");
         CellTools.SetCellColor(idTarget, "water");
@@ -66,64 +66,70 @@ public class WaterBehaviour : ICellBehaviour
         }
         
         
-        if (idLeft3 != -1)
+        var ran = RandomTool.Range(0, 2);
+        
+        
+        switch (ran)
         {
-            if (!CellAutomationSystem._cellEntities[idLeft3].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idLeft3);
+            case 0:
                 
-                return;
-            }
-        }
-        
-        if (idLeft2 != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idLeft2].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idLeft2);
-                return;
-            }
-        }
-        
-        
-
-        if (idLeft != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idLeft);
-                return;
-            }
-        }
-        
-        
-        if (idRight3 != -1)
-        {
-            
-            if (!CellAutomationSystem._cellEntities[idRight3].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idRight3);
-                return;
-            }
-        }
-        
-        if (idRight2 != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idRight2].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idRight2);
-                return;
-            }
-        }
-        
-        
-        if (idRight != -1)
-        {
-            if(!CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idRight);
-                return;
-            }
+                if (idLeft3 != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idLeft3].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idLeft3);
+                        return;
+                    }
+                }
+                
+                if (idLeft2 != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idLeft2].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idLeft2);
+                        return;
+                    }
+                }
+                    
+                if (idLeft != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idLeft);
+                        return;
+                    }
+                }
+                break;
+            case 1:
+                
+                if (idRight3 != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idRight3].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idRight3);
+                        return;
+                    }
+                }
+                
+                if (idRight2 != -1)
+                {
+                    if (!CellAutomationSystem._cellEntities[idRight2].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idRight2);
+                        return;
+                    }
+                }
+                
+                
+                if (idRight != -1)
+                {
+                    if(!CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation)
+                    {
+                        MoveToTarget(id, idRight);
+                        return;
+                    }
+                }
+                break;
         }
         
         

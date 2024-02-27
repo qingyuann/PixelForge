@@ -44,38 +44,27 @@ public class SandBehaviour : ICellBehaviour
             }
         }
         
+        if (idDownLeft != -1)
+        {
+            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
+            {
+                MoveToTarget(id, idDownLeft);
+                return;
+            }
+        }
         
 
         if(idDownRight != -1)
         {
             if(!CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation)
             {
-                CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation = true;
-                CellAutomationSystem._cellEntities[idDownRight].isComponentSand = true;
-                CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
-                CellAutomationSystem._cellEntities[id].isComponentSand = false;
-                //Debug.Log("move down right");
-                CellTools.SetCellColor(idDownRight, "sand");
-                CellTools.SetCellColor(id, "none");
+                MoveToTarget(id, idDownRight);
                 
                 return;
             }
         }
         
-        if (idDownLeft != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
-            {
-                CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation = true;
-                CellAutomationSystem._cellEntities[idDownLeft].isComponentSand = true;
-                CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
-                CellAutomationSystem._cellEntities[id].isComponentSand = false;
-                //Debug.Log("move down left");
-                CellTools.SetCellColor(idDownLeft, "sand");
-                CellTools.SetCellColor(id, "none");
-                return;
-            }
-        }
+       
         
         
     }

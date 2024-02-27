@@ -2,6 +2,7 @@
 
 // See https://aka.ms/new-console-template for more information
 
+using System.Diagnostics;
 using System.Numerics;
 using Render;
 using Silk.NET.Input;
@@ -18,6 +19,10 @@ namespace PixelForge {
 		static RenderPipeline _renderPipeline;
 		static Systems _systems = new Systems();
 		static Contexts _contexts = new Contexts();
+		
+		private static Stopwatch _stopwatch = new Stopwatch();
+		private static int _frameCount = 0;
+		private static float _fps = 0;
 
 		public void Stop() {
 			_window.Close();
@@ -37,7 +42,8 @@ namespace PixelForge {
 
 			_window = Window.Create( options );
 
-
+			_stopwatch.Start();
+			
 			_window.Load += OnLoad;
 			_window.Update += OnUpdate;
 			_window.Render += OnRender;
@@ -58,6 +64,16 @@ namespace PixelForge {
 		}
 
 		static void OnUpdate( double deltaTime ) {
+			_frameCount++;
+			if (_stopwatch.ElapsedMilliseconds >= 1000)
+			{
+				_fps = _frameCount;
+				_frameCount = 0;
+				_stopwatch.Restart();
+			}
+			
+			_window.Title = $"{GameSetting.Name} - FPS: {_fps}";
+
 			//在update的最开始执行
 			EarlyUpdate( deltaTime );
 			//在update的中间执行
