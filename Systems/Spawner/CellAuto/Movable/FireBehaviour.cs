@@ -12,7 +12,6 @@ public class FireBehaviour : ICellBehaviour
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire) { CellAutomationSystem._cellEntities[idSource].RemoveComponentFire(); }
         CellAutomationSystem._cellEntities[idSource].isComponentSmoke = true;
         
-        
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
