@@ -16,28 +16,29 @@ public static class GameComponentsLookup {
     public const int ComponentCellUpdate = 5;
     public const int ComponentExplodeFire = 6;
     public const int ComponentFire = 7;
-    public const int ComponentName = 8;
-    public const int ComponentParent = 9;
-    public const int ComponentPosition = 10;
-    public const int ComponentRotation = 11;
-    public const int ComponentSand = 12;
-    public const int ComponentSize = 13;
-    public const int ComponentSmoke = 14;
-    public const int ComponentSteam = 15;
-    public const int ComponentStone = 16;
-    public const int ComponentTexture = 17;
-    public const int ComponentWater = 18;
-    public const int ComponentWood = 19;
-    public const int LightCircleLight = 20;
-    public const int LightGlobalLight = 21;
-    public const int MatPara = 22;
-    public const int MatRenderSingle = 23;
-    public const int MatSpriteInstanceRenderer = 24;
-    public const int ppBloom = 25;
-    public const int ppGaussianBlur = 26;
-    public const int ppLightSetting = 27;
+    public const int ComponentLiquid = 8;
+    public const int ComponentName = 9;
+    public const int ComponentParent = 10;
+    public const int ComponentPosition = 11;
+    public const int ComponentRotation = 12;
+    public const int ComponentSand = 13;
+    public const int ComponentSize = 14;
+    public const int ComponentSmoke = 15;
+    public const int ComponentSteam = 16;
+    public const int ComponentStone = 17;
+    public const int ComponentTexture = 18;
+    public const int ComponentWater = 19;
+    public const int ComponentWood = 20;
+    public const int LightCircleLight = 21;
+    public const int LightGlobalLight = 22;
+    public const int MatPara = 23;
+    public const int MatRenderSingle = 24;
+    public const int MatSpriteInstanceRenderer = 25;
+    public const int ppBloom = 26;
+    public const int ppGaussianBlur = 27;
+    public const int ppLightSetting = 28;
 
-    public const int TotalComponents = 28;
+    public const int TotalComponents = 29;
 
     public static readonly string[] componentNames = {
         "ComponentAcid",
@@ -48,6 +49,7 @@ public static class GameComponentsLookup {
         "ComponentCellUpdate",
         "ComponentExplodeFire",
         "ComponentFire",
+        "ComponentLiquid",
         "ComponentName",
         "ComponentParent",
         "ComponentPosition",
@@ -79,6 +81,7 @@ public static class GameComponentsLookup {
         typeof(Component.CellUpdateComponent),
         typeof(Component.ExplodeFireComponent),
         typeof(Component.FireComponent),
+        typeof(Component.LiquidComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
         typeof(Component.PositionComponent),

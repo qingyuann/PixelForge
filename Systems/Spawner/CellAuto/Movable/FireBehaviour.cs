@@ -1,10 +1,9 @@
+using System.Net;
 using PixelForge.Tools;
 
 namespace PixelForge.Spawner.CellAuto.Movable;
 
 //Todo: Add a fire spread max time
-
-
 
 public class FireBehaviour : ICellBehaviour
 {
@@ -12,7 +11,8 @@ public class FireBehaviour : ICellBehaviour
     {
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire) { CellAutomationSystem._cellEntities[idSource].RemoveComponentFire(); }
         CellAutomationSystem._cellEntities[idSource].isComponentSmoke = true;
-
+        
+        
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
@@ -24,6 +24,7 @@ public class FireBehaviour : ICellBehaviour
     {
         CellAutomationSystem._cellEntities[idTarget].isComponentCellularAutomation = true;
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) {CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50);}
+        
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire){CellAutomationSystem._cellEntities[idSource].RemoveComponentFire();}
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
@@ -32,7 +33,7 @@ public class FireBehaviour : ICellBehaviour
         CellTools.SetCellColor(idSource, "none");
     }
 
-    public static void FireWithWater(int idSource, int idTarget)
+    private static void FireWithWater(int idSource, int idTarget)
     {
         // become water steam
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
@@ -41,11 +42,41 @@ public class FireBehaviour : ICellBehaviour
             CellAutomationSystem._cellEntities[idSource].RemoveComponentFire();
         }
 
+        if (CellAutomationSystem._cellEntities[idTarget].hasComponentLiquid)
+        {
+            CellAutomationSystem._cellEntities[idTarget].RemoveComponentLiquid();
+        }
+        
         CellAutomationSystem._cellEntities[idTarget].isComponentSteam = true;
         
         CellTools.SetCellColor(idTarget, "steam");
         CellTools.SetCellColor(idSource, "none");
     }
+
+    private static void FireWithLiquid(int idSource, int idTarget)
+    {
+        // with oil, spread fast, even with explosion
+        switch (CellAutomationSystem._cellEntities[idTarget].componentLiquid.Flammability)
+        {
+            case 0:
+                // not flammable
+                FireWithWater(idSource, idTarget);
+                if (CellAutomationSystem._cellEntities[idTarget].hasComponentLiquid) {CellAutomationSystem._cellEntities[idTarget].RemoveComponentLiquid();}
+                break;
+            case 1:
+                // flammable
+                FireSpread(idSource, idTarget);
+                if (CellAutomationSystem._cellEntities[idTarget].hasComponentLiquid) {CellAutomationSystem._cellEntities[idTarget].RemoveComponentLiquid();}
+                break;
+           
+        }
+        // with water, become steam
+        
+        
+        // with acid and lava, become smoke
+        
+    }
+    
     
     public static void Act(int i, int j)
     {
@@ -86,57 +117,142 @@ public class FireBehaviour : ICellBehaviour
             case 0:
                 if (idTop != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idTop].isComponentWater) { FireWithWater(id, idTop); return; }
-                    if (CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTop].hasComponentFire) { FireSpread(id, idTop); flag = true;}
+                    //if (CellAutomationSystem._cellEntities[idTop].isComponentWater) { FireWithWater(id, idTop); return; }
+                    if (CellAutomationSystem._cellEntities[idTop].hasComponentLiquid) { 
+                        FireWithLiquid(id, idTop); 
+                        flag = true;
+                        
+                    }
+                    
+                    //has something to burn, spread
+                    else if (CellAutomationSystem._cellEntities[idTop].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idTop].hasComponentFire)
+                    {
+                        FireSpread(id, idTop); 
+                        flag = true;
+                        
+                    }
                 }
                 break;
+            
             case 1:
                 if (idDown != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idDown].isComponentWater) { FireWithWater(id, idDown); return; }
-                    if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDown].hasComponentFire) { FireSpread(id, idDown); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idDown].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idDown); 
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idDown].hasComponentFire)
+                    {
+                        FireSpread(id, idDown); 
+                        flag = true;
+                    }
                 }
                 break;
+            
             case 2:
                 if (idLeft != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idLeft].isComponentWater) { FireWithWater(id, idLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idLeft].hasComponentFire) { FireSpread(id, idLeft); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idLeft].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idLeft);
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idLeft].hasComponentFire)
+                    {
+                        FireSpread(id, idLeft); 
+                        flag = true;
+                    }
                 }
                 break;
             case 3:
                 if (idRight != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idRight].isComponentWater) { FireWithWater(id, idRight); return; }
-                    if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idRight].hasComponentFire) { FireSpread(id, idRight); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idRight].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idRight); 
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idRight].hasComponentFire)
+                    {
+                        FireSpread(id, idRight); 
+                        flag = true;
+                    }
                 }
                 break;
             case 4:
                 if (idDownLeft != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentWater) { FireWithWater(id, idDownLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownLeft].hasComponentFire) { FireSpread(id, idDownLeft); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idDownLeft].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idDownLeft);
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idDownLeft].hasComponentFire)
+                    {
+                        FireSpread(id, idDownLeft); 
+                        flag = true;
+                    }
                 }
                 break;
             case 5:
                 if (idDownRight != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentWater) { FireWithWater(id, idDownRight); return; }
-                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idDownRight].hasComponentFire) { FireSpread(id, idDownRight); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idDownRight].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idDownRight);
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idDownRight].hasComponentFire)
+                    {
+                        FireSpread(id, idDownRight); 
+                        flag = true;
+                    }
                 }
                 break;
             case 6:
                 if (idTopLeft != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentWater) { FireWithWater(id, idTopLeft); return; }
-                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopLeft].hasComponentFire) { FireSpread(id, idTopLeft); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idTopLeft].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idTopLeft); 
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idTopLeft].hasComponentFire)
+                    {
+                        FireSpread(id, idTopLeft); 
+                        flag = true;
+                    }
                 }
                 break;
             case 7:
                 if (idTopRight != -1)
                 {
-                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentWater) { FireWithWater(id, idTopRight); return; }
-                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation & !CellAutomationSystem._cellEntities[idTopRight].hasComponentFire) { FireSpread(id, idTopRight); flag = true;}
+                    if (CellAutomationSystem._cellEntities[idTopRight].hasComponentLiquid)
+                    {
+                        FireWithLiquid(id, idTopRight); 
+                        flag = true;
+                    }
+
+                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation &&
+                        !CellAutomationSystem._cellEntities[idTopRight].hasComponentFire)
+                    {
+                        FireSpread(id, idTopRight);
+                        flag = true;
+                    }
                 }
                 break;
             

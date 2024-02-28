@@ -71,6 +71,16 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             TestGenerateBombFire();
         }
         
+        if (InputSystem.GetKeyDown(Key.I))
+        {
+            TestGenerateOli();
+        }
+        
+        if (InputSystem.GetKeyDown(Key.O))
+        {
+            TestGenerateAcid();
+        }
+        
         
         // from bottom to top, from right to left
         for(int j = _height-1; j >= 0; j--)
@@ -93,18 +103,25 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                     }
                     
                     
+                    if (e.hasComponentLiquid)
+                    {
+                        LiquidBehaviour.Act(i, j);
+                        continue;
+                    }
+                    
                     if (e.isComponentSand)
                     {
                         SandBehaviour.Act(i, j);
                         continue;
                     }
-                
+                    
+                    /*
                     if (e.isComponentWater)
                     {
                         WaterBehaviour.Act(i, j);
                         continue;
                     }
-                    
+                    */
                     
                 }
                 e.isComponentCellUpdate = true;
@@ -138,7 +155,9 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         }
         
     }
+
     
+
     private void InitCellEntities()
     {
         for (int i = 0; i < _width * _height; i++)
@@ -261,7 +280,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         CellTools.SetCellColor(index, "sand");
     }
     
-    private void TestGenerateWater()
+    private void TestGenerateOli()
     {
         
         var x = (int) (0.5 * _width);
@@ -272,10 +291,44 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         //Debug.Log("index" + index);
         var e = _cellEntities[index];
         e.isComponentCellularAutomation = true;
-        e.isComponentWater = true;
+        //e.isComponentWater = true;
+        if(!e.hasComponentLiquid){e.AddComponentLiquid("oli", 0,1);}
+
+        CellTools.SetCellColor(index, "oli");
+    }
+    
+    private void TestGenerateWater()
+    {
+        var x = (int) (0.5 * _width);
+        var y = (int) (0.2 * _height);
+        
+        var index = CellTools.ComputeIndex(x, y);
+    
+        //Debug.Log("index" + index);
+        var e = _cellEntities[index];
+        e.isComponentCellularAutomation = true;
+        //e.isComponentWater = true;
+        if(!e.hasComponentLiquid){e.AddComponentLiquid("water", 1,0);}
 
         CellTools.SetCellColor(index, "water");
     }
+    
+    private void TestGenerateAcid()
+    {
+        var x = (int) (0.5 * _width);
+        var y = (int) (0.2 * _height);
+        
+        var index = CellTools.ComputeIndex(x, y);
+    
+        //Debug.Log("index" + index);
+        var e = _cellEntities[index];
+        e.isComponentCellularAutomation = true;
+        //e.isComponentWater = true;
+        if(!e.hasComponentLiquid){e.AddComponentLiquid("acid", 2,1);}
+
+        CellTools.SetCellColor(index, "acid");
+    }
+    
     
     private void TestGenerateFire()
     {

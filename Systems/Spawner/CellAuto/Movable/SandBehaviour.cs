@@ -37,6 +37,12 @@ public class SandBehaviour : ICellBehaviour
                 SwitchSandWater(id, idDown);
                 return;
             }
+            if (CellAutomationSystem._cellEntities[idDown].hasComponentLiquid)
+            {
+                SwitchSandLiquid(id, idDown);
+                return;
+            }
+            
             if (!CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation)
             {
                 MoveToTarget(id, idDown);
@@ -53,7 +59,6 @@ public class SandBehaviour : ICellBehaviour
             }
         }
         
-
         if(idDownRight != -1)
         {
             if(!CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation)
@@ -63,8 +68,6 @@ public class SandBehaviour : ICellBehaviour
                 return;
             }
         }
-        
-       
         
         
     }
@@ -91,4 +94,21 @@ public class SandBehaviour : ICellBehaviour
         CellTools.SetCellColor(idWater, "sand");
         CellTools.SetCellColor(idSand, "water");
     }
+
+    private static void SwitchSandLiquid(int idSand, int idLiquid)
+    {
+        var coty = CellAutomationSystem._cellEntities[idLiquid].componentLiquid.ColorType;
+        var den = CellAutomationSystem._cellEntities[idLiquid].componentLiquid.Density;
+        var flam = CellAutomationSystem._cellEntities[idLiquid].componentLiquid.Flammability;
+        
+        CellAutomationSystem._cellEntities[idLiquid].isComponentSand = true;
+        CellAutomationSystem._cellEntities[idLiquid].RemoveComponentLiquid();
+        
+        CellAutomationSystem._cellEntities[idSand].AddComponentLiquid(coty, den, flam);
+        CellAutomationSystem._cellEntities[idSand].isComponentSand = false;
+        
+        CellTools.SetCellColor(idLiquid, "sand");
+        CellTools.SetCellColor(idSand, coty);
+    }
+    
 }

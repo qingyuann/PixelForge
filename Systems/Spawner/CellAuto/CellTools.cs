@@ -6,10 +6,13 @@ public class CellTools
 {
     private static readonly List<byte> SandColor = new List<byte>{ 194, 178, 128, 255 };
     private static readonly List<byte> WaterColor = new List<byte>{ 135, 206, 250, 255 };
+    private static readonly List<byte> AcidColor = new List<byte>{ 76, 187, 23, 255 };
+    private static readonly List<byte> LavaColor = new List<byte>{ 255, 69, 0, 255 };
+    private static readonly List<byte> OliColor = new List<byte>{ 59, 41, 30, 255 };
     private static readonly List<byte> StoneColor = new List<byte>{ 153, 101, 40, 255 };
     private static readonly List<byte> FireColor = new List<byte>{ 255, 165, 0, 255 };
     private static readonly List<byte> SteamColor = new List<byte> { 255, 220, 220, 150};
-    private static readonly List<byte> SmokeColor = new List<byte> { 45, 45, 45, 150};
+    private static readonly List<byte> SmokeColor = new List<byte> { 45, 45, 45, 200};
     private static readonly List<byte> BombFireColor1 = new List<byte> { 255, 215, 0, 255};
     private static readonly List<byte> BombFireColor2 = new List<byte> { 255, 165, 0, 255};
     private static readonly List<byte> BombFireColor3 = new List<byte> { 255, 0, 0, 255};
@@ -37,6 +40,8 @@ public class CellTools
             CellAutomationSystem._cellColors[offset + 1] = SandColor[1];
             CellAutomationSystem._cellColors[offset + 2] = SandColor[2];
             CellAutomationSystem._cellColors[offset + 3] = SandColor[3];
+            
+            return;
         }
 
         if (colorType == "none")
@@ -46,6 +51,8 @@ public class CellTools
             CellAutomationSystem._cellColors[offset + 1] = 0;
             CellAutomationSystem._cellColors[offset + 2] = 0;
             CellAutomationSystem._cellColors[offset + 3] = 0;
+            
+            return;
         }
         
         if (colorType == "water")
@@ -55,7 +62,44 @@ public class CellTools
             CellAutomationSystem._cellColors[offset + 1] = WaterColor[1];
             CellAutomationSystem._cellColors[offset + 2] = WaterColor[2];
             CellAutomationSystem._cellColors[offset + 3] = WaterColor[3];
+            
+            return;
         }
+        
+        if (colorType == "oli")
+        {
+            var offset = index * 4;
+            CellAutomationSystem._cellColors[offset] = OliColor[0];
+            CellAutomationSystem._cellColors[offset + 1] = OliColor[1];
+            CellAutomationSystem._cellColors[offset + 2] = OliColor[2];
+            CellAutomationSystem._cellColors[offset + 3] = OliColor[3];
+            
+            return;
+        }
+        
+        if (colorType == "lava")
+        {
+            var offset = index * 4;
+            CellAutomationSystem._cellColors[offset] = LavaColor[0];
+            CellAutomationSystem._cellColors[offset + 1] = LavaColor[1];
+            CellAutomationSystem._cellColors[offset + 2] = LavaColor[2];
+            CellAutomationSystem._cellColors[offset + 3] = LavaColor[3];
+            
+            return;
+        }
+        
+        if (colorType == "acid")
+        {
+            var offset = index * 4;
+            CellAutomationSystem._cellColors[offset] = AcidColor[0];
+            CellAutomationSystem._cellColors[offset + 1] = AcidColor[1];
+            CellAutomationSystem._cellColors[offset + 2] = AcidColor[2];
+            CellAutomationSystem._cellColors[offset + 3] = AcidColor[3];
+            
+            return;
+        }
+        
+        
         
         if (colorType == "stone")
         {
@@ -124,6 +168,8 @@ public class CellTools
                     CellAutomationSystem._cellColors[offset + 3] = BombFireColor4[3];
                     break;
             }
+
+            
             
             
         }
