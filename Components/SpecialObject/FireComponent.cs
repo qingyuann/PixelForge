@@ -6,4 +6,5 @@ namespace Component;
 public class FireComponent : IComponent
 {
     public int LifeTime;
+    public int SpreadTime;
 }

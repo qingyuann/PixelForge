@@ -9,10 +9,13 @@ public class FireBehaviour : ICellBehaviour
 {
     private static void FireSpread(int idSource, int idTarget)
     {
+        var spt = CellAutomationSystem._cellEntities[idSource].componentFire.SpreadTime - 1;
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire) { CellAutomationSystem._cellEntities[idSource].RemoveComponentFire(); }
         CellAutomationSystem._cellEntities[idSource].isComponentSmoke = true;
         
-        if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50); }
+        if (CellAutomationSystem._cellEntities[idTarget].hasComponentLiquid) { CellAutomationSystem._cellEntities[idTarget].RemoveComponentLiquid(); }
+        CellAutomationSystem._cellEntities[idTarget].isComponentSand = false;
+        if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50, spt); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
         CellTools.SetCellColor(idTarget, "fire");
@@ -21,8 +24,9 @@ public class FireBehaviour : ICellBehaviour
     
     private static void MoveToTarget(int idSource, int idTarget)
     {
+        var spt = CellAutomationSystem._cellEntities[idSource].componentFire.SpreadTime;
         CellAutomationSystem._cellEntities[idTarget].isComponentCellularAutomation = true;
-        if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) {CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50);}
+        if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) {CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50, spt);}
         
         CellAutomationSystem._cellEntities[idSource].isComponentCellularAutomation = false;
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire){CellAutomationSystem._cellEntities[idSource].RemoveComponentFire();}
@@ -54,7 +58,7 @@ public class FireBehaviour : ICellBehaviour
 
     private static void FireWithLiquid(int idSource, int idTarget)
     {
-        // with oil, spread fast, even with explosion
+        
         switch (CellAutomationSystem._cellEntities[idTarget].componentLiquid.Flammability)
         {
             case 0:
@@ -69,11 +73,6 @@ public class FireBehaviour : ICellBehaviour
                 break;
            
         }
-        // with water, become steam
-        
-        
-        // with acid and lava, become smoke
-        
     }
     
     
@@ -92,11 +91,14 @@ public class FireBehaviour : ICellBehaviour
         
         // randomly spread to test surroundings
         var ran = RandomTool.Range(0, 8);
+        
+        
 
         if (CellAutomationSystem._cellEntities[id].hasComponentFire)
         {
             if(CellAutomationSystem._cellEntities[id].componentFire.LifeTime > 0)
                 CellAutomationSystem._cellEntities[id].componentFire.LifeTime -= 1;
+            
             else
             {
                 if (CellAutomationSystem._cellEntities[id].hasComponentFire)
@@ -106,6 +108,14 @@ public class FireBehaviour : ICellBehaviour
                     CellTools.SetCellColor(id, "none");
                     return;
                 }
+            }
+            
+            if (CellAutomationSystem._cellEntities[id].componentFire.SpreadTime <= 0)
+            {
+                CellAutomationSystem._cellEntities[id].RemoveComponentFire();
+                CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;
+                CellTools.SetCellColor(id, "none");
+                return;
             }
         }
         
@@ -143,7 +153,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idDown].hasComponentFire)
                     {
                         FireSpread(id, idDown); 
@@ -161,7 +171,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idLeft].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idLeft].hasComponentFire)
                     {
                         FireSpread(id, idLeft); 
@@ -178,7 +188,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idRight].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idRight].hasComponentFire)
                     {
                         FireSpread(id, idRight); 
@@ -195,7 +205,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idDownLeft].hasComponentFire)
                     {
                         FireSpread(id, idDownLeft); 
@@ -212,7 +222,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idDownRight].hasComponentFire)
                     {
                         FireSpread(id, idDownRight); 
@@ -229,7 +239,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idTopLeft].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idTopLeft].hasComponentFire)
                     {
                         FireSpread(id, idTopLeft); 
@@ -246,7 +256,7 @@ public class FireBehaviour : ICellBehaviour
                         flag = true;
                     }
 
-                    if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation &&
+                    else if (CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation &&
                         !CellAutomationSystem._cellEntities[idTopRight].hasComponentFire)
                     {
                         FireSpread(id, idTopRight);

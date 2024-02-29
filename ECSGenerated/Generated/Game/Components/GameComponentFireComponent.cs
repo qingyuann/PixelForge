@@ -11,17 +11,19 @@ public partial class GameEntity {
     public Component.FireComponent componentFire { get { return (Component.FireComponent)GetComponent(GameComponentsLookup.ComponentFire); } }
     public bool hasComponentFire { get { return HasComponent(GameComponentsLookup.ComponentFire); } }
 
-    public void AddComponentFire(int newLifeTime) {
+    public void AddComponentFire(int newLifeTime, int newSpreadTime) {
         var index = GameComponentsLookup.ComponentFire;
         var component = (Component.FireComponent)CreateComponent(index, typeof(Component.FireComponent));
         component.LifeTime = newLifeTime;
+        component.SpreadTime = newSpreadTime;
         AddComponent(index, component);
     }
 
-    public void ReplaceComponentFire(int newLifeTime) {
+    public void ReplaceComponentFire(int newLifeTime, int newSpreadTime) {
         var index = GameComponentsLookup.ComponentFire;
         var component = (Component.FireComponent)CreateComponent(index, typeof(Component.FireComponent));
         component.LifeTime = newLifeTime;
+        component.SpreadTime = newSpreadTime;
         ReplaceComponent(index, component);
     }
 

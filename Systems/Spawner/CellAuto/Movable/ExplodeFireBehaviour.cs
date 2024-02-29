@@ -38,7 +38,7 @@ public class ExplodeFireBehaviour : ICellBehaviour
                 if (CellAutomationSystem._cellEntities[id].hasComponentExplodeFire)
                 {
                     CellAutomationSystem._cellEntities[id].RemoveComponentExplodeFire();
-                    CellAutomationSystem._cellEntities[id].AddComponentFire(20);
+                    CellAutomationSystem._cellEntities[id].AddComponentFire(20, 3);
                     CellTools.SetCellColor(id, "fire");
                     return;
                 }

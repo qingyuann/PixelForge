@@ -64,7 +64,6 @@ public class SandBehaviour : ICellBehaviour
             if(!CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation)
             {
                 MoveToTarget(id, idDownRight);
-                
                 return;
             }
         }

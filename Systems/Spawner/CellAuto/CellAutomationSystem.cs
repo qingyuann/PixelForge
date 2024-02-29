@@ -81,7 +81,6 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             TestGenerateAcid();
         }
         
-        
         // from bottom to top, from right to left
         for(int j = _height-1; j >= 0; j--)
             for (int i = _width-1; i >= 0; i--)
@@ -91,24 +90,19 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 {
                     if (e.hasComponentFire)
                     {
-                    
                         FireBehaviour.Act(i, j);
                         continue;
                     }
-
                     if (e.hasComponentExplodeFire)
                     {
                         ExplodeFireBehaviour.Act(i, j);
                         continue;
                     }
-                    
-                    
                     if (e.hasComponentLiquid)
                     {
                         LiquidBehaviour.Act(i, j);
                         continue;
                     }
-                    
                     if (e.isComponentSand)
                     {
                         SandBehaviour.Act(i, j);
@@ -255,7 +249,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                         var e = _cellEntities[index];
                         e.isComponentCellularAutomation = true;
-                        if(!e.hasComponentFire){e.AddComponentFire(300);}
+                        if(!e.hasComponentFire){e.AddComponentFire(200, 5);}
 
                         CellTools.SetCellColor(index, "fire");
                     }
@@ -341,7 +335,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         //Debug.Log("index" + index);
         var e = _cellEntities[index];
         e.isComponentCellularAutomation = true;
-        e.AddComponentFire(300);
+        e.AddComponentFire(300, 5);
 
         CellTools.SetCellColor(index, "fire");
     }
