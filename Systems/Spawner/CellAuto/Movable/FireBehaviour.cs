@@ -3,7 +3,7 @@ using PixelForge.Tools;
 
 namespace PixelForge.Spawner.CellAuto.Movable;
 
-//Todo: Add a fire spread max time
+
 
 public class FireBehaviour : ICellBehaviour
 {
@@ -15,6 +15,7 @@ public class FireBehaviour : ICellBehaviour
         
         if (CellAutomationSystem._cellEntities[idTarget].hasComponentLiquid) { CellAutomationSystem._cellEntities[idTarget].RemoveComponentLiquid(); }
         CellAutomationSystem._cellEntities[idTarget].isComponentSand = false;
+        CellAutomationSystem._cellEntities[idTarget].isComponentStone = false;
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50, spt); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
@@ -272,6 +273,7 @@ public class FireBehaviour : ICellBehaviour
             if(idDown != -1)
                 if (!CellAutomationSystem._cellEntities[idDown].isComponentCellularAutomation)
                     MoveToTarget(id, idDown);
+            return;
         }
         
         

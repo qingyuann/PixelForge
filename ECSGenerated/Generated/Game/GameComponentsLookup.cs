@@ -19,26 +19,27 @@ public static class GameComponentsLookup {
     public const int ComponentLiquid = 8;
     public const int ComponentName = 9;
     public const int ComponentParent = 10;
-    public const int ComponentPosition = 11;
-    public const int ComponentRotation = 12;
-    public const int ComponentSand = 13;
-    public const int ComponentSize = 14;
-    public const int ComponentSmoke = 15;
-    public const int ComponentSteam = 16;
-    public const int ComponentStone = 17;
-    public const int ComponentTexture = 18;
-    public const int ComponentWater = 19;
-    public const int ComponentWood = 20;
-    public const int LightCircleLight = 21;
-    public const int LightGlobalLight = 22;
-    public const int MatPara = 23;
-    public const int MatRenderSingle = 24;
-    public const int MatSpriteInstanceRenderer = 25;
-    public const int ppBloom = 26;
-    public const int ppGaussianBlur = 27;
-    public const int ppLightSetting = 28;
+    public const int ComponentPlayer = 11;
+    public const int ComponentPosition = 12;
+    public const int ComponentRotation = 13;
+    public const int ComponentSand = 14;
+    public const int ComponentSize = 15;
+    public const int ComponentSmoke = 16;
+    public const int ComponentSteam = 17;
+    public const int ComponentStone = 18;
+    public const int ComponentTexture = 19;
+    public const int ComponentWater = 20;
+    public const int ComponentWood = 21;
+    public const int LightCircleLight = 22;
+    public const int LightGlobalLight = 23;
+    public const int MatPara = 24;
+    public const int MatRenderSingle = 25;
+    public const int MatSpriteInstanceRenderer = 26;
+    public const int ppBloom = 27;
+    public const int ppGaussianBlur = 28;
+    public const int ppLightSetting = 29;
 
-    public const int TotalComponents = 29;
+    public const int TotalComponents = 30;
 
     public static readonly string[] componentNames = {
         "ComponentAcid",
@@ -52,6 +53,7 @@ public static class GameComponentsLookup {
         "ComponentLiquid",
         "ComponentName",
         "ComponentParent",
+        "ComponentPlayer",
         "ComponentPosition",
         "ComponentRotation",
         "ComponentSand",
@@ -84,6 +86,7 @@ public static class GameComponentsLookup {
         typeof(Component.LiquidComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
+        typeof(Component.PlayerComponent),
         typeof(Component.PositionComponent),
         typeof(Component.RotationComponent),
         typeof(Component.SandComponent),

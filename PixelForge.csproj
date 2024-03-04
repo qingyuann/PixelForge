@@ -11,6 +11,7 @@
     <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Box2D.NetStandard" Version="1.0.4" />
     <PackageReference Include="Entitas" Version="1.14.2" />
     <PackageReference Include="Entitas.CodeGeneration.Plugins" Version="1.14.2" />
     <PackageReference Include="Jenny.Generator.Cli" Version="1.2.0" />

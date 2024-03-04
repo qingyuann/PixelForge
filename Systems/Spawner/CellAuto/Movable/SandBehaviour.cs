@@ -50,20 +50,22 @@ public class SandBehaviour : ICellBehaviour
             }
         }
         
-        if (idDownLeft != -1)
-        {
-            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
-            {
-                MoveToTarget(id, idDownLeft);
-                return;
-            }
-        }
+        
         
         if(idDownRight != -1)
         {
             if(!CellAutomationSystem._cellEntities[idDownRight].isComponentCellularAutomation)
             {
                 MoveToTarget(id, idDownRight);
+                return;
+            }
+        }
+        
+        if (idDownLeft != -1)
+        {
+            if (!CellAutomationSystem._cellEntities[idDownLeft].isComponentCellularAutomation)
+            {
+                MoveToTarget(id, idDownLeft);
                 return;
             }
         }
@@ -103,7 +105,7 @@ public class SandBehaviour : ICellBehaviour
         CellAutomationSystem._cellEntities[idLiquid].isComponentSand = true;
         CellAutomationSystem._cellEntities[idLiquid].RemoveComponentLiquid();
         
-        CellAutomationSystem._cellEntities[idSand].AddComponentLiquid(coty, den, flam);
+        if(!CellAutomationSystem._cellEntities[idSand].hasComponentLiquid){CellAutomationSystem._cellEntities[idSand].AddComponentLiquid(coty, den, flam);}
         CellAutomationSystem._cellEntities[idSand].isComponentSand = false;
         
         CellTools.SetCellColor(idLiquid, "sand");

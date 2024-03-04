@@ -12,7 +12,7 @@ public class CellTools
     private static readonly List<byte> StoneColor = new List<byte>{ 153, 101, 40, 255 };
     private static readonly List<byte> FireColor = new List<byte>{ 255, 165, 0, 255 };
     private static readonly List<byte> SteamColor = new List<byte> { 255, 220, 220, 150};
-    private static readonly List<byte> SmokeColor = new List<byte> { 45, 45, 45, 200};
+    private static readonly List<byte> SmokeColor = new List<byte> { 120, 100, 100, 250};
     private static readonly List<byte> BombFireColor1 = new List<byte> { 255, 215, 0, 255};
     private static readonly List<byte> BombFireColor2 = new List<byte> { 255, 165, 0, 255};
     private static readonly List<byte> BombFireColor3 = new List<byte> { 255, 0, 0, 255};

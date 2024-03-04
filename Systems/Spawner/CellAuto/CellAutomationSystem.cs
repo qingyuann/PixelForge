@@ -39,23 +39,26 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
         foreach(var e in _cellRenderGroup.GetEntities())
         {
-            if(e.hasMatRenderSingle && e.matRenderSingle.Renderer is not null)
+            if (e.componentName.Name == "quad3")
             {
-                SetTexture(e);
+                if (e.hasMatRenderSingle && e.matRenderSingle.Renderer is not null)
+                {
+                    SetTexture(e);
+                }
             }
         }
         
-        TestGenerateStone();
+        //TestGenerateStone();
         
         //generate a sand on click position
-        InputSystem.AddMouseDownEvent( OnMouseDown );
+        //InputSystem.AddMouseDownEvent( OnMouseDown );
     }
     
     
     
     public void Execute()
     {
-        
+        /*
         if (InputSystem.GetKey(Key.K))
         {
             TestGenerateSand();
@@ -80,6 +83,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         {
             TestGenerateAcid();
         }
+        */
         
         // from bottom to top, from right to left
         for(int j = _height-1; j >= 0; j--)
@@ -93,9 +97,9 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                         FireBehaviour.Act(i, j);
                         continue;
                     }
-                    if (e.hasComponentExplodeFire)
+                    if (e.isComponentSand)
                     {
-                        ExplodeFireBehaviour.Act(i, j);
+                        SandBehaviour.Act(i, j);
                         continue;
                     }
                     if (e.hasComponentLiquid)
@@ -103,12 +107,12 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                         LiquidBehaviour.Act(i, j);
                         continue;
                     }
-                    if (e.isComponentSand)
+                    
+                    if (e.hasComponentExplodeFire)
                     {
-                        SandBehaviour.Act(i, j);
+                        ExplodeFireBehaviour.Act(i, j);
                         continue;
                     }
-                    
                     /*
                     if (e.isComponentWater)
                     {
@@ -141,10 +145,14 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         //update the color of the texture
         foreach(var e in _cellRenderGroup.GetEntities())
         {
-            if( e.matRenderSingle.Renderer is not null )
+            if (e.componentName.Name == "quad3")
             {
-                //Debug.Log("update texture");
-                e.matRenderSingle.Renderer.Textures["MainTex"].UpdateImageContent( _cellColors, (uint)_width, (uint)_height );
+                if (e.matRenderSingle.Renderer is not null)
+                {
+                    //Debug.Log("update texture");
+                    e.matRenderSingle.Renderer.Textures["MainTex"]
+                        .UpdateImageContent(_cellColors, (uint)_width, (uint)_height);
+                }
             }
         }
         
@@ -184,8 +192,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
         if (button == MouseButton.Left)
         {
-            var x = (int) (mouse.Position.X / 1000 * _width);
-            var y = (int)(mouse.Position.Y / 1000 * _height);
+            var x = (int) (mouse.Position.X / GameSetting.WindowWidth * _width);
+            var y = (int)(mouse.Position.Y / GameSetting.WindowHeight * _height);
             
             //Debug.Log("x: " + x + " y: " + y);
             
@@ -222,8 +230,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
         if (button == MouseButton.Right)
         {
-            var x = (int) (mouse.Position.X / 1000 * _width);
-            var y = (int)(mouse.Position.Y / 1000 * _height);
+            var x = (int) (mouse.Position.X / GameSetting.WindowWidth * _width);
+            var y = (int)(mouse.Position.Y / GameSetting.WindowHeight * _height);
             
             //Debug.Log("x: " + x + " y: " + y);
            
@@ -258,72 +266,186 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         }
     }
 
-    private void TestGenerateSand()
+    public static void TestGenerateSand(int x, int y)
     {
-        
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.2 * _height);
-        
-        var index = CellTools.ComputeIndex(x, y);
-    
-        //Debug.Log("index" + index);
-        var e = _cellEntities[index];
-        e.isComponentCellularAutomation = true;
-        e.isComponentSand = true;
+        int widthSize = 20;
+        int heightSize = 10;
+        Random random = new Random();
+            
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
 
-        CellTools.SetCellColor(index, "sand");
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    e.isComponentSand = true;
+
+                    CellTools.SetCellColor(index, "sand");
+                }
+            }
+        }
     }
     
-    private void TestGenerateOli()
+    public static void TestGenerateOli(int x, int y)
     {
-        
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.2 * _height);
-        
-        var index = CellTools.ComputeIndex(x, y);
-    
-        //Debug.Log("index" + index);
-        var e = _cellEntities[index];
-        e.isComponentCellularAutomation = true;
-        //e.isComponentWater = true;
-        if(!e.hasComponentLiquid){e.AddComponentLiquid("oli", 0,1);}
+        int widthSize = 20; 
+        int heightSize = 10;
+        Random random = new Random();
+            
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
 
-        CellTools.SetCellColor(index, "oli");
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    //e.isComponentWater = true;
+                    if(!e.hasComponentLiquid){e.AddComponentLiquid("oli", 0,1);}
+
+                    CellTools.SetCellColor(index, "oli");
+                }
+            }
+        }
+        
     }
     
-    private void TestGenerateWater()
+    public static void TestGenerateWater(int x, int y)
     {
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.2 * _height);
-        
-        var index = CellTools.ComputeIndex(x, y);
-    
-        //Debug.Log("index" + index);
-        var e = _cellEntities[index];
-        e.isComponentCellularAutomation = true;
-        //e.isComponentWater = true;
-        if(!e.hasComponentLiquid){e.AddComponentLiquid("water", 1,0);}
+        //var x = (int) (0.5 * _width);
+        //var y = (int) (0.2 * _height);
+        int widthSize = 20; 
+        int heightSize = 10;
+        Random random = new Random();
+            
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
 
-        CellTools.SetCellColor(index, "water");
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    if(!e.hasComponentLiquid){e.AddComponentLiquid("water", 1,0);}
+
+                    CellTools.SetCellColor(index, "water");
+                }
+            }
+        }
+        
+
+        
     }
     
-    private void TestGenerateAcid()
+    public static void TestGenerateAcid(int x, int y)
     {
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.2 * _height);
-        
-        var index = CellTools.ComputeIndex(x, y);
-    
-        //Debug.Log("index" + index);
-        var e = _cellEntities[index];
-        e.isComponentCellularAutomation = true;
-        //e.isComponentWater = true;
-        if(!e.hasComponentLiquid){e.AddComponentLiquid("acid", 2,1);}
+        int widthSize = 20; 
+        int heightSize = 10;
+        Random random = new Random();
+            
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
 
-        CellTools.SetCellColor(index, "acid");
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    //e.isComponentWater = true;
+                    if(!e.hasComponentLiquid){e.AddComponentLiquid("acid", 2,1);}
+
+                    CellTools.SetCellColor(index, "acid");
+                }
+            }
+        }
+        
+        
+        
+        
     }
-    
-    
+
+
+
+
+    public static void TestGenerateLava(int x, int y)
+    {
+        int widthSize = 20;
+        int heightSize = 10;
+        Random random = new Random();
+
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
+
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    //e.isComponentWater = true;
+                    if (!e.hasComponentLiquid)
+                    {
+                        e.AddComponentLiquid("lava", 3, 1);
+                    }
+
+                    CellTools.SetCellColor(index, "lava");
+                }
+            }
+        }
+    }
+
+
     private void TestGenerateFire()
     {
         
@@ -367,13 +489,13 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         
     }
 
-    private void TestGenerateStone()
+    public static void TestGenerateStone(int x, int y)
     {
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.6 * _height);
+        //var x = (int) (0.5 * _width);
+        //var y = (int) (0.6 * _height);
         
-        int widthSize = 120; 
-        int heightSize = 20;
+        int widthSize = 10; 
+        int heightSize = 5;
         
             
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
@@ -386,7 +508,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                 if (index == -1)
                 {
-                    Debug.Log("index out of range: " + currentX + ", " + currentY);
+                    //Debug.Log("index out of range: " + currentX + ", " + currentY);
                     continue;
                 }
 
@@ -409,7 +531,6 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
         while (x <= y)
         {
-            // 利用对称性绘制八个点
             points.Add((centerX + x, centerY + y));
             points.Add((centerX + y, centerY + x));
             points.Add((centerX - x, centerY + y));

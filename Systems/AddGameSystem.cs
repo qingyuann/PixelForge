@@ -1,3 +1,5 @@
+using PixelForge.Physics;
+
 namespace PixelForge;
 
 using Entitas;
@@ -21,7 +23,9 @@ public sealed class AddGameSystem : Systems {
 		Add( new BasicMoveSystem( contexts ) );
 		Add( new EnemySystem( contexts, 10 ) );
 		//Add( new CellularAutomatonSystem( contexts ) );
-		Add(new CellAutomationSystem(contexts));
+		Add( new GameDemo() );
+		Add( new CellAutomationSystem( contexts ) );
+		Add( new BoxCollisionSystem( contexts ) );
 
 		//最后处理相机
 		Add( new CameraSystem( contexts ) );

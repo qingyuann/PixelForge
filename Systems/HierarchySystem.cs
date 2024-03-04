@@ -2,6 +2,7 @@
 using Render;
 using Render.PostEffect;
 using System.Numerics;
+using PixelForge.Physics;
 
 namespace PixelForge;
 
@@ -24,7 +25,7 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentRotation( 0 );
 		camera.AddComponentPosition( 0, 0, -1 );
 		camera.AddComponentCamera( 0, true, 2f );
-		camera.AddComponentBasicMove( true, 0.0005f );
+		//camera.AddComponentBasicMove( true, 0.0005f );
 		//camera.AddMatRenderSingle( true, 2, null );
 		
 		
@@ -60,11 +61,18 @@ public class HierarchySystem : IInitializeSystem {
 		var quad3 = _contexts.game.CreateEntity();
 		quad3.AddComponentName( "quad3" );
 		quad3.AddComponentPosition( 0, 0, 0 );
-		quad3.AddComponentSize( 2f, 2f );
+		quad3.AddComponentSize( 1f, 1f );
 		quad3.AddComponentRotation( 0 );
-		quad3.AddMatRenderSingle( true, 0, null );
+		quad3.AddMatRenderSingle( true, 1, null );
 		quad3.isComponentCellAutoTexture = true;
 		
+		var quad4 = _contexts.game.CreateEntity();
+		quad4.AddComponentName( "quad4" );
+		quad4.AddComponentPosition( 0, 0,0 );
+		quad4.AddComponentSize( 0.04f, 0.08f );
+		quad4.AddComponentRotation( 0 );
+		quad4.AddMatRenderSingle( true, 0, null );
+		quad4.isComponentCellAutoTexture = true;
 		
 		/*
 		var quad4 = _contexts.game.CreateEntity();
