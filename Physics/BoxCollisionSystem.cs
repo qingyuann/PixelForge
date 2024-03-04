@@ -158,7 +158,7 @@ public class BoxCollisionSystem : IInitializeSystem, IExecuteSystem
     
     private int GetCellIndex(int x, int y)
     {
-        return CellTools.ComputeIndex(x, 250-y);
+        return CellTools.ComputeIndex(x, 256-y);
     }
     
 

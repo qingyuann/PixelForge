@@ -36,10 +36,10 @@ public class CellTools
         {
             var offset = index * 4;
             //Debug.Log("set sand color");
-            CellAutomationSystem._cellColors[offset] = SandColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = SandColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = SandColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = SandColor[3];
+            CellAutomationSystem._cellColorsSand[offset] = SandColor[0];
+            CellAutomationSystem._cellColorsSand[offset + 1] = SandColor[1];
+            CellAutomationSystem._cellColorsSand[offset + 2] = SandColor[2];
+            CellAutomationSystem._cellColorsSand[offset + 3] = SandColor[3];
             
             return;
         }
@@ -47,21 +47,25 @@ public class CellTools
         if (colorType == "none")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = 0;
-            CellAutomationSystem._cellColors[offset + 1] = 0;
-            CellAutomationSystem._cellColors[offset + 2] = 0;
-            CellAutomationSystem._cellColors[offset + 3] = 0;
             
+            //at this offset set all color list to 0
+            foreach (var colorlist in CellAutomationSystem._cellColorsList)
+            {
+                colorlist[offset] = 0;
+                colorlist[offset + 1] = 0;
+                colorlist[offset + 2] = 0;
+                colorlist[offset + 3] = 0;
+            } 
             return;
         }
         
         if (colorType == "water")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = WaterColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = WaterColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = WaterColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = WaterColor[3];
+            CellAutomationSystem._cellColorsWater[offset] = WaterColor[0];
+            CellAutomationSystem._cellColorsWater[offset + 1] = WaterColor[1];
+            CellAutomationSystem._cellColorsWater[offset + 2] = WaterColor[2];
+            CellAutomationSystem._cellColorsWater[offset + 3] = WaterColor[3];
             
             return;
         }
@@ -69,10 +73,10 @@ public class CellTools
         if (colorType == "oli")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = OliColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = OliColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = OliColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = OliColor[3];
+            CellAutomationSystem._cellColorsOli[offset] = OliColor[0];
+            CellAutomationSystem._cellColorsOli[offset + 1] = OliColor[1];
+            CellAutomationSystem._cellColorsOli[offset + 2] = OliColor[2];
+            CellAutomationSystem._cellColorsOli[offset + 3] = OliColor[3];
             
             return;
         }
@@ -80,10 +84,11 @@ public class CellTools
         if (colorType == "lava")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = LavaColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = LavaColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = LavaColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = LavaColor[3];
+            CellAutomationSystem._cellColorsLava[offset] = LavaColor[0];
+            CellAutomationSystem._cellColorsLava[offset + 1] = LavaColor[1];
+            CellAutomationSystem._cellColorsLava[offset + 2] = LavaColor[2];
+            CellAutomationSystem._cellColorsLava[offset + 3] = LavaColor[3];
+            
             
             return;
         }
@@ -91,10 +96,10 @@ public class CellTools
         if (colorType == "acid")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = AcidColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = AcidColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = AcidColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = AcidColor[3];
+            CellAutomationSystem._cellColorsAcid[offset] = AcidColor[0];
+            CellAutomationSystem._cellColorsAcid[offset + 1] = AcidColor[1];
+            CellAutomationSystem._cellColorsAcid[offset + 2] = AcidColor[2];
+            CellAutomationSystem._cellColorsAcid[offset + 3] = AcidColor[3];
             
             return;
         }
@@ -104,37 +109,46 @@ public class CellTools
         if (colorType == "stone")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = StoneColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = StoneColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = StoneColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = StoneColor[3];
+            CellAutomationSystem._cellColorsStone[offset] = StoneColor[0];
+            CellAutomationSystem._cellColorsStone[offset + 1] = StoneColor[1];
+            CellAutomationSystem._cellColorsStone[offset + 2] = StoneColor[2];
+            CellAutomationSystem._cellColorsStone[offset + 3] = StoneColor[3];
+            
+            return;
         }
         
         if (colorType == "fire")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = FireColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = FireColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = FireColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = FireColor[3];
+            CellAutomationSystem._cellColorsFire[offset] = FireColor[0];
+            CellAutomationSystem._cellColorsFire[offset + 1] = FireColor[1];
+            CellAutomationSystem._cellColorsFire[offset + 2] = FireColor[2];
+            CellAutomationSystem._cellColorsFire[offset + 3] = FireColor[3];
+            
+            return;
         }
 
         if (colorType == "steam")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = SteamColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = SteamColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = SteamColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = SteamColor[3];
+            CellAutomationSystem._cellColorsSteam[offset] = SteamColor[0];
+            CellAutomationSystem._cellColorsSteam[offset + 1] = SteamColor[1];
+            CellAutomationSystem._cellColorsSteam[offset + 2] = SteamColor[2];
+            CellAutomationSystem._cellColorsSteam[offset + 3] = SteamColor[3];
+            
+            return;
         }
         
         if (colorType == "smoke")
         {
             var offset = index * 4;
-            CellAutomationSystem._cellColors[offset] = SmokeColor[0];
-            CellAutomationSystem._cellColors[offset + 1] = SmokeColor[1];
-            CellAutomationSystem._cellColors[offset + 2] = SmokeColor[2];
-            CellAutomationSystem._cellColors[offset + 3] = SmokeColor[3];
+            
+            CellAutomationSystem._cellColorsSmoke[offset] = SmokeColor[0];
+            CellAutomationSystem._cellColorsSmoke[offset + 1] = SmokeColor[1];
+            CellAutomationSystem._cellColorsSmoke[offset + 2] = SmokeColor[2];
+            CellAutomationSystem._cellColorsSmoke[offset + 3] = SmokeColor[3];
+            
+            return;
         }
         
         if (colorType == "bombFire")
@@ -144,28 +158,28 @@ public class CellTools
             switch (ran)
             {
                 case 0:
-                    CellAutomationSystem._cellColors[offset] = BombFireColor1[0];
-                    CellAutomationSystem._cellColors[offset + 1] = BombFireColor1[1];
-                    CellAutomationSystem._cellColors[offset + 2] = BombFireColor1[2];
-                    CellAutomationSystem._cellColors[offset + 3] = BombFireColor1[3];
+                    CellAutomationSystem._cellColorsFire[offset] = BombFireColor1[0];
+                    CellAutomationSystem._cellColorsFire[offset + 1] = BombFireColor1[1];
+                    CellAutomationSystem._cellColorsFire[offset + 2] = BombFireColor1[2];
+                    CellAutomationSystem._cellColorsFire[offset + 3] = BombFireColor1[3];
                     break;
                 case 1:
-                    CellAutomationSystem._cellColors[offset] = BombFireColor2[0];
-                    CellAutomationSystem._cellColors[offset + 1] = BombFireColor2[1];
-                    CellAutomationSystem._cellColors[offset + 2] = BombFireColor2[2];
-                    CellAutomationSystem._cellColors[offset + 3] = BombFireColor2[3];
+                    CellAutomationSystem._cellColorsFire[offset] = BombFireColor2[0];
+                    CellAutomationSystem._cellColorsFire[offset + 1] = BombFireColor2[1];
+                    CellAutomationSystem._cellColorsFire[offset + 2] = BombFireColor2[2];
+                    CellAutomationSystem._cellColorsFire[offset + 3] = BombFireColor2[3];
                     break;
                 case 2:
-                    CellAutomationSystem._cellColors[offset] = BombFireColor3[0];
-                    CellAutomationSystem._cellColors[offset + 1] = BombFireColor3[1];
-                    CellAutomationSystem._cellColors[offset + 2] = BombFireColor3[2];
-                    CellAutomationSystem._cellColors[offset + 3] = BombFireColor3[3];
+                    CellAutomationSystem._cellColorsFire[offset] = BombFireColor3[0];
+                    CellAutomationSystem._cellColorsFire[offset + 1] = BombFireColor3[1];
+                    CellAutomationSystem._cellColorsFire[offset + 2] = BombFireColor3[2];
+                    CellAutomationSystem._cellColorsFire[offset + 3] = BombFireColor3[3];
                     break;
                 case 3:
-                    CellAutomationSystem._cellColors[offset] = BombFireColor4[0];
-                    CellAutomationSystem._cellColors[offset + 1] = BombFireColor4[1];
-                    CellAutomationSystem._cellColors[offset + 2] = BombFireColor4[2];
-                    CellAutomationSystem._cellColors[offset + 3] = BombFireColor4[3];
+                    CellAutomationSystem._cellColorsFire[offset] = BombFireColor4[0];
+                    CellAutomationSystem._cellColorsFire[offset + 1] = BombFireColor4[1];
+                    CellAutomationSystem._cellColorsFire[offset + 2] = BombFireColor4[2];
+                    CellAutomationSystem._cellColorsFire[offset + 3] = BombFireColor4[3];
                     break;
             }
 

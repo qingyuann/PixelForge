@@ -19,14 +19,40 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     public static int _height;
     public static GameEntity[] _cellEntities;
     public static byte[] _cellColors;
+    public static byte[] _cellColorsFire;
+    public static byte[] _cellColorsWater;
+    public static byte[] _cellColorsSand;
+    public static byte[] _cellColorsOli;
+    public static byte[] _cellColorsAcid;
+    public static byte[] _cellColorsLava;
+    public static byte[] _cellColorsStone;
+    public static byte[] _cellColorsSteam;
+    public static byte[] _cellColorsSmoke;
+    
+    public static List<byte[]> _cellColorsList;
     
     
     public CellAutomationSystem( Contexts contexts )
     {
         _contexts = contexts;
-        _width = 250;
-        _height = 250;
+        _width = 256;
+        _height = 256;
+        
         _cellColors = new byte[_width * _height * 4];
+        _cellColorsFire = new byte[_width * _height * 4];
+        _cellColorsWater = new byte[_width * _height * 4];
+        _cellColorsSand = new byte[_width * _height * 4];
+        _cellColorsOli = new byte[_width * _height * 4];
+        _cellColorsAcid = new byte[_width * _height * 4];
+        _cellColorsLava = new byte[_width * _height * 4];
+        _cellColorsStone = new byte[_width * _height * 4];
+        _cellColorsSteam = new byte[_width * _height * 4];
+        _cellColorsSmoke = new byte[_width * _height * 4];
+        
+        
+        _cellColorsList = new List<byte[]>{_cellColors, _cellColorsFire, _cellColorsWater, _cellColorsSand, _cellColorsOli, _cellColorsAcid, _cellColorsLava, _cellColorsStone};
+        
+        
         _cellEntities = new GameEntity[_width * _height];
         _cellRenderGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellAutoTexture, GameMatcher.MatRenderSingle ) );
     }
@@ -35,7 +61,6 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     {
         
         InitCellEntities();
-        InitCellColors();
         
         foreach(var e in _cellRenderGroup.GetEntities())
         {
@@ -151,7 +176,22 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 {
                     //Debug.Log("update texture");
                     e.matRenderSingle.Renderer.Textures["MainTex"]
-                        .UpdateImageContent(_cellColors, (uint)_width, (uint)_height);
+                        .UpdateImageContent(_cellColorsStone, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["fire"]
+                        .UpdateImageContent(_cellColorsFire, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["water"]
+                        .UpdateImageContent(_cellColorsWater, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["sand"]
+                        .UpdateImageContent(_cellColorsSand, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["oli"]
+                        .UpdateImageContent(_cellColorsOli, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["acid"]
+                        .UpdateImageContent(_cellColorsAcid, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["lava"]
+                        .UpdateImageContent( _cellColorsLava, (uint)_width, (uint)_height );
+                    e.matRenderSingle.Renderer.Textures["stone"]
+                        .UpdateImageContent( _cellColorsStone, (uint)_width, (uint)_height );
+                    
                 }
             }
         }
@@ -169,21 +209,52 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             _cellEntities[i].isComponentCellUpdate = false;
         }
     }
-    private void InitCellColors()
-    {
-        for (int i = 0; i < _width * _height  * 4; i++)
-        {
-            _cellColors[i] = 0;
-        }
-    }
+    
 
     void SetTexture( GameEntity e ) {
         Texture tempTexture = new Texture( GlobalVariable.GL, _cellColors, (uint)_width, (uint)_height );
+        Texture fireTexture = new Texture( GlobalVariable.GL, _cellColorsFire, (uint)_width, (uint)_height );
+        Texture waterTexture = new Texture( GlobalVariable.GL, _cellColorsWater, (uint)_width, (uint)_height );
+        Texture sandTexture = new Texture( GlobalVariable.GL, _cellColorsSand, (uint)_width, (uint)_height );
+        Texture oliTexture = new Texture( GlobalVariable.GL, _cellColorsOli, (uint)_width, (uint)_height );
+        Texture acidTexture = new Texture( GlobalVariable.GL, _cellColorsAcid, (uint)_width, (uint)_height );
+        Texture lavaTexture = new Texture( GlobalVariable.GL, _cellColorsLava, (uint)_width, (uint)_height );
+        Texture stoneTexture = new Texture( GlobalVariable.GL, _cellColorsStone, (uint)_width, (uint)_height );
+        
         if( !e.hasMatPara ) {
             e.AddMatPara( null, new (){
                 {
                     "MainTex", (tempTexture,default)
+                },
+                {
+                    "fire", (fireTexture, default)
                 }
+                ,
+                {
+                    "water", (waterTexture, default)
+                }
+                ,
+                {
+                    "sand", (sandTexture, default)
+                }
+                ,
+                {
+                    "oli", (oliTexture, default)
+                }
+                ,
+                {
+                    "acid", (acidTexture, default)
+                }
+                ,
+                {
+                    "lava", (lavaTexture, default)
+                }
+                ,
+                {
+                    "stone", (stoneTexture, default)
+                }
+                
+               
             } );
         }
     }
