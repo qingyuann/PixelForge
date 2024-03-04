@@ -4,6 +4,7 @@ using Component;
 using Entitas;
 using PixelForge.Spawner.CellAuto.Movable;
 using PixelForge.Tools;
+using Render;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Texture = Render.Texture;
@@ -13,7 +14,7 @@ namespace PixelForge.Spawner.CellAuto;
 
 public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 {
-    private	readonly Contexts _contexts;
+    private readonly Contexts _contexts;
     IGroup<GameEntity> _cellRenderGroup;
     public static int _width;
     public static int _height;
@@ -28,16 +29,16 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     public static byte[] _cellColorsStone;
     public static byte[] _cellColorsSteam;
     public static byte[] _cellColorsSmoke;
-    
+
     public static List<byte[]> _cellColorsList;
-    
-    
-    public CellAutomationSystem( Contexts contexts )
+
+
+    public CellAutomationSystem(Contexts contexts)
     {
         _contexts = contexts;
         _width = 256;
         _height = 256;
-        
+
         _cellColors = new byte[_width * _height * 4];
         _cellColorsFire = new byte[_width * _height * 4];
         _cellColorsWater = new byte[_width * _height * 4];
@@ -48,21 +49,26 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         _cellColorsStone = new byte[_width * _height * 4];
         _cellColorsSteam = new byte[_width * _height * 4];
         _cellColorsSmoke = new byte[_width * _height * 4];
-        
-        
-        _cellColorsList = new List<byte[]>{_cellColors, _cellColorsFire, _cellColorsWater, _cellColorsSand, _cellColorsOli, _cellColorsAcid, _cellColorsLava, _cellColorsStone};
-        
-        
+
+
+        _cellColorsList = new List<byte[]>
+        {
+            _cellColors, _cellColorsFire, _cellColorsWater, _cellColorsSand, _cellColorsOli, _cellColorsAcid,
+            _cellColorsLava, _cellColorsStone, _cellColorsSmoke
+        };
+
+
         _cellEntities = new GameEntity[_width * _height];
-        _cellRenderGroup = _contexts.game.GetGroup( GameMatcher.AllOf( GameMatcher.ComponentCellAutoTexture, GameMatcher.MatRenderSingle ) );
+        _cellRenderGroup =
+            _contexts.game.GetGroup(
+                GameMatcher.AllOf(GameMatcher.ComponentCellAutoTexture, GameMatcher.MatRenderSingle));
     }
 
     public void Initialize()
     {
-        
         InitCellEntities();
-        
-        foreach(var e in _cellRenderGroup.GetEntities())
+
+        foreach (var e in _cellRenderGroup.GetEntities())
         {
             if (e.componentName.Name == "quad3")
             {
@@ -72,15 +78,14 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 }
             }
         }
-        
+
         //TestGenerateStone();
-        
+
         //generate a sand on click position
         //InputSystem.AddMouseDownEvent( OnMouseDown );
     }
-    
-    
-    
+
+
     public void Execute()
     {
         /*
@@ -93,112 +98,112 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         {
             TestGenerateWater();
         }
-        
+
         if (InputSystem.GetKeyDown(Key.J))
         {
             TestGenerateBombFire();
         }
-        
+
         if (InputSystem.GetKeyDown(Key.I))
         {
             TestGenerateOli();
         }
-        
+
         if (InputSystem.GetKeyDown(Key.O))
         {
             TestGenerateAcid();
         }
         */
-        
+
         // from bottom to top, from right to left
-        for(int j = _height-1; j >= 0; j--)
-            for (int i = _width-1; i >= 0; i--)
+        for (int j = _height - 1; j >= 0; j--)
+        for (int i = _width - 1; i >= 0; i--)
+        {
+            var e = _cellEntities[CellTools.ComputeIndex(i, j)];
+            if (e.isComponentCellUpdate == false)
             {
-                var e = _cellEntities[CellTools.ComputeIndex(i, j)];
-                if (e.isComponentCellUpdate == false)
+                if (e.hasComponentFire)
                 {
-                    if (e.hasComponentFire)
-                    {
-                        FireBehaviour.Act(i, j);
-                        continue;
-                    }
-                    if (e.isComponentSand)
-                    {
-                        SandBehaviour.Act(i, j);
-                        continue;
-                    }
-                    if (e.hasComponentLiquid)
-                    {
-                        LiquidBehaviour.Act(i, j);
-                        continue;
-                    }
-                    
-                    if (e.hasComponentExplodeFire)
-                    {
-                        ExplodeFireBehaviour.Act(i, j);
-                        continue;
-                    }
-                    /*
-                    if (e.isComponentWater)
-                    {
-                        WaterBehaviour.Act(i, j);
-                        continue;
-                    }
-                    */
-                    
-                }
-                e.isComponentCellUpdate = true;
-            }
-        
-        // from top to bottom, from right to left
-        for(int j = 0; j < _height; j++)
-            for (int i = _width-1; i >= 0; i--)
-            {
-                var e = _cellEntities[CellTools.ComputeIndex(i, j)];
-                if (e.isComponentSteam)
-                {
-                    SteamBehaviour.Act(i, j);
+                    FireBehaviour.Act(i, j);
+                    continue;
                 }
 
-                if (e.isComponentSmoke)
+                if (e.isComponentSand)
                 {
-                    SmokeBehaviour.Act(i, j);
+                    SandBehaviour.Act(i, j);
+                    continue;
                 }
-                e.isComponentCellUpdate = false;
+
+                if (e.hasComponentLiquid)
+                {
+                    LiquidBehaviour.Act(i, j);
+                    continue;
+                }
+
+                if (e.hasComponentExplodeFire)
+                {
+                    ExplodeFireBehaviour.Act(i, j);
+                    continue;
+                }
+                /*
+                if (e.isComponentWater)
+                {
+                    WaterBehaviour.Act(i, j);
+                    continue;
+                }
+                */
             }
-        
+
+            e.isComponentCellUpdate = true;
+        }
+
+        // from top to bottom, from right to left
+        for (int j = 0; j < _height; j++)
+        for (int i = _width - 1; i >= 0; i--)
+        {
+            var e = _cellEntities[CellTools.ComputeIndex(i, j)];
+            if (e.isComponentSteam)
+            {
+                SteamBehaviour.Act(i, j);
+            }
+
+            if (e.isComponentSmoke)
+            {
+                SmokeBehaviour.Act(i, j);
+            }
+
+            e.isComponentCellUpdate = false;
+        }
+
         //update the color of the texture
-        foreach(var e in _cellRenderGroup.GetEntities())
+        foreach (var e in _cellRenderGroup.GetEntities())
         {
             if (e.componentName.Name == "quad3")
             {
                 if (e.matRenderSingle.Renderer is not null)
                 {
                     //Debug.Log("update texture");
-                    e.matRenderSingle.Renderer.Textures["MainTex"]
-                        .UpdateImageContent(_cellColorsStone, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["fire"]
+                    e.matRenderSingle.Renderer.Textures["FireTex"]
                         .UpdateImageContent(_cellColorsFire, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["water"]
+                    e.matRenderSingle.Renderer.Textures["WaterTex"]
                         .UpdateImageContent(_cellColorsWater, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["sand"]
+                    e.matRenderSingle.Renderer.Textures["SandTex"]
                         .UpdateImageContent(_cellColorsSand, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["oli"]
+                    e.matRenderSingle.Renderer.Textures["OilTex"]
                         .UpdateImageContent(_cellColorsOli, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["acid"]
+                    e.matRenderSingle.Renderer.Textures["AcidTex"]
                         .UpdateImageContent(_cellColorsAcid, (uint)_width, (uint)_height);
-                    e.matRenderSingle.Renderer.Textures["lava"]
-                        .UpdateImageContent( _cellColorsLava, (uint)_width, (uint)_height );
-                    e.matRenderSingle.Renderer.Textures["stone"]
-                        .UpdateImageContent( _cellColorsStone, (uint)_width, (uint)_height );
-                    
+                    e.matRenderSingle.Renderer.Textures["LavaTex"]
+                        .UpdateImageContent(_cellColorsLava, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["StoneTex"]
+                        .UpdateImageContent(_cellColorsStone, (uint)_width, (uint)_height);
+                    e.matRenderSingle.Renderer.Textures["SmokeTex"]
+                        .UpdateImageContent(_cellColorsSmoke, (uint)_width, (uint)_height);
                 }
             }
         }
-        
     }
 
-    
 
     private void InitCellEntities()
     {
@@ -209,69 +214,74 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             _cellEntities[i].isComponentCellUpdate = false;
         }
     }
-    
 
-    void SetTexture( GameEntity e ) {
-        Texture tempTexture = new Texture( GlobalVariable.GL, _cellColors, (uint)_width, (uint)_height );
-        Texture fireTexture = new Texture( GlobalVariable.GL, _cellColorsFire, (uint)_width, (uint)_height );
-        Texture waterTexture = new Texture( GlobalVariable.GL, _cellColorsWater, (uint)_width, (uint)_height );
-        Texture sandTexture = new Texture( GlobalVariable.GL, _cellColorsSand, (uint)_width, (uint)_height );
-        Texture oliTexture = new Texture( GlobalVariable.GL, _cellColorsOli, (uint)_width, (uint)_height );
-        Texture acidTexture = new Texture( GlobalVariable.GL, _cellColorsAcid, (uint)_width, (uint)_height );
-        Texture lavaTexture = new Texture( GlobalVariable.GL, _cellColorsLava, (uint)_width, (uint)_height );
-        Texture stoneTexture = new Texture( GlobalVariable.GL, _cellColorsStone, (uint)_width, (uint)_height );
-        
-        if( !e.hasMatPara ) {
-            e.AddMatPara( null, new (){
+
+    void SetTexture(GameEntity e)
+    {
+        Texture tempTexture = new Texture(GlobalVariable.GL, _cellColors, (uint)_width, (uint)_height);
+        Texture fireTexture = new Texture(GlobalVariable.GL, _cellColorsFire, (uint)_width, (uint)_height);
+        Texture waterTexture = new Texture(GlobalVariable.GL, _cellColorsWater, (uint)_width, (uint)_height);
+        Texture sandTexture = new Texture(GlobalVariable.GL, _cellColorsSand, (uint)_width, (uint)_height);
+        Texture oliTexture = new Texture(GlobalVariable.GL, _cellColorsOli, (uint)_width, (uint)_height);
+        Texture acidTexture = new Texture(GlobalVariable.GL, _cellColorsAcid, (uint)_width, (uint)_height);
+        Texture lavaTexture = new Texture(GlobalVariable.GL, _cellColorsLava, (uint)_width, (uint)_height);
+        Texture stoneTexture = new Texture(GlobalVariable.GL, _cellColorsStone, (uint)_width, (uint)_height);
+        Texture smokeTexture = new Texture(GlobalVariable.GL, _cellColorsSmoke, (uint)_width, (uint)_height);
+
+        if (!e.hasMatPara)
+        {
+            e.AddMatPara(null, new()
+            {
                 {
-                    "MainTex", (tempTexture,default)
+                    "MainTex", (tempTexture, default)
                 },
                 {
-                    "fire", (fireTexture, default)
-                }
-                ,
+                    "FireTex", (fireTexture, default)
+                },
                 {
-                    "water", (waterTexture, default)
-                }
-                ,
+                    "WaterTex", (waterTexture, default)
+                },
                 {
-                    "sand", (sandTexture, default)
-                }
-                ,
+                    "SandTex", (sandTexture, default)
+                },
                 {
-                    "oli", (oliTexture, default)
-                }
-                ,
+                    "OilTex", (oliTexture, default)
+                },
                 {
-                    "acid", (acidTexture, default)
-                }
-                ,
+                    "AcidTex", (acidTexture, default)
+                },
                 {
-                    "lava", (lavaTexture, default)
-                }
-                ,
+                    "LavaTex", (lavaTexture, default)
+                },
                 {
-                    "stone", (stoneTexture, default)
-                }
-                
-               
-            } );
+                    "StoneTex", (stoneTexture, default)
+                },
+                {
+                    "SmokeTex", (smokeTexture, default)
+                },
+                {
+                    "PerlinNoise", ("PerlinNoise.png", new TexParam(true, true))
+                },
+                {
+                    "WaterColPanel", ("WaterPanel.png", new TexParam(false, true))
+                },
+            });
         }
     }
-    
-    private void OnMouseDown(IMouse mouse, MouseButton button) {
-        
+
+    private void OnMouseDown(IMouse mouse, MouseButton button)
+    {
         if (button == MouseButton.Left)
         {
-            var x = (int) (mouse.Position.X / GameSetting.WindowWidth * _width);
+            var x = (int)(mouse.Position.X / GameSetting.WindowWidth * _width);
             var y = (int)(mouse.Position.Y / GameSetting.WindowHeight * _height);
-            
+
             //Debug.Log("x: " + x + " y: " + y);
-            
-            int widthSize = 30; 
+
+            int widthSize = 30;
             int heightSize = 10;
             Random random = new Random();
-            
+
             for (int i = -widthSize / 2; i <= widthSize / 2; i++)
             {
                 for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -294,22 +304,21 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                         CellTools.SetCellColor(index, "steam");
                     }
-                    
                 }
             }
         }
-        
+
         if (button == MouseButton.Right)
         {
-            var x = (int) (mouse.Position.X / GameSetting.WindowWidth * _width);
+            var x = (int)(mouse.Position.X / GameSetting.WindowWidth * _width);
             var y = (int)(mouse.Position.Y / GameSetting.WindowHeight * _height);
-            
+
             //Debug.Log("x: " + x + " y: " + y);
-           
-            int widthSize = 20; 
+
+            int widthSize = 20;
             int heightSize = 3;
             Random random = new Random();
-            
+
             for (int i = -widthSize / 2; i <= widthSize / 2; i++)
             {
                 for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -328,7 +337,10 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                         var e = _cellEntities[index];
                         e.isComponentCellularAutomation = true;
-                        if(!e.hasComponentFire){e.AddComponentFire(200, 5);}
+                        if (!e.hasComponentFire)
+                        {
+                            e.AddComponentFire(200, 5);
+                        }
 
                         CellTools.SetCellColor(index, "fire");
                     }
@@ -342,7 +354,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
         int widthSize = 20;
         int heightSize = 10;
         Random random = new Random();
-            
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -368,13 +380,13 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
             }
         }
     }
-    
+
     public static void TestGenerateOli(int x, int y)
     {
-        int widthSize = 20; 
+        int widthSize = 20;
         int heightSize = 10;
         Random random = new Random();
-            
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -394,23 +406,25 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                     var e = _cellEntities[index];
                     e.isComponentCellularAutomation = true;
                     //e.isComponentWater = true;
-                    if(!e.hasComponentLiquid){e.AddComponentLiquid("oli", 0,1);}
+                    if (!e.hasComponentLiquid)
+                    {
+                        e.AddComponentLiquid("oli", 0, 1);
+                    }
 
                     CellTools.SetCellColor(index, "oli");
                 }
             }
         }
-        
     }
-    
+
     public static void TestGenerateWater(int x, int y)
     {
         //var x = (int) (0.5 * _width);
         //var y = (int) (0.2 * _height);
-        int widthSize = 20; 
+        int widthSize = 20;
         int heightSize = 10;
         Random random = new Random();
-            
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -429,23 +443,23 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                     var e = _cellEntities[index];
                     e.isComponentCellularAutomation = true;
-                    if(!e.hasComponentLiquid){e.AddComponentLiquid("water", 1,0);}
+                    if (!e.hasComponentLiquid)
+                    {
+                        e.AddComponentLiquid("water", 1, 0);
+                    }
 
                     CellTools.SetCellColor(index, "water");
                 }
             }
         }
-        
-
-        
     }
-    
+
     public static void TestGenerateAcid(int x, int y)
     {
-        int widthSize = 20; 
+        int widthSize = 20;
         int heightSize = 10;
         Random random = new Random();
-            
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -465,19 +479,16 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                     var e = _cellEntities[index];
                     e.isComponentCellularAutomation = true;
                     //e.isComponentWater = true;
-                    if(!e.hasComponentLiquid){e.AddComponentLiquid("acid", 2,1);}
+                    if (!e.hasComponentLiquid)
+                    {
+                        e.AddComponentLiquid("acid", 2, 1);
+                    }
 
                     CellTools.SetCellColor(index, "acid");
                 }
             }
         }
-        
-        
-        
-        
     }
-
-
 
 
     public static void TestGenerateLava(int x, int y)
@@ -520,11 +531,11 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     public static void TestGenerateFire(int x, int y)
     {
         //Debug.Log("x: " + x + " y: " + y);
-           
-        int widthSize = 20; 
+
+        int widthSize = 20;
         int heightSize = 3;
         Random random = new Random();
-            
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -544,19 +555,22 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
 
                     var e = _cellEntities[index];
                     e.isComponentCellularAutomation = true;
-                    if(!e.hasComponentFire){e.AddComponentFire(60, 20);}
+                    if (!e.hasComponentFire)
+                    {
+                        e.AddComponentFire(60, 20);
+                    }
 
                     CellTools.SetCellColor(index, "fire");
                 }
             }
         }
     }
-    
+
     private void TestGenerateBombFire()
     {
         var x = RandomTool.Range(0, _width);
         var y = RandomTool.Range(0, _height);
-        
+
         // x,y as the center of the bomb, generate a circle of fire bomb
         // all fire bomb has a travel time of 40, direction is a circle (vector2) 
         var l = GetCirclePoints(x, y, 3);
@@ -572,22 +586,21 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 {
                     e.AddComponentExplodeFire(dir, 40);
                 }
+
                 CellTools.SetCellColor(index, "bombFire");
             }
-            
         }
-        
     }
 
     public static void TestGenerateStone(int x, int y)
     {
         //var x = (int) (0.5 * _width);
         //var y = (int) (0.6 * _height);
-        
-        int widthSize = 10; 
+
+        int widthSize = 10;
         int heightSize = 5;
-        
-            
+
+
         for (int i = -widthSize / 2; i <= widthSize / 2; i++)
         {
             for (int j = -heightSize / 2; j <= heightSize / 2; j++)
@@ -607,12 +620,10 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 e.isComponentStone = true;
 
                 CellTools.SetCellColor(index, "stone");
-                    
             }
         }
-        
     }
-    
+
     List<(int, int)> GetCirclePoints(int centerX, int centerY, int radius)
     {
         List<(int, int)> points = new List<(int, int)>();
@@ -639,9 +650,10 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
                 d += 2 * (x - y) + 5;
                 y--;
             }
+
             x++;
         }
-        
+
         return points;
     }
 }
