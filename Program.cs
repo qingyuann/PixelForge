@@ -1,16 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// See https://aka.ms/new-console-template for more information
-
-using System.Numerics;
+﻿using System.Diagnostics;
 using Render;
-using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
-using Silk.NET.GLFW;
 using Entitas;
 using Silk.NET.OpenGL;
-using Texture = Silk.NET.OpenGL.Texture;
 
 namespace PixelForge {
 	class MainLoop {
@@ -19,6 +12,10 @@ namespace PixelForge {
 		static RenderPipeline _renderPipeline;
 		static Systems _systems = new Systems();
 		static Contexts _contexts = new Contexts();
+		
+		private static Stopwatch _stopwatch = new Stopwatch();
+		private static int _frameCount = 0;
+		private static float _fps = 0;
 
 		public void Stop() {
 			_window.Close();
@@ -37,8 +34,11 @@ namespace PixelForge {
 			};
 
 			_window = Window.Create( options );
+
 			GlobalVariable.Window = _window;
 
+			_stopwatch.Start();
+			
 			_window.Load += OnLoad;
 			_window.Update += OnUpdate;
 			_window.Render += OnRender;
@@ -47,8 +47,7 @@ namespace PixelForge {
 			_window.Dispose();
 		}
 
-
-		static async void OnLoad() {
+		static void OnLoad() {
 			GlobalVariable.Load();
 			GlobalVariable.GL = GL.GetApi( _window );
 
@@ -59,6 +58,16 @@ namespace PixelForge {
 		}
 
 		static void OnUpdate( double deltaTime ) {
+			_frameCount++;
+			if (_stopwatch.ElapsedMilliseconds >= 1000)
+			{
+				_fps = _frameCount;
+				_frameCount = 0;
+				_stopwatch.Restart();
+			}
+			
+			_window.Title = $"{GameSetting.Name} - FPS: {_fps}";
+
 			//在update的最开始执行
 			EarlyUpdate( deltaTime );
 			//在update的中间执行
@@ -84,7 +93,7 @@ namespace PixelForge {
 
 		static void OnRender( double deltaTime ) {
 			_renderPipeline.OnRender();
-			CalculateFrameRate( deltaTime );
+			// CalculateFrameRate( deltaTime );
 		}
 
 		static void OnClose() {
@@ -92,17 +101,17 @@ namespace PixelForge {
 		}
 
 
-		static int _frameCount = 0;
-		static double _lastFrameTime = 0;
-		static void CalculateFrameRate( double deltaTime ) {
-			_frameCount++;
-			if( _window.Time - _lastFrameTime >= 1.0 ) {
-				double fps = _frameCount / ( _window.Time - _lastFrameTime );
-				_window.Title = $"FPS: {fps:F2}";
-
-				_frameCount = 0;
-				_lastFrameTime = _window.Time;
-			}
-		}
+		// static int _frameCount = 0;
+		// static double _lastFrameTime = 0;
+		// static void CalculateFrameRate( double deltaTime ) {
+		// 	_frameCount++;
+		// 	if( _window.Time - _lastFrameTime >= 1.0 ) {
+		// 		double fps = _frameCount / ( _window.Time - _lastFrameTime );
+		// 		_window.Title = $"FPS: {fps:F2}";
+		//
+		// 		_frameCount = 0;
+		// 		_lastFrameTime = _window.Time;
+		// 	}
+		// }
 	}
 }

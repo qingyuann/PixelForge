@@ -16,6 +16,7 @@ public class RenderPipeline {
 	public RenderPipeline( GL gl ) {
 		_gl = GlobalVariable.GL;
 		_gl.Enable( GLEnum.DepthTest );
+		// gl.Enable(EnableCap.Blend);
 		_gl.DepthFunc( DepthFunction.Less );
 
 		//create render layer

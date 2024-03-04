@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Component.CellularAutomatonComponent componentCellularAutomatonComponent = new Component.CellularAutomatonComponent();
+    static readonly Component.SandComponent componentSandComponent = new Component.SandComponent();
 
-    public bool isComponentCellularAutomaton {
-        get { return HasComponent(GameComponentsLookup.ComponentCellularAutomaton); }
+    public bool isComponentSand {
+        get { return HasComponent(GameComponentsLookup.ComponentSand); }
         set {
-            if (value != isComponentCellularAutomaton) {
-                var index = GameComponentsLookup.ComponentCellularAutomaton;
+            if (value != isComponentSand) {
+                var index = GameComponentsLookup.ComponentSand;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : componentCellularAutomatonComponent;
+                            : componentSandComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherComponentCellularAutomaton;
+    static Entitas.IMatcher<GameEntity> _matcherComponentSand;
 
-    public static Entitas.IMatcher<GameEntity> ComponentCellularAutomaton {
+    public static Entitas.IMatcher<GameEntity> ComponentSand {
         get {
-            if (_matcherComponentCellularAutomaton == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ComponentCellularAutomaton);
+            if (_matcherComponentSand == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ComponentSand);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherComponentCellularAutomaton = matcher;
+                _matcherComponentSand = matcher;
             }
 
-            return _matcherComponentCellularAutomaton;
+            return _matcherComponentSand;
         }
     }
 }

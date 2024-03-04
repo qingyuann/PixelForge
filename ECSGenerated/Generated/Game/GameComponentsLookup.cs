@@ -8,37 +8,63 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int ComponentBasicMove = 0;
-    public const int ComponentCamera = 1;
-    public const int ComponentCellularAutomaton = 2;
-    public const int ComponentName = 3;
-    public const int ComponentParent = 4;
-    public const int ComponentPosition = 5;
-    public const int ComponentRotation = 6;
-    public const int ComponentSize = 7;
-    public const int ComponentTexture = 8;
-    public const int LightCircleLight = 9;
-    public const int LightGlobalLight = 10;
-    public const int LightShadowLight = 11;
-    public const int MatPara = 12;
-    public const int MatRenderSingle = 13;
-    public const int MatSpriteInstanceRenderer = 14;
-    public const int ppBloom = 15;
-    public const int ppGaussianBlur = 16;
-    public const int ppLightSetting = 17;
+    public const int ComponentAcid = 0;
+    public const int ComponentBasicMove = 1;
+    public const int ComponentCamera = 2;
+    public const int ComponentCellAutoTexture = 3;
+    public const int ComponentCellularAutomation = 4;
+    public const int ComponentCellUpdate = 5;
+    public const int ComponentExplodeFire = 6;
+    public const int ComponentFire = 7;
+    public const int ComponentLiquid = 8;
+    public const int ComponentName = 9;
+    public const int ComponentParent = 10;
+    public const int ComponentPlayer = 11;
+    public const int ComponentPosition = 12;
+    public const int ComponentRotation = 13;
+    public const int ComponentSand = 14;
+    public const int ComponentSize = 15;
+    public const int ComponentSmoke = 16;
+    public const int ComponentSteam = 17;
+    public const int ComponentStone = 18;
+    public const int ComponentTexture = 19;
+    public const int ComponentWater = 20;
+    public const int ComponentWood = 21;
+    public const int LightCircleLight = 22;
+    public const int LightGlobalLight = 23;
+    public const int LightShadowLight = 24;
+    public const int MatPara = 25;
+    public const int MatRenderSingle = 26;
+    public const int MatSpriteInstanceRenderer = 27;
+    public const int ppBloom = 28;
+    public const int ppGaussianBlur = 29;
+    public const int ppLightSetting = 30;
 
-    public const int TotalComponents = 18;
+    public const int TotalComponents = 31;
 
     public static readonly string[] componentNames = {
+        "ComponentAcid",
         "ComponentBasicMove",
         "ComponentCamera",
-        "ComponentCellularAutomaton",
+        "ComponentCellAutoTexture",
+        "ComponentCellularAutomation",
+        "ComponentCellUpdate",
+        "ComponentExplodeFire",
+        "ComponentFire",
+        "ComponentLiquid",
         "ComponentName",
         "ComponentParent",
+        "ComponentPlayer",
         "ComponentPosition",
         "ComponentRotation",
+        "ComponentSand",
         "ComponentSize",
+        "ComponentSmoke",
+        "ComponentSteam",
+        "ComponentStone",
         "ComponentTexture",
+        "ComponentWater",
+        "ComponentWood",
         "LightCircleLight",
         "LightGlobalLight",
         "LightShadowLight",
@@ -51,15 +77,28 @@ public static class GameComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(Component.AcidComponent),
         typeof(Component.BasicMoveComponent),
         typeof(Component.CameraComponent),
-        typeof(Component.CellularAutomatonComponent),
+        typeof(Component.CellAutoTexture),
+        typeof(Component.CellularAutomationComponent),
+        typeof(Component.CellUpdateComponent),
+        typeof(Component.ExplodeFireComponent),
+        typeof(Component.FireComponent),
+        typeof(Component.LiquidComponent),
         typeof(Component.NameComponent),
         typeof(Component.ParentComponent),
+        typeof(Component.PlayerComponent),
         typeof(Component.PositionComponent),
         typeof(Component.RotationComponent),
+        typeof(Component.SandComponent),
         typeof(Component.SizeComponent),
+        typeof(Component.SmokeComponent),
+        typeof(Component.SteamComponent),
+        typeof(Component.StoneComponent),
         typeof(Component.TextureComponent),
+        typeof(Component.WaterComponent),
+        typeof(Component.WoodComponent),
         typeof(Light.CircleLightComponent),
         typeof(Light.GlobalLightComponent),
         typeof(Light.ShadowLightComponent),
