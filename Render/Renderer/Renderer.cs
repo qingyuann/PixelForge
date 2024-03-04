@@ -85,23 +85,17 @@ public class Renderer
         ApplyUniform(name, value);
     }
 
-    public void SetTexture(string texName, Texture texture)
-    {
-        if (Textures.ContainsKey(texName))
-        {
-            TexturePool.ReturnTex(Textures[texName]);
-            Textures[texName] = texture;
-        }
-        else
-        {
-            Textures.Add(texName, texture);
-        }
+    public void SetTexture(string texName, Texture texture) {
+        if( Textures.TryAdd( texName, texture ) )
+            return;
+        TexturePool.ReturnTex(Textures[texName]);
+        Textures[texName] = texture;
     }
 
-    public void SetTexture(string texName, string textureName)
+    public void SetTexture(string texName, string textureName,TexParam param = default)
     {
         var path = AssetManager.GetAssetPath(textureName);
-        var tex = new Texture(Gl, path);
+        var tex = new Texture(Gl, path,param);
         if (Textures.TryAdd(texName, tex))
             return;
         TexturePool.ReturnTex(Textures[texName]);

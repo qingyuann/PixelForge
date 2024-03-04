@@ -23,16 +23,16 @@ public class BasicMoveSystem : IInitializeSystem, IExecuteSystem {
 			if( move.IsActive ) {
 				var pos = e.componentPosition;
 				if( InputSystem.GetKey( Key.W ) ) {
-					pos.Y += move.Speed * GameSetting.DeltaTime*_accelerator;
+					pos.Y += move.Speed * GlobalVariable.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.S ) ) {
-					pos.Y -= move.Speed * GameSetting.DeltaTime*_accelerator;
+					pos.Y -= move.Speed * GlobalVariable.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.A ) ) {
-					pos.X -= move.Speed * GameSetting.DeltaTime*_accelerator;
+					pos.X -= move.Speed * GlobalVariable.DeltaTime*_accelerator;
 				}
 				if( InputSystem.GetKey( Key.D ) ) {
-					pos.X += move.Speed * GameSetting.DeltaTime*_accelerator;
+					pos.X += move.Speed * GlobalVariable.DeltaTime*_accelerator;
 				}
 				_accelerator = InputSystem.GetKey( Key.ShiftLeft ) ? 2 : 1;
 			}

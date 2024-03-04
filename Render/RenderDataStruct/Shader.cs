@@ -39,7 +39,8 @@ namespace Render {
 			texture.Bind( textureUnit );
 			int textureLocation = _gl.GetUniformLocation( _handle, texName );
 			if( textureLocation == -1 ) {
-				Console.WriteLine( $"{texName} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform1( textureLocation, textureNum );
 	 }
@@ -47,7 +48,8 @@ namespace Render {
 		public void SetUniform( string name, int value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform1( location, value );
 		}
@@ -56,7 +58,8 @@ namespace Render {
 			//A new overload has been created for setting a uniform so we can use the transform in our shader.
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.UniformMatrix4( location, 1, false, (float*)&value );
 		}
@@ -64,7 +67,8 @@ namespace Render {
 		public void SetUniform( string name, Vector2 value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform2( location, value.X, value.Y );
 		}
@@ -72,7 +76,8 @@ namespace Render {
 		public void SetUniform( string name, float[] value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			var num = value.Length;
 
@@ -82,7 +87,8 @@ namespace Render {
 		public void SetUniform( string name, float value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform1( location, value );
 		}
@@ -90,7 +96,8 @@ namespace Render {
 		public void SetUniform( string name, Vector3 value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform3( location, value.X, value.Y, value.Z );
 		}
@@ -98,7 +105,8 @@ namespace Render {
 		public void SetUniform( string name, Vector4 value ) {
 			int location = _gl.GetUniformLocation( _handle, name );
 			if( location == -1 ) {
-				Console.WriteLine( $"{name} uniform not found on shader." );
+				// Console.WriteLine( $"{name} uniform not found on shader." );
+				return;
 			}
 			_gl.Uniform4( location, value.X, value.Y, value.Z, value.W );
 		}
