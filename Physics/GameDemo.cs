@@ -40,6 +40,11 @@ public class GameDemo : IInitializeSystem, IExecuteSystem
         {
             _funcName = "Lava";
         }
+        if (InputSystem.GetKey(Key.Number6))
+        {
+            _funcName = "fire";
+        }
+        
         
         if (InputSystem.GetMouse(MouseButton.Right, out var pos))
         {
@@ -71,6 +76,9 @@ public class GameDemo : IInitializeSystem, IExecuteSystem
                 break;
             case "Lava":
                 CellAutomationSystem.TestGenerateLava(x, y);
+                break;
+            case "fire":
+                CellAutomationSystem.TestGenerateFire(x, y);
                 break;
         }
         

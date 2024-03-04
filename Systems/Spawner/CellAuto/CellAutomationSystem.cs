@@ -446,20 +446,39 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem
     }
 
 
-    private void TestGenerateFire()
+    public static void TestGenerateFire(int x, int y)
     {
-        
-        var x = (int) (0.5 * _width);
-        var y = (int) (0.2 * _height);
-        
-        var index = CellTools.ComputeIndex(x, y);
-    
-        //Debug.Log("index" + index);
-        var e = _cellEntities[index];
-        e.isComponentCellularAutomation = true;
-        e.AddComponentFire(300, 5);
+        //Debug.Log("x: " + x + " y: " + y);
+           
+        int widthSize = 20; 
+        int heightSize = 3;
+        Random random = new Random();
+            
+        for (int i = -widthSize / 2; i <= widthSize / 2; i++)
+        {
+            for (int j = -heightSize / 2; j <= heightSize / 2; j++)
+            {
+                if (random.NextDouble() < 0.4)
+                {
+                    var currentX = x + i;
+                    var currentY = y + j;
+                    var index = CellTools.ComputeIndex(currentX, currentY);
 
-        CellTools.SetCellColor(index, "fire");
+                    if (index == -1 || _cellEntities[index].isComponentCellularAutomation)
+                    {
+                        //Debug.Log("index out of range: " + currentX + ", " + currentY);
+                        break;
+                    }
+
+
+                    var e = _cellEntities[index];
+                    e.isComponentCellularAutomation = true;
+                    if(!e.hasComponentFire){e.AddComponentFire(60, 20);}
+
+                    CellTools.SetCellColor(index, "fire");
+                }
+            }
+        }
     }
     
     private void TestGenerateBombFire()
