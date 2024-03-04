@@ -9,6 +9,10 @@ namespace Render {
 	public struct TexParam {
 		public bool Interpolate;
 		public bool Repeat;
+		public TexParam( bool interpolate = true, bool repeat = true ) {
+			Interpolate = interpolate;
+			Repeat = repeat;
+		}
 	}
 
 	public class Texture : IDisposable {

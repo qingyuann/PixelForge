@@ -1,4 +1,5 @@
 ﻿using Entitas;
+using Render;
 using Silk.NET.OpenGL;
 using System.Numerics;
 using Texture = Render.Texture;
@@ -11,5 +12,5 @@ public class ParaComponent : IComponent {
 	/// <summary>
 	/// object 为 Texture或者string
 	/// </summary>
-	public Dictionary<string, object>? TextureDict;//TEXTURE
+	public Dictionary<string,(object,TexParam)>? TextureDict;//TEXTURE
 }

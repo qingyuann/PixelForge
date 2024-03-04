@@ -16,7 +16,6 @@ public class RenderSystem : IInitializeSystem {
 	public RenderSystem( Contexts contexts ) {
 		_contexts = contexts;
 	}
-
 	
 	/// <summary>
 	/// call from render pipeline
@@ -100,10 +99,10 @@ public class RenderSystem : IInitializeSystem {
 			}
 			if( e.matPara.TextureDict != null ) {
 				foreach( var texture in e.matPara.TextureDict ) {
-					if( texture.Value is string value ) {
-						renderer?.SetTexture( texture.Key, value );
-					} else if( texture.Value is Texture textureValue ) {
-						renderer?.SetTexture( texture.Key, textureValue );
+					if( texture.Value is (string,_) strValue ) {
+						renderer?.SetTexture( texture.Key, (string)strValue.Item1 , strValue.Item2);
+					} else if( texture.Value is (Texture,_) textureValue ) {
+						renderer?.SetTexture( texture.Key, (Texture)textureValue.Item1 );
 					}
 				}
 			}
