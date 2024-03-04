@@ -125,10 +125,14 @@ public class CellTools
             CellAutomationSystem._cellColorsFire[offset + 2] = FireColor[2];
             CellAutomationSystem._cellColorsFire[offset + 3] = FireColor[3];
             
-            if(spreadTime!=-1 && lifeTime!=-1)
+            if(spreadTime!=-1 && lifeTime!=-1 )
             {
-                CellAutomationSystem._cellColorsFire[offset + 2] = (byte)lifeTime;
-                CellAutomationSystem._cellColorsFire[offset + 3] = (byte)spreadTime;
+                if(lifeTime> 60)
+                    lifeTime = 60;
+                if(spreadTime> 20)
+                    spreadTime = 20;
+                CellAutomationSystem._cellColorsFire[offset + 2] = (byte)( lifeTime / 60 * 255);
+                CellAutomationSystem._cellColorsFire[offset + 3] = (byte)( spreadTime / 20 * 255);
             }
             
             return;
