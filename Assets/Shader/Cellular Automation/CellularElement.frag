@@ -22,6 +22,7 @@ uniform sampler2D LavaTex;
 uniform sampler2D StoneTex;
 uniform sampler2D SandTex;
 uniform sampler2D SmokeTex;
+uniform sampler2D SteamTex;
 
 uniform float Resolution;
 float pseudoRandom(float seed) {
@@ -99,7 +100,7 @@ void main()
         fireM += (right + left + up + down);
         if (fireM > 0.1) {
             fireCol = texture(FireColPanel, uvH * noise) * 0.5;
-        }else{
+        } else {
             float rightUp = texture(FireTex, vec2(uv.x + 1 / picRes, uv.y + 1 / picRes)).r;
             float leftUp = texture(FireTex, vec2(uv.x - 1 / picRes, uv.y + 1 / picRes)).r;
             float rightDown = texture(FireTex, vec2(uv.x + 1 / picRes, uv.y - 1 / picRes)).r;
@@ -153,11 +154,16 @@ void main()
     vec4 lavaCol = texture(FireColPanel, uvH3);
     col = mix(col, lavaCol, texture(LavaTex, uv).a);
 
-
+    //smoke
+    col = mix(col, vec4(0.87,0.7,0.77,1)*noise_3, texture(SmokeTex, uv).a);    
+    
+    //steam
+    col = mix(col, vec4(0.47,0.95,0.82,1)*noise_2, texture(SteamTex, uv).a);
+    
     FragColor = vec4(col);
-    if (col.a < 0.1) {
-        discard;
-    }
+    //    if (col.a < 0.1) {
+    //        discard;
+    //    }
 
 
     //    FragColor = vec4(alpha, alpha, alpha, 1);

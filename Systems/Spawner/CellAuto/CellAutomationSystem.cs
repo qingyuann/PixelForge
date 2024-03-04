@@ -51,7 +51,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 
 		_cellColorsList = new List<byte[]>{
 			_cellColors, _cellColorsFire, _cellColorsWater, _cellColorsSand, _cellColorsOli, _cellColorsAcid,
-			_cellColorsLava, _cellColorsStone, _cellColorsSmoke
+			_cellColorsLava, _cellColorsStone, _cellColorsSmoke,_cellColorsSteam
 		};
 
 
@@ -178,7 +178,9 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 					e.matRenderSingle.Renderer.Textures["StoneTex"]
 					 .UpdateImageContent( _cellColorsStone, (uint)_width, (uint)_height );
 					e.matRenderSingle.Renderer.Textures["SmokeTex"]
-					 .UpdateImageContent( _cellColorsSmoke, (uint)_width, (uint)_height );
+					 .UpdateImageContent( _cellColorsSmoke, (uint)_width, (uint)_height );	
+					e.matRenderSingle.Renderer.Textures["SteamTex"]
+					 .UpdateImageContent( _cellColorsSteam, (uint)_width, (uint)_height );
 				}
 			}
 		}
@@ -204,6 +206,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 		Texture lavaTexture = new Texture( GlobalVariable.GL, _cellColorsLava, (uint)_width, (uint)_height );
 		Texture stoneTexture = new Texture( GlobalVariable.GL, _cellColorsStone, (uint)_width, (uint)_height );
 		Texture smokeTexture = new Texture( GlobalVariable.GL, _cellColorsSmoke, (uint)_width, (uint)_height );
+		Texture steamTexture = new Texture( GlobalVariable.GL, _cellColorsSmoke, (uint)_width, (uint)_height );
 
 		if( !e.hasMatPara ) {
 			e.AddMatPara( null, new(){
@@ -225,6 +228,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 					"StoneTex", ( stoneTexture, default )
 				},{
 					"SmokeTex", ( smokeTexture, default )
+				},{
+					"SteamTex", ( steamTexture, default )
 				},{
 					"PerlinNoise", ( "PerlinNoise.png", new TexParam( true, true ) )
 				},{
