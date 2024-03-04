@@ -29,7 +29,7 @@ public class CellTools
         return index;
     }
     
-    public static void SetCellColor(int index, string colorType)
+    public static void SetCellColor(int index, string colorType, int spreadTime=-1, int lifeTime=-1)
     {
        
         if (colorType == "sand")
@@ -124,6 +124,12 @@ public class CellTools
             CellAutomationSystem._cellColorsFire[offset + 1] = FireColor[1];
             CellAutomationSystem._cellColorsFire[offset + 2] = FireColor[2];
             CellAutomationSystem._cellColorsFire[offset + 3] = FireColor[3];
+            
+            if(spreadTime!=-1 && lifeTime!=-1)
+            {
+                CellAutomationSystem._cellColorsFire[offset + 2] = (byte)lifeTime;
+                CellAutomationSystem._cellColorsFire[offset + 3] = (byte)spreadTime;
+            }
             
             return;
         }

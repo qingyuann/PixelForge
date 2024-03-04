@@ -12,9 +12,8 @@
   <component name="ChangeListManager">
     <list default="true" id="81b83e96-f10f-47e4-a7f0-0a6b3f8680d3" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelForge.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelForge.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Physics/BoxCollisionSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Physics/BoxCollisionSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellAutomationSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellAutomationSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellTools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellTools.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/Movable/FireBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/Movable/FireBehaviour.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,16 +31,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="PixelForge" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />

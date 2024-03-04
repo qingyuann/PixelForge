@@ -40,7 +40,7 @@ public class GameDemo : IInitializeSystem, IExecuteSystem
         {
             _funcName = "Lava";
         }
-        if (InputSystem.GetKey(Key.Number6))
+        if (InputSystem.GetKey(Key.Number7))
         {
             _funcName = "fire";
         }

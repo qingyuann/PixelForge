@@ -19,7 +19,7 @@ public class FireBehaviour : ICellBehaviour
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50, spt); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
-        CellTools.SetCellColor(idTarget, "fire");
+        CellTools.SetCellColor(idTarget, "fire", spt, 50);
         CellTools.SetCellColor(idSource, "smoke");
     }
     
@@ -33,7 +33,7 @@ public class FireBehaviour : ICellBehaviour
         if (CellAutomationSystem._cellEntities[idSource].hasComponentFire){CellAutomationSystem._cellEntities[idSource].RemoveComponentFire();}
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
         //Debug.Log("move down");
-        CellTools.SetCellColor(idTarget, "fire");
+        CellTools.SetCellColor(idTarget, "fire", spt, 50);
         CellTools.SetCellColor(idSource, "none");
     }
 
@@ -97,9 +97,11 @@ public class FireBehaviour : ICellBehaviour
 
         if (CellAutomationSystem._cellEntities[id].hasComponentFire)
         {
-            if(CellAutomationSystem._cellEntities[id].componentFire.LifeTime > 0)
+            if (CellAutomationSystem._cellEntities[id].componentFire.LifeTime > 0)
+            {
                 CellAutomationSystem._cellEntities[id].componentFire.LifeTime -= 1;
-            
+                CellTools.SetCellColor(id, "fire", CellAutomationSystem._cellEntities[id].componentFire.SpreadTime, CellAutomationSystem._cellEntities[id].componentFire.LifeTime);
+            }
             else
             {
                 if (CellAutomationSystem._cellEntities[id].hasComponentFire)
