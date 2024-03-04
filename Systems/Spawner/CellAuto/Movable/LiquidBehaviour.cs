@@ -50,7 +50,9 @@ public class LiquidBehaviour : ICellBehaviour
                
                CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
                
+               CellTools.SetCellColor(idTarget, "none");
                CellTools.SetCellColor(idTarget, CellAutomationSystem._cellEntities[idTarget].componentLiquid.ColorType);
+               CellTools.SetCellColor(idSource, "none");
                CellTools.SetCellColor(idSource, CellAutomationSystem._cellEntities[idSource].componentLiquid.ColorType);
                
                return 1;

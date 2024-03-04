@@ -108,7 +108,9 @@ public class SandBehaviour : ICellBehaviour
         if(!CellAutomationSystem._cellEntities[idSand].hasComponentLiquid){CellAutomationSystem._cellEntities[idSand].AddComponentLiquid(coty, den, flam);}
         CellAutomationSystem._cellEntities[idSand].isComponentSand = false;
         
+        CellTools.SetCellColor(idLiquid, "none");
         CellTools.SetCellColor(idLiquid, "sand");
+        CellTools.SetCellColor(idSand, "none");
         CellTools.SetCellColor(idSand, coty);
     }
     
