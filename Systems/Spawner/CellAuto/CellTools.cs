@@ -131,8 +131,8 @@ public class CellTools
                     lifeTime = 60;
                 if(spreadTime> 20)
                     spreadTime = 20;
-                CellAutomationSystem._cellColorsFire[offset + 2] = (byte)( lifeTime / 60 * 255);
-                CellAutomationSystem._cellColorsFire[offset + 3] = (byte)( spreadTime / 20 * 255);
+                CellAutomationSystem._cellColorsFire[offset + 2] = (byte)( lifeTime *255 /60  );
+                CellAutomationSystem._cellColorsFire[offset + 3] = (byte)( spreadTime * 255 /20 );
             }
             
             return;

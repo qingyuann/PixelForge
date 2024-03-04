@@ -98,7 +98,7 @@ public class HierarchySystem : IInitializeSystem
         quad3.AddComponentPosition(0, 0, 0);
         quad3.AddComponentSize(1f, 1f);
         quad3.AddComponentRotation(0);
-        quad3.AddMatRenderSingle(true, 1, new RenderQuad(fragShaderName:"WaterElement.frag"));
+        quad3.AddMatRenderSingle(true, 1, new RenderQuad(fragShaderName:"CellularElement.frag"));
         quad3.isComponentCellAutoTexture = true;
 
         var quad4 = _contexts.game.CreateEntity();
