@@ -1,6 +1,5 @@
 ﻿using PixelForge;
 using Silk.NET.OpenGL;
-using System.Collections.Specialized;
 using System.Numerics;
 
 namespace Render;
@@ -13,7 +12,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 	public BufferObject<uint> Ebo { get; set; }
 	public VertexArrayObject<float, uint> Vao { get; set; }
 
-	public RenderQuad( Vector3 pos = default, Vector2 scale = default, float rotation = 0f, int layer = 0, Anchor anchor = Anchor.Center, string vertShaderName = "QuadBasic.vert", string fragShaderName = "QuadBasic.frag", bool relativeLength = false, bool invertV = false ) : base( layer, vertShaderName, fragShaderName ) {
+	public RenderQuad( Vector3 pos, Vector2 scale, float rotation, int layer, Anchor anchor = Anchor.Center, string vertShaderName = "QuadBasic.vert", string fragShaderName = "QuadBasic.frag", bool relativeLength = false, bool invertV = false ) : base( layer, vertShaderName, fragShaderName ) {
 		GL gl = GlobalVariable.GL;
 		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out uint[] indices, anchor, relativeLength, invertV );
 		Vertices = vert;
@@ -27,7 +26,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 		Vao.VertexAttributePointer( 1, 2, VertexAttribPointerType.Float, 5, 3 );
 	}
 
-	public void UpdateTransform( Vector3 pos = default, Vector2 scale = default, float rotation = default, Anchor anchor = Anchor.Center ) {
+	public void UpdateTransform( Vector3 pos, Vector2 scale, float rotation, Anchor anchor = Anchor.Center ) {
 		PatternMesh.CreateQuad( pos, scale, rotation, out float[] vert, out _, anchor );
 		Vertices = vert;
 		Vbo.UpdateBuffer( Vertices );
@@ -43,6 +42,7 @@ public class RenderQuad : Renderer, IRenderSingleObject {
 				BaseShader.SetUniform( textureNum, tex.Key, tex.Value );
 				textureNum++;
 			}
+			SetUniform( "viewMatrix", CameraSystem.MainCamViewMatrix );
 
 			Gl.DrawElements( PrimitiveType.Triangles,
 				(uint)Indices.Length, DrawElementsType.UnsignedInt, null );

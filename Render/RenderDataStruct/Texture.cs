@@ -5,12 +5,6 @@ using SixLabors.ImageSharp.PixelFormats;
 using System;
 
 namespace Render {
-
-	public struct TexParam {
-		public bool Interpolate;
-		public bool Repeat;
-	}
-
 	public class Texture : IDisposable {
 		protected readonly uint _handle;
 		public int Width;
@@ -29,8 +23,8 @@ namespace Render {
 				Images.Remove( img.Key );
 			}
 		}
-
-		public unsafe Texture( GL gl, string path, TexParam param = default ) {
+		
+		public unsafe Texture( GL gl, string path ) {
 			_gl = gl;
 
 			_handle = _gl.GenTexture();
@@ -41,7 +35,7 @@ namespace Render {
 			if( !Images.TryGetValue( path, out img ) ) {
 				img = Image.Load<Rgba32>( path );
 				Images.Add( path, img );
-			}
+			} 
 			Width = img.Width;
 			Height = img.Height;
 			gl.TexImage2D( TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)img.Width, (uint)img.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null );
@@ -53,14 +47,14 @@ namespace Render {
 					}
 				}
 			} );
-
-			SetParameters( param );
+			
+			SetParameters();
 		}
 
 
 
 
-		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ,TexParam param = default ) {
+		public unsafe Texture( GL gl, Span<byte> data, uint width, uint height ) {
 			_gl = gl;
 			_handle = _gl.GenTexture();
 			Width = (int)width;
@@ -70,7 +64,7 @@ namespace Render {
 
 			fixed (void* d = &data[0]) {
 				_gl.TexImage2D( TextureTarget.Texture2D, 0, (int)InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, d );
-				SetParameters(param);
+				SetParameters();
 			}
 		}
 
@@ -80,43 +74,36 @@ namespace Render {
 		/// <param name="data"></param>
 		/// <param name="width"></param>
 		/// <param name="height"></param>
-		public void UpdateImageContent( Span<byte> data, uint width, uint height,TexParam param=default) {
+		public void UpdateImageContent( Span<byte> data, uint width, uint height ) {
 			unsafe {
 				Bind( TextureUnit.Texture31 );
 
 				fixed (void* d = &data[0]) {
 					_gl.TexSubImage2D( TextureTarget.Texture2D, 0, 0, 0, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, d );
-					SetParameters(param);
+					SetParameters();
 				}
 			}
 		}
 
-		public void UpdateImageContentSingleLine( Span<byte> data, int xOffset, int yOffset, uint width,TexParam param=default) {
+		public void UpdateImageContentSingleLine( Span<byte> data, int xOffset, int yOffset, uint width ) {
 			unsafe {
 				Bind( TextureUnit.Texture31 );
 
 				fixed (void* d = &data[0]) {
 					_gl.TexSubImage2D( TextureTarget.Texture2D, 0, xOffset, yOffset, width, 1, PixelFormat.Rgba, PixelType.UnsignedByte, d );
-					SetParameters(param);
+					SetParameters();
 				}
 			}
 		}
 
-		void SetParameters( TexParam param ) {
-			if( param.Repeat ) {
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.Repeat );
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.Repeat );
-			} else {
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge );
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge );
-			}
-			if( !param.Interpolate ) {
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest );
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest );
-			} else {
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear );
-				_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear );
-			}
+		void SetParameters() {
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge );
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge );
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear );
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear );
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0 );
+			_gl.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 8 );
+			_gl.GenerateMipmap( TextureTarget.Texture2D );
 		}
 
 		public void Bind( TextureUnit textureSlot = TextureUnit.Texture0 ) {

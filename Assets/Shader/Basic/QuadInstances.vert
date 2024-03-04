@@ -10,7 +10,7 @@ uniform float posOffset[MAX_INSTANCE*3];
 uniform float scaleOffset[MAX_INSTANCE*2];
 uniform float rotationOffset[MAX_INSTANCE];
 
-uniform mat4 _ViewMatrix;
+uniform mat4 viewMatrix;
 
 void main()
 {
@@ -24,6 +24,6 @@ void main()
                                 0, 0, 1);
     pos = rotationMatrix*pos;
     vec3 offset = vec3(posOffset[gl_InstanceID*3], posOffset[gl_InstanceID*3+1], posOffset[gl_InstanceID*3+2]);
-    gl_Position = _ViewMatrix*vec4(pos.xyz+offset.xyz, 1.0);
+    gl_Position = viewMatrix*vec4(pos.xyz+offset.xyz, 1.0);
     fUv = vUv;
 }

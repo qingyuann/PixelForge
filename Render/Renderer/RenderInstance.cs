@@ -113,6 +113,7 @@ public class RenderQuadInstances : Renderer, IRenderInstanceObject {
 			BaseShader.SetUniform( textureNum, tex.Key, tex.Value );
 			textureNum++;
 		}
+		SetUniform( "viewMatrix", CameraSystem.MainCamViewMatrix );
 
 		Vao.Bind();
 
