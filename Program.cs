@@ -49,7 +49,7 @@ namespace PixelForge {
 
 
 		static async void OnLoad() {
-			GameSetting.Load();
+			GlobalVariable.Load();
 			GlobalVariable.GL = GL.GetApi( _window );
 
 			_inputSystem = new InputSystem( _window );
@@ -69,7 +69,7 @@ namespace PixelForge {
 
 		static void EarlyUpdate( double deltaTime ) {
 			//更新deltaTime
-			GameSetting.Update( 0.1 );
+			GlobalVariable.Update( 0.1 );
 			_inputSystem.CheckKeys();
 		}
 

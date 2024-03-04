@@ -17,22 +17,30 @@ public class RenderSystem : IInitializeSystem {
 		_contexts = contexts;
 	}
 
+	
+	/// <summary>
+	/// call from render pipeline
+	/// </summary>
+	/// <param name="layer"></param>
+	public static void Render( int layer ) {
+		UpdateRenderGroupTransform();
+		foreach( var e in _renderGroup ) {
+			int eLayer = e.matRenderSingle.Layer;
+			if( eLayer != layer )
+				continue;
+			if( !e.hasMatRenderSingle )
+				continue;
+			if( e.matRenderSingle.Renderer is null )
+				continue;
+			SetGlobalUniform(	e.matRenderSingle.Renderer);
+			e.matRenderSingle.Renderer.Draw();
+		}
+	}
+
 	public void Initialize() {
 		SetupRendererGroup();
 	}
 	
-	public static void Render( int layer ) {
-		UpdateRenderGroupTransform();
-		foreach( var e in _renderGroup ) {
-			var eLayer = e.matRenderSingle.Layer;
-			if( eLayer == layer ) {
-				if( e.hasMatRenderSingle ) {
-					e.matRenderSingle.Renderer?.Draw();
-				}
-			}
-		}
-	}
-
 	static void SetupRendererGroup() {
 		//渲染单个的sprite
 		_renderGroup = _contexts.game.GetGroup(
@@ -130,5 +138,10 @@ public class RenderSystem : IInitializeSystem {
 		//获得批量渲染的种类
 		var entities = _renderInstanceGroup.GetEntities();
 	}
-	
+
+	static void SetGlobalUniform(Renderer renderer ) {
+		renderer.SetUniform( "_ViewMatrix", CameraSystem.MainCamViewMatrix );
+		renderer.SetUniform( "_Time",GlobalVariable.Time);
+		renderer.SetUniform( "_Red", new Vector3( 1, 0, 0 ) );
+	}
 }
