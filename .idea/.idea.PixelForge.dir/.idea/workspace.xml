@@ -12,7 +12,9 @@
   <component name="ChangeListManager">
     <list default="true" id="81b83e96-f10f-47e4-a7f0-0a6b3f8680d3" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PixelForge.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PixelForge.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellTools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellTools.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Systems/HierarchySystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/HierarchySystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellAutomationSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/CellAutomationSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Systems/Spawner/CellAuto/Movable/FireBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Systems/Spawner/CellAuto/Movable/FireBehaviour.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

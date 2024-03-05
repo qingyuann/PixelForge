@@ -27,7 +27,7 @@ public class HierarchySystem : IInitializeSystem {
 		camera.AddComponentRotation( 0 );
 		camera.AddComponentCamera( 0, true, 1f );
 		camera.AddComponentPosition( 0f, 0f, 0 );
-
+		
 		var bg = _contexts.game.CreateEntity();
 		bg.AddComponentName( "bg" );
 		bg.AddComponentPosition( 0, 0, 0 );

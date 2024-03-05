@@ -19,7 +19,9 @@ public class FireBehaviour : ICellBehaviour
         if (!CellAutomationSystem._cellEntities[idTarget].hasComponentFire) { CellAutomationSystem._cellEntities[idTarget].AddComponentFire(50, spt); }
         
         CellAutomationSystem._cellEntities[idTarget].isComponentCellUpdate = true;
+        CellTools.SetCellColor(idTarget, "none");
         CellTools.SetCellColor(idTarget, "fire", spt, 50);
+        CellTools.SetCellColor(idSource, "none");
         CellTools.SetCellColor(idSource, "smoke");
     }
     
@@ -53,6 +55,7 @@ public class FireBehaviour : ICellBehaviour
         
         CellAutomationSystem._cellEntities[idTarget].isComponentSteam = true;
         
+        CellTools.SetCellColor(idTarget, "none");
         CellTools.SetCellColor(idTarget, "steam");
         CellTools.SetCellColor(idSource, "none");
     }

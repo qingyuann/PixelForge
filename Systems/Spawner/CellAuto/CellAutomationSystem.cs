@@ -206,7 +206,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 		Texture lavaTexture = new Texture( GlobalVariable.GL, _cellColorsLava, (uint)_width, (uint)_height );
 		Texture stoneTexture = new Texture( GlobalVariable.GL, _cellColorsStone, (uint)_width, (uint)_height );
 		Texture smokeTexture = new Texture( GlobalVariable.GL, _cellColorsSmoke, (uint)_width, (uint)_height );
-		Texture steamTexture = new Texture( GlobalVariable.GL, _cellColorsSmoke, (uint)_width, (uint)_height );
+		Texture steamTexture = new Texture( GlobalVariable.GL, _cellColorsSteam, (uint)_width, (uint)_height );
 
 		if( !e.hasMatPara ) {
 			e.AddMatPara( null, new(){
@@ -318,8 +318,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 	}
 
 	public static void TestGenerateSand( int x, int y ) {
-		int widthSize = 20;
-		int heightSize = 10;
+		int widthSize = 8;
+		int heightSize = 4;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -345,8 +345,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 	}
 
 	public static void TestGenerateOli( int x, int y ) {
-		int widthSize = 20;
-		int heightSize = 10;
+		int widthSize = 10;
+		int heightSize = 4;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -377,8 +377,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 	public static void TestGenerateWater( int x, int y ) {
 		//var x = (int) (0.5 * _width);
 		//var y = (int) (0.2 * _height);
-		int widthSize = 20;
-		int heightSize = 10;
+		int widthSize = 10;
+		int heightSize = 4;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -406,8 +406,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 	}
 
 	public static void TestGenerateAcid( int x, int y ) {
-		int widthSize = 20;
-		int heightSize = 10;
+		int widthSize = 10;
+		int heightSize = 4;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -437,8 +437,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 
 
 	public static void TestGenerateLava( int x, int y ) {
-		int widthSize = 20;
-		int heightSize = 10;
+		int widthSize = 10;
+		int heightSize = 4;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -470,8 +470,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 	public static void TestGenerateFire( int x, int y ) {
 		//Debug.Log("x: " + x + " y: " + y);
 
-		int widthSize = 20;
-		int heightSize = 3;
+		int widthSize = 15;
+		int heightSize = 2;
 		Random random = new Random();
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
@@ -525,8 +525,8 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 		//var x = (int) (0.5 * _width);
 		//var y = (int) (0.6 * _height);
 
-		int widthSize = 20;
-		int heightSize = 20;
+		int widthSize = 10;
+		int heightSize = 6;
 
 
 		for( int i = -widthSize / 2; i <= widthSize / 2; i++ ) {
