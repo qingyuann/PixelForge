@@ -41,7 +41,6 @@ void main()
     float picRes = 256;
     vec2 uv = ceil(fUv * picRes) / picRes;
 
-
     //noise block 0-1
     vec2 moveSpeed = vec2(0.002, 0.001);
     vec2 noiseSample1 = uv + vec2(pseudoRandom(_Time.z * moveSpeed.x), pseudoRandom(_Time.z * moveSpeed.y));
@@ -155,16 +154,15 @@ void main()
     col = mix(col, lavaCol, texture(LavaTex, uv).a);
 
     //smoke
-    col = mix(col, vec4(0.87,0.7,0.77,1)*noise_3, texture(SmokeTex, uv).a);    
-    
-    //steam
-    col = mix(col, vec4(0.47,0.95,0.82,1)*noise_2, texture(SteamTex, uv).a);
-    
-    FragColor = vec4(col);
-    //    if (col.a < 0.1) {
-    //        discard;
-    //    }
+    col = mix(col, vec4(0.87, 0.8, 0.82, 1) * (noise_2 - 0.1) * (noise_3), texture(SmokeTex, uv).a);
 
+    //steam
+    col = mix(col, vec4(0.77, 0.95, 0.92, 1) * noise_1, texture(SteamTex, uv).a);
+
+    FragColor = vec4(col);
+    if (col.a < 0.1) {
+        discard;
+    }
 
     //    FragColor = vec4(alpha, alpha, alpha, 1);
     //    FragColor = vec4(noise, noise, noise, 1);

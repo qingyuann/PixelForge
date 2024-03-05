@@ -13,7 +13,7 @@ public class LightSystem : IExecuteSystem, IInitializeSystem {
 	public static LightSystem Instance { get; private set; }
 
 	static Dictionary<Type, (LightEffectComputer, List<(ILightComponent, PositionComponent)>)> _lightComputers = new Dictionary<Type, (LightEffectComputer, List<(ILightComponent, PositionComponent)>)>(){
-		{ typeof( GlobalLightComponent ), ( new ShadowLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
+		{ typeof( GlobalLightComponent ), ( new GlobalLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
 		{ typeof( CircleLightComponent ), ( new CircleLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
 		{ typeof( ShadowLightComponent ), ( new ShadowLightComputer(), new List<(ILightComponent, PositionComponent)>() ) },
 	};
@@ -28,7 +28,6 @@ public class LightSystem : IExecuteSystem, IInitializeSystem {
 	IGroup<GameEntity> _lightsGroup;
 
 	Contexts _contexts;
-
 
 	public LightSystem( Contexts contexts ) {
 		_contexts = contexts;
@@ -66,9 +65,9 @@ public class LightSystem : IExecuteSystem, IInitializeSystem {
 
 	public static void RenderLights( int layer, RenderTexture rt ) {
 
-		// //Render Global Lights
-		// RenderLight( rt, layer, typeof( GlobalLightComponent ) );
-		//
+		//Render Global Lights
+		RenderLight( rt, layer, typeof( GlobalLightComponent ) );
+
 		// //Render Other Lights
 		// var otherLights = _computers.Where( c => c.Key != typeof( GlobalLightComponent ) && c.Key != typeof( ShadowLightComponent ) );
 		// foreach( var light in otherLights ) {

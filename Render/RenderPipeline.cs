@@ -8,12 +8,15 @@ namespace Render;
 public class RenderPipeline {
 	readonly GL _gl;
 	readonly RenderFullscreen _renderScreen;
+	readonly RenderFullscreen _mergeLight;
 	readonly int _layerCount = GameSetting.MaxRenderLayer;
 	readonly List<RenderTexture> _layerRt = new List<RenderTexture>();
 
 	RenderQuad _quad;
 
 	public RenderPipeline( GL gl ) {
+		_mergeLight = new RenderFullscreen( "Blit.vert", "QuadBasic.frag" );
+
 		_gl = GlobalVariable.GL;
 		_gl.Enable( GLEnum.DepthTest );
 		// gl.Enable(EnableCap.Blend);
@@ -23,14 +26,14 @@ public class RenderPipeline {
 		for( int i = 0; i < _layerCount; i++ ) {
 			_layerRt.Add( TexturePool.GetRT( GameSetting.WindowWidth, GameSetting.WindowHeight ) );
 		}
-		_renderScreen = new RenderFullscreen();
+		// _renderScreen = new RenderFullscreen();
 		_gl.Viewport( 0, 0, GameSetting.WindowWidth, GameSetting.WindowHeight );
 
 		//set renderScreen shader
-		for( int i = 0; i < _layerCount; i++ ) {
-			string texName = $"uTexture{i}";
-			_renderScreen.SetTexture( texName, _layerRt[i] );
-		}
+		// for( int i = 0; i < _layerCount; i++ ) {
+		// 	string texName = $"uTexture{i}";
+		// 	_renderScreen.SetTexture( texName, _layerRt[i] );
+		// }
 
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 
@@ -61,7 +64,16 @@ public class RenderPipeline {
 		//blit to screen
 		_gl.BindFramebuffer( GLEnum.Framebuffer, 0 );
 		_gl.Clear( (uint)GLEnum.ColorBufferBit | (uint)ClearBufferMask.DepthBufferBit );
-		_renderScreen.Draw();
+		
+		GlobalVariable.GL.DepthMask(false); 
+		GlobalVariable.GL.Enable( EnableCap.Blend );
+		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha );
+		foreach( RenderTexture rt in _layerRt ) {
+			_mergeLight.SetTexture( "MainTex", rt );
+			_mergeLight.Draw();
+		}
+		GlobalVariable.GL.Disable( EnableCap.Blend );
+		GlobalVariable.GL.DepthMask( true );
 	}
 
 	public void OnClose() {

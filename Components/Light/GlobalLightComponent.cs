@@ -12,4 +12,5 @@ public class GlobalLightComponent : IComponent, ILightComponent
     public int LightOrder { get; set; }
     public Vector3 Color;
     public float Intensity;
+    public float Merge;
 }

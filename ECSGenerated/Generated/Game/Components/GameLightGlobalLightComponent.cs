@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Light.GlobalLightComponent lightGlobalLight { get { return (Light.GlobalLightComponent)GetComponent(GameComponentsLookup.LightGlobalLight); } }
     public bool hasLightGlobalLight { get { return HasComponent(GameComponentsLookup.LightGlobalLight); } }
 
-    public void AddLightGlobalLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector3 newColor, float newIntensity) {
+    public void AddLightGlobalLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector3 newColor, float newIntensity, float newMerge) {
         var index = GameComponentsLookup.LightGlobalLight;
         var component = (Light.GlobalLightComponent)CreateComponent(index, typeof(Light.GlobalLightComponent));
         component.Enabled = newEnabled;
@@ -19,10 +19,11 @@ public partial class GameEntity {
         component.LightOrder = newLightOrder;
         component.Color = newColor;
         component.Intensity = newIntensity;
+        component.Merge = newMerge;
         AddComponent(index, component);
     }
 
-    public void ReplaceLightGlobalLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector3 newColor, float newIntensity) {
+    public void ReplaceLightGlobalLight(bool newEnabled, int[] newLayers, int newLightOrder, System.Numerics.Vector3 newColor, float newIntensity, float newMerge) {
         var index = GameComponentsLookup.LightGlobalLight;
         var component = (Light.GlobalLightComponent)CreateComponent(index, typeof(Light.GlobalLightComponent));
         component.Enabled = newEnabled;
@@ -30,6 +31,7 @@ public partial class GameEntity {
         component.LightOrder = newLightOrder;
         component.Color = newColor;
         component.Intensity = newIntensity;
+        component.Merge = newMerge;
         ReplaceComponent(index, component);
     }
 
