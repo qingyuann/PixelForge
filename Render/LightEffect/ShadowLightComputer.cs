@@ -130,10 +130,11 @@ public class ShadowLightComputer : LightEffectComputer {
 		// a texture to store the merged light
 		RenderTexture mergeLightRt = TexturePool.GetRT( (uint)( rt.Width ), (uint)( rt.Height ), false );
 		mergeLightRt.RenderToRt();
+		GlobalVariable.GL.ClearColor( 0.7f,0.7f,0.7f,0f );
 		GlobalVariable.GL.Clear( (uint)GLEnum.ColorBufferBit | (uint)GLEnum.DepthBufferBit );
 		GlobalVariable.GL.DepthMask(false); 
 		GlobalVariable.GL.Enable( EnableCap.Blend );
-		GlobalVariable.GL.BlendFunc( BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha );
+		GlobalVariable.GL.BlendFunc( BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha );
 		foreach( RenderTexture lightRt in lightTextures ) {
 			_mergeLight.SetTexture( "MainTex", lightRt );
 			_mergeLight.Draw();
@@ -150,11 +151,11 @@ public class ShadowLightComputer : LightEffectComputer {
 		//////////////////////////////////////
 		rt.RenderToRt();
 		GlobalVariable.GL.Clear(  (uint)GLEnum.DepthBufferBit );
-		// GlobalVariable.GL.Enable( EnableCap.Blend );
-		// GlobalVariable.GL.BlendFunc( BlendingFactor.One, BlendingFactor.One );
+		GlobalVariable.GL.Enable( EnableCap.Blend );
+		GlobalVariable.GL.BlendFunc( BlendingFactor.One, BlendingFactor.One );
 		_mergeLight.SetTexture( "MainTex", mergeLightRt );
 		_mergeLight.Draw();
-		// GlobalVariable.GL.Disable( EnableCap.Blend );
+		GlobalVariable.GL.Disable( EnableCap.Blend );
 		GlobalVariable.GL.DepthMask( true );
 
 		/////////////////////////////////

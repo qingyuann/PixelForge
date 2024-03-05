@@ -117,7 +117,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad4.AddComponentRotation( 0 );
 		quad4.AddMatRenderSingle( true, 2, null );
 		quad4.isComponentCellAutoTexture = true;
-		quad4.AddLightShadowLight( true, new[]{ 1 }, 0, 10f, 1f, 0.8f, new Vector3( 246 / 255f, 149 / 255f, 96 / 255f ), 1f, 1f );
+		quad4.AddLightShadowLight( true, new[]{ 1 }, 0, 10f, 1f, 1f, new Vector3( 246 / 255f, 149 / 255f, 96 / 255f ), 0.7f, 1f );
 
 
 		/*
