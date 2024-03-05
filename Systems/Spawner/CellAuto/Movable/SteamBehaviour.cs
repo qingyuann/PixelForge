@@ -61,7 +61,7 @@ public class SteamBehaviour : ICellBehaviour
             }
         }
         
-        if(idTop != -1 || idTop2 != -1 || idTop3 != -1)
+        if(idTop != -1 || idTop2 != -1 || idTop3 != -1 || idTopLeft != -1 || idTopRight != -1)
         {
             CellAutomationSystem._cellEntities[id].isComponentSteam = false;
             CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;

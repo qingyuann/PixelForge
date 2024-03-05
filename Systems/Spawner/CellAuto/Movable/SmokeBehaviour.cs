@@ -21,8 +21,8 @@ public class SmokeBehaviour : ICellBehaviour
             return;
         }
         
-        var ran = RandomTool.Range(0, 4);
-
+        var ran = RandomTool.Range(0, 3);
+        var flag = 0;
         switch (ran)
         {
             case 0:
@@ -32,6 +32,10 @@ public class SmokeBehaviour : ICellBehaviour
                     {
                         MoveToTarget(id, idTopLeft);
                         return;
+                    }
+                    else
+                    {
+                        flag = 1;
                     }
                 }
                 break;
@@ -44,6 +48,10 @@ public class SmokeBehaviour : ICellBehaviour
                         MoveToTarget(id, idTop);
                         return;
                     }
+                    else
+                    {
+                        flag = 1;
+                    }
                 }
                 break;
             case 2:
@@ -52,17 +60,16 @@ public class SmokeBehaviour : ICellBehaviour
                     if (!CellAutomationSystem._cellEntities[idTopRight].isComponentCellularAutomation)
                     {
                         MoveToTarget(id, idTopRight);
-                        return;
+                    }
+                    else
+                    {
+                        flag = 1;
                     }
                 }
                 break;
-            case 3:
-                break;
         }
         
-        
-        
-        if(idTop != -1 || idTop2 != -1 || idTop3 != -1)
+        if(flag == 1)
         {
             CellAutomationSystem._cellEntities[id].isComponentSteam = false;
             CellAutomationSystem._cellEntities[id].isComponentCellularAutomation = false;

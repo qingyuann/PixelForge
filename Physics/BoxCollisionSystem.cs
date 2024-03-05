@@ -120,16 +120,19 @@ public class BoxCollisionSystem : IInitializeSystem, IExecuteSystem
                         if (index != -1)
                         { 
                             var dir = new Vector2((x - cx)/10.0f, (y - 250 + cy)/10.0f);
-                            if (!CellAutomationSystem._cellEntities[index].hasComponentExplodeFire)
+                            if (!CellAutomationSystem._cellEntities[index].isComponentCellularAutomation && !CellAutomationSystem._cellEntities[index].hasComponentExplodeFire)
                             {
+                                CellAutomationSystem._cellEntities[index].isComponentCellularAutomation = true;
                                 CellAutomationSystem._cellEntities[index].AddComponentExplodeFire(dir, 20);
+                                CellTools.SetCellColor(index, "fire");
                             }
-                            CellAutomationSystem._cellEntities[index].isComponentCellUpdate = true;
-                            CellTools.SetCellColor(index, "bombFire");
+                            
                         }
                     }
                 }
             }
+            
+            //if the mouse position is on the left side of the box
             else if (x < cx-_w/2)
             {
                 for(var i = _w/2; i < _w/2+5; i++)
@@ -140,12 +143,14 @@ public class BoxCollisionSystem : IInitializeSystem, IExecuteSystem
                         if (index != -1)
                         { 
                             var dir = new Vector2((x - cx)/10.0f, (y - 250 + cy)/10.0f);
-                            if (!CellAutomationSystem._cellEntities[index].hasComponentExplodeFire)
+                            if (!CellAutomationSystem._cellEntities[index].isComponentCellularAutomation && !CellAutomationSystem._cellEntities[index].hasComponentExplodeFire)
                             {
+                                CellAutomationSystem._cellEntities[index].isComponentCellularAutomation = true;
                                 CellAutomationSystem._cellEntities[index].AddComponentExplodeFire(dir, 20);
+                                CellTools.SetCellColor(index, "fire");
                             }
-                            CellAutomationSystem._cellEntities[index].isComponentCellUpdate = true;
-                            CellTools.SetCellColor(index, "bombFire");
+                            
+                            
                         }
                     }
                 }
