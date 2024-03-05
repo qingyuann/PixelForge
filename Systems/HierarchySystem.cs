@@ -38,11 +38,15 @@ public class HierarchySystem : IInitializeSystem {
 			{ "MainTex", ( "bg.jpg", default ) }
 		} );
 
+		var postProcess = _contexts.game.CreateEntity();
+		postProcess.AddppLightSetting( true );
+		postProcess.AddppBloom( true, new[]{ 1 }, 4, 2, 0.93f, 0.2f, new BloomComputer() );
+		postProcess.AddppGaussianBlur( true, new[]{ 0 }, 10, 5,  new GaussianBlurComputer() );
 
 		var light1 = _contexts.game.CreateEntity();
 		light1.AddComponentPosition( 0f, 0f, 0 );
 		light1.AddLightGlobalLight( true, new[]{ 1 }, 0, new Vector3( 0.2f, 0.2f, 0.4f ), 0.1f, 1f );
-		
+
 		var light2 = _contexts.game.CreateEntity();
 		light2.AddComponentPosition( 0f, 0f, 0 );
 		light2.AddLightGlobalLight( true, new[]{ 1 }, 0, new Vector3( 0.8f, 0.7f, 0.5f ) * 1.5f, 0.4f, 1f );
@@ -113,7 +117,7 @@ public class HierarchySystem : IInitializeSystem {
 		quad4.AddComponentRotation( 0 );
 		quad4.AddMatRenderSingle( true, 2, null );
 		quad4.isComponentCellAutoTexture = true;
-		quad4.AddLightShadowLight( true, new[]{ 1 }, 0, 10f, 1f, 0.8f, new Vector3( 246/255f, 149/255f, 96/255f ), 1f, 0f );
+		quad4.AddLightShadowLight( true, new[]{ 1 }, 0, 10f, 1f, 0.8f, new Vector3( 246 / 255f, 149 / 255f, 96 / 255f ), 1f, 1f );
 
 
 		/*

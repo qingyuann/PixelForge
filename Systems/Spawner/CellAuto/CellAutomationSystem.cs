@@ -51,7 +51,7 @@ public class CellAutomationSystem : IInitializeSystem, IExecuteSystem {
 
 		_cellColorsList = new List<byte[]>{
 			_cellColors, _cellColorsFire, _cellColorsWater, _cellColorsSand, _cellColorsOli, _cellColorsAcid,
-			_cellColorsLava, _cellColorsStone, _cellColorsSmoke,_cellColorsSteam
+			_cellColorsLava, _cellColorsStone,_cellColorsSteam, _cellColorsSmoke,
 		};
 
 
