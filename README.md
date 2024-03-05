@@ -6,10 +6,6 @@ Interesting features in Pixel Forge:
  - Celluar Automation
  - Fancy Shaders!
 
-![4101709645161_ pic](https://github.com/Ma-qy/PixelForge/assets/88923933/a076e049-1349-47e3-8c87-241fec0a9a57)
-
-![4111709645178_ pic](https://github.com/Ma-qy/PixelForge/assets/88923933/e6942b5c-761a-422f-8ee7-4aa6e063403f)
-
 https://github.com/Ma-qy/PixelForge/assets/88923933/1dad0348-1fae-43a9-be51-c7c93c53c368
 
 
